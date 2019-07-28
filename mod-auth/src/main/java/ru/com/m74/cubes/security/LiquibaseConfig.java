@@ -1,4 +1,4 @@
-package ru.com.m74.cubes.conf;
+package ru.com.m74.cubes.security;
 
 import liquibase.integration.spring.SpringLiquibase;
 import org.springframework.beans.factory.annotation.Autowired;
