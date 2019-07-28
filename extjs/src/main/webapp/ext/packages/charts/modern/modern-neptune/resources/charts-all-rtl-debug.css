@@ -1,0 +1,226 @@
+/* /home/teamcity/buildAgent/work/47e72153b7b97580/sencha/ext/packages/charts/sass/src/draw/Surface.scss:2 */
+.x-surface,
+.x-surface-canvas {
+    position: absolute;
+}
+/* /home/teamcity/buildAgent/work/47e72153b7b97580/sencha/ext/packages/charts/sass/src/draw/Container.scss:1 */
+.x-draw-container {
+    position: relative;
+    cursor: default;
+}
+/* /home/teamcity/buildAgent/work/47e72153b7b97580/sencha/ext/packages/charts/sass/src/chart/legend/Legend.scss:1 */
+.x-legend {
+    background: #fff;
+    outline: none;
+}
+/* /home/teamcity/buildAgent/work/47e72153b7b97580/sencha/ext/packages/charts/sass/src/chart/legend/Legend.scss:6 */
+.x-legend-horizontal {
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+/* /home/teamcity/buildAgent/work/47e72153b7b97580/sencha/ext/packages/charts/sass/src/chart/legend/Legend.scss:12 */
+.x-legend-horizontal .x-legend-item {
+    display: inline-block;
+    border-right: 1px solid #ccc;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+}
+/* /home/teamcity/buildAgent/work/47e72153b7b97580/sencha/ext/packages/charts/sass/src/chart/legend/Legend.scss:19 */
+.x-legend-horizontal .x-legend-item:first-child {
+    border-left: 1px solid #ccc;
+    border-bottom-left-radius: 3px;
+    border-top-left-radius: 3px;
+}
+/* /home/teamcity/buildAgent/work/47e72153b7b97580/sencha/ext/packages/charts/sass/src/chart/legend/Legend.scss:25 */
+.x-legend-horizontal .x-legend-item:last-child {
+    border-bottom-right-radius: 3px;
+    border-top-right-radius: 3px;
+}
+/* /home/teamcity/buildAgent/work/47e72153b7b97580/sencha/ext/packages/charts/sass/src/chart/legend/Legend.scss:31 */
+.x-legend-horizontal.x-rtl .x-legend-item:first-child {
+    border-right: 1px solid #ccc;
+    border-bottom-right-radius: 3px;
+    border-top-right-radius: 3px;
+}
+/* /home/teamcity/buildAgent/work/47e72153b7b97580/sencha/ext/packages/charts/sass/src/chart/legend/Legend.scss:36 */
+.x-legend-horizontal.x-rtl .x-legend-item:last-child {
+    border-right: none;
+    border-bottom-left-radius: 3px;
+    border-top-left-radius: 3px;
+}
+/* /home/teamcity/buildAgent/work/47e72153b7b97580/sencha/ext/packages/charts/sass/src/chart/legend/Legend.scss:44 */
+.x-legend-vertical {
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+/* /home/teamcity/buildAgent/work/47e72153b7b97580/sencha/ext/packages/charts/sass/src/chart/legend/Legend.scss:49 */
+.x-legend-vertical .x-legend-item {
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+}
+/* /home/teamcity/buildAgent/work/47e72153b7b97580/sencha/ext/packages/charts/sass/src/chart/legend/Legend.scss:54 */
+.x-legend-vertical .x-legend-item:first-child {
+    border-top: 1px solid #ccc;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+}
+/* /home/teamcity/buildAgent/work/47e72153b7b97580/sencha/ext/packages/charts/sass/src/chart/legend/Legend.scss:60 */
+.x-legend-vertical .x-legend-item:last-child {
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+/* /home/teamcity/buildAgent/work/47e72153b7b97580/sencha/ext/packages/charts/sass/src/chart/legend/Legend.scss:67 */
+.x-legend-item-inactive {
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
+    opacity: 0.3;
+}
+/* /home/teamcity/buildAgent/work/47e72153b7b97580/sencha/ext/packages/charts/sass/src/chart/legend/Legend.scss:71 */
+.x-legend-item {
+    padding: 0.8em 0.6em 0.8em 1.8em;
+    color: #333;
+    background: rgba(255, 255, 255, 0);
+    max-width: 16em;
+    min-width: 0;
+    font-size: 13px;
+    font-family: helvetica, arial, sans-serif;
+    line-height: 13px;
+    font-weight: normal;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    position: relative;
+}
+/* /home/teamcity/buildAgent/work/47e72153b7b97580/sencha/ext/packages/charts/sass/src/chart/legend/Legend.scss:87 */
+.x-rtl > * > .x-legend-item {
+    padding: 0.8em 1.8em 0.8em 1em;
+}
+/* /home/teamcity/buildAgent/work/47e72153b7b97580/sencha/ext/packages/charts/sass/src/chart/legend/Legend.scss:91 */
+.x-legend-item-marker {
+    position: absolute;
+    width: 0.8em;
+    height: 0.8em;
+    -webkit-border-radius: 0.4em;
+    -moz-border-radius: 0.4em;
+    -ms-border-radius: 0.4em;
+    -o-border-radius: 0.4em;
+    border-radius: 0.4em;
+    -webkit-box-shadow: rgba(255, 255, 255, 0.3) 0 1px 0, rgba(0, 0, 0, 0.4) 0 1px 0 inset;
+    -moz-box-shadow: rgba(255, 255, 255, 0.3) 0 1px 0, rgba(0, 0, 0, 0.4) 0 1px 0 inset;
+    box-shadow: rgba(255, 255, 255, 0.3) 0 1px 0, rgba(0, 0, 0, 0.4) 0 1px 0 inset;
+    left: 0.7em;
+    top: 0.85em;
+}
+/* /home/teamcity/buildAgent/work/47e72153b7b97580/sencha/ext/packages/charts/sass/src/chart/legend/Legend.scss:103 */
+.x-rtl > * > * > .x-legend-item-marker {
+    right: 0.7em;
+}
+/* /home/teamcity/buildAgent/work/47e72153b7b97580/sencha/ext/packages/charts/modern/sass/src/draw/Container.scss:1 */
+.x-chart-preview > img {
+    width: 100% !important;
+    height: auto !important;
+    position: absolute;
+    top: 50%;
+    transform: translate(0, -50%);
+}
+/* /home/teamcity/buildAgent/work/47e72153b7b97580/sencha/ext/packages/charts/modern/sass/src/chart/legend/Legend.scss:13 */
+.x-legend .x-legend-body-el {
+    /*
+ * The DOM looks like this:
+ *
+ *     ext-legend
+ *         x-legend-body-el x-legend-horizontal/vertical
+ *             x-legend-item
+ *             x-legend-item
+ *
+ * The `x-legend-body-el` is what is being scrolled.
+ */
+    display: inline-block;
+    margin: auto;
+    white-space: nowrap !important;
+    line-height: 0;
+    background: #fff;
+    -webkit-box-shadow: rgba(255, 255, 255, 0.6) 0 1px 1px;
+    -moz-box-shadow: rgba(255, 255, 255, 0.6) 0 1px 1px;
+    box-shadow: rgba(255, 255, 255, 0.6) 0 1px 1px;
+}
+/* /home/teamcity/buildAgent/work/47e72153b7b97580/sencha/ext/packages/charts/modern/sass/src/chart/legend/Legend.scss:29 */
+.x-legend-horizontal .x-legend-body-el {
+    display: table;
+    margin: 0 auto;
+}
+/* /home/teamcity/buildAgent/work/47e72153b7b97580/sencha/ext/packages/charts/modern/sass/src/chart/legend/Legend.scss:35 */
+.x-legend-item {
+    font-size: 13px;
+    line-height: 13px;
+}
+/* /home/teamcity/buildAgent/work/47e72153b7b97580/sencha/ext/packages/charts/modern/sass/src/chart/legend/Legend.scss:40 */
+.x-legend-item-marker {
+    top: 0.95em;
+}
+/* /home/teamcity/buildAgent/work/47e72153b7b97580/sencha/ext/packages/charts/modern/sass/src/chart/legend/Legend.scss:44 */
+.x-legend-body-el {
+    white-space: nowrap;
+    padding: 10px;
+}
+/* /home/teamcity/buildAgent/work/47e72153b7b97580/sencha/ext/packages/charts/modern/sass/src/chart/legend/Legend.scss:49 */
+.x-legend-horizontal {
+    overflow-x: auto;
+}
+/* /home/teamcity/buildAgent/work/47e72153b7b97580/sencha/ext/packages/charts/modern/sass/src/chart/legend/Legend.scss:53 */
+.x-legend-vertical .x-legend-body-el {
+    overflow-y: auto;
+    flex: none;
+}
+/* /home/teamcity/buildAgent/work/47e72153b7b97580/sencha/ext/packages/charts/modern/sass/src/chart/AbstractChart.scss:1 */
+.x-chart-toolbar {
+    position: absolute;
+    z-index: 9;
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-box;
+    display: box;
+    padding: 0.6em;
+}
+/* /home/teamcity/buildAgent/work/47e72153b7b97580/sencha/ext/packages/charts/modern/sass/src/chart/AbstractChart.scss:7 */
+.x-chart-toolbar .x-button {
+    margin: 0.2em;
+}
+/* /home/teamcity/buildAgent/work/47e72153b7b97580/sencha/ext/packages/charts/modern/sass/src/chart/AbstractChart.scss:11 */
+.x-chart-toolbar[data-side=left],
+.x-chart-toolbar[data-side=right] {
+    top: 0;
+    -webkit-box-orient: vertical;
+    -moz-box-orient: vertical;
+    -ms-box-orient: vertical;
+    box-orient: vertical;
+}
+/* /home/teamcity/buildAgent/work/47e72153b7b97580/sencha/ext/packages/charts/modern/sass/src/chart/AbstractChart.scss:16 */
+.x-chart-toolbar[data-side=left] {
+    left: 0;
+}
+/* /home/teamcity/buildAgent/work/47e72153b7b97580/sencha/ext/packages/charts/modern/sass/src/chart/AbstractChart.scss:20 */
+.x-chart-toolbar[data-side=right] {
+    right: 0;
+}
+/* /home/teamcity/buildAgent/work/47e72153b7b97580/sencha/ext/packages/charts/modern/sass/src/chart/AbstractChart.scss:24 */
+.x-chart-toolbar[data-side=top],
+.x-chart-toolbar[data-side=bottom] {
+    -webkit-box-orient: horizontal;
+    -moz-box-orient: horizontal;
+    -ms-box-orient: horizontal;
+    box-orient: horizontal;
+    right: 0;
+}
+/* /home/teamcity/buildAgent/work/47e72153b7b97580/sencha/ext/packages/charts/modern/sass/src/chart/AbstractChart.scss:29 */
+.x-chart-toolbar[data-side=top] {
+    top: 0;
+}
+/* /home/teamcity/buildAgent/work/47e72153b7b97580/sencha/ext/packages/charts/modern/sass/src/chart/AbstractChart.scss:33 */
+.x-chart-toolbar[data-side=bottom] {
+    bottom: 0;
+    -webkit-box-orient: horizontal;
+    -moz-box-orient: horizontal;
+    -ms-box-orient: horizontal;
+    box-orient: horizontal;
+}

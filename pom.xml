@@ -13,6 +13,9 @@
         <module>mod-app</module>
         <module>mod-auth</module>
         <module>app-spring-boot</module>
+        <module>extjs-dto</module>
+        <module>extjs-repository</module>
+        <module>extjs</module>
         <!--<module>wrapper-spring-boot</module>-->
         <!--<module>wrapper-webapp</module>-->
         <!--<module>webapp-conf</module>-->
@@ -113,4 +116,11 @@
         </pluginManagement>
     </build>
 
+    <repositories>
+        <repository>
+            <id>github</id>
+            <name>GitHub m74 Maven Packages</name>
+            <url>https://maven.pkg.github.com/m74</url>
+        </repository>
+    </repositories>
 </project>

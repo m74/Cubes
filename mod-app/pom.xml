@@ -15,7 +15,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>ru.com.m74</groupId>
+            <groupId>ru.com.m74.cubes</groupId>
             <artifactId>extjs</artifactId>
             <version>6.5.3</version>
         </dependency>

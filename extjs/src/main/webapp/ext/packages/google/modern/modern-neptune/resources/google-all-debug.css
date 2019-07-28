@@ -1,0 +1,24 @@
+/* /home/teamcity/buildAgent/work/47e72153b7b97580/sencha/ext/packages/google/modern/sass/src/ux/google/Map.scss:5 */
+.x-map {
+    /**
+ * @class Ext.ux.google.Map
+ */
+    background-color: #edeae2;
+}
+/* /home/teamcity/buildAgent/work/47e72153b7b97580/sencha/ext/packages/google/modern/sass/src/ux/google/Map.scss:8 */
+.x-map * {
+    -webkit-box-sizing: content-box;
+    box-sizing: content-box;
+}
+/* /home/teamcity/buildAgent/work/47e72153b7b97580/sencha/ext/packages/google/modern/sass/src/ux/google/Map.scss:14 */
+.x-mask-map {
+    background: transparent !important;
+}
+/* /home/teamcity/buildAgent/work/47e72153b7b97580/sencha/ext/packages/google/modern/sass/src/ux/google/Map.scss:18 */
+.x-map-container {
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
