@@ -16,6 +16,7 @@
         <module>extjs-dto</module>
         <module>extjs-repository</module>
         <module>extjs</module>
+        <module>app-spring-boot-test</module>
         <!--<module>wrapper-spring-boot</module>-->
         <!--<module>wrapper-webapp</module>-->
         <!--<module>webapp-conf</module>-->
@@ -29,10 +30,6 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-orm</artifactId>
-        </dependency>
         <!--<dependency>-->
         <!--<groupId>org.springframework.security</groupId>-->
         <!--<artifactId>spring-security-config</artifactId>-->
@@ -43,11 +40,6 @@
         <!--<artifactId>spring-security-web</artifactId>-->
         <!--<version>5.1.5.RELEASE</version>-->
         <!--</dependency>-->
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-entitymanager</artifactId>
-            <version>5.3.10.Final</version>
-        </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
