@@ -11,7 +11,7 @@
         <module>spring-boot-app</module>
         <module>web-app</module>
         <module>lib</module>
-        <module>app-module</module>
+        <module>mod</module>
     </modules>
 
     <packaging>pom</packaging>
