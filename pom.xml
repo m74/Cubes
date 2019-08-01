@@ -22,6 +22,7 @@
         <project.reporting.outputEncoding>${project.build.sourceEncoding}</project.reporting.outputEncoding>
 
         <spring.version>5.1.8.RELEASE</spring.version>
+        <slf4j.version>1.7.25</slf4j.version>
         <!--<jackson.version>2.9.6</jackson.version>-->
         <!--<hibernate.version>5.3.10.Final</hibernate.version>-->
 
@@ -39,6 +40,10 @@
             <artifactId>jackson-annotations</artifactId>
             <version>2.9.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>
@@ -49,6 +54,11 @@
                 <version>${spring.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
