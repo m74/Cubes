@@ -11,19 +11,31 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>app-spring-boot-test</artifactId>
+    <groupId>ru.com.m74.cubes</groupId>
+    <artifactId>spring-boot-app</artifactId>
+    <version>1.0-SNAPSHOT</version>
 
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>spring-boot-example</module>
+        <module>spring-boot-example-jpa</module>
+    </modules>
+
+    <properties>
+        <java.version>1.8</java.version>
+    </properties>
+
 
     <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
         <dependency>
             <groupId>ru.com.m74.cubes</groupId>
             <artifactId>mod-app</artifactId>
             <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
     </dependencies>
 
@@ -37,6 +49,7 @@
                 <targetPath>META-INF/resources</targetPath>
             </resource>
         </resources>
+
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -44,4 +57,5 @@
             </plugin>
         </plugins>
     </build>
+
 </project>

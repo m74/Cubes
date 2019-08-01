@@ -3,7 +3,7 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>cubes</artifactId>
+        <artifactId>lib</artifactId>
         <groupId>ru.com.m74.cubes</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
@@ -22,27 +22,19 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
-            <!--<version>${spring.version}</version>-->
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
-            <!--<version>${spring.version}</version>-->
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-tx</artifactId>
-            <!--<version>${spring.version}</version>-->
         </dependency>
         <dependency>
             <groupId>javax.persistence</groupId>
             <artifactId>javax.persistence-api</artifactId>
             <version>2.2</version>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>ru.com.m74.libs</groupId>-->
-            <!--<artifactId>common-utils</artifactId>-->
-            <!--<version>0.0.1</version>-->
-        <!--</dependency>-->
     </dependencies>
 </project>

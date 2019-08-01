@@ -8,66 +8,13 @@
     <artifactId>cubes</artifactId>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <!--<module>container</module>-->
-        <module>app-test</module>
-        <module>mod-app</module>
-        <module>mod-auth</module>
-        <module>app-spring-boot</module>
-        <module>extjs-dto</module>
-        <module>extjs-repository</module>
-        <module>extjs</module>
-        <module>app-spring-boot-test</module>
-        <!--<module>wrapper-spring-boot</module>-->
-        <!--<module>wrapper-webapp</module>-->
-        <!--<module>webapp-conf</module>-->
+        <module>spring-boot-app</module>
+        <module>web-app</module>
+        <module>lib</module>
+        <module>app-module</module>
     </modules>
 
     <packaging>pom</packaging>
-
-    <dependencies>
-
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-webmvc</artifactId>
-        </dependency>
-        <!--<dependency>-->
-        <!--<groupId>org.springframework.security</groupId>-->
-        <!--<artifactId>spring-security-config</artifactId>-->
-        <!--<version>5.1.5.RELEASE</version>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-        <!--<groupId>org.springframework.security</groupId>-->
-        <!--<artifactId>spring-security-web</artifactId>-->
-        <!--<version>5.1.5.RELEASE</version>-->
-        <!--</dependency>-->
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-annotations</artifactId>
-            <version>2.9.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.datatype</groupId>
-            <artifactId>jackson-datatype-jdk8</artifactId>
-            <version>2.9.9</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.datatype</groupId>
-            <artifactId>jackson-datatype-jsr310</artifactId>
-            <version>2.9.9</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-fileupload</groupId>
-            <artifactId>commons-fileupload</artifactId>
-            <version>1.3.3</version>
-        </dependency>
-
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <version>3.0.1</version>
-            <scope>provided</scope>
-        </dependency>
-    </dependencies>
 
     <properties>
         <java.version>1.8</java.version>
@@ -79,6 +26,20 @@
         <!--<hibernate.version>5.3.10.Final</hibernate.version>-->
 
     </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.0.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>2.9.0</version>
+        </dependency>
+    </dependencies>
 
     <dependencyManagement>
         <dependencies>
@@ -108,11 +69,11 @@
         </pluginManagement>
     </build>
 
-    <repositories>
-        <repository>
-            <id>github</id>
-            <name>GitHub m74 Maven Packages</name>
-            <url>https://maven.pkg.github.com/m74</url>
-        </repository>
-    </repositories>
+    <!--<repositories>-->
+    <!--<repository>-->
+    <!--<id>github</id>-->
+    <!--<name>GitHub m74 Maven Packages</name>-->
+    <!--<url>https://maven.pkg.github.com/m74</url>-->
+    <!--</repository>-->
+    <!--</repositories>-->
 </project>
