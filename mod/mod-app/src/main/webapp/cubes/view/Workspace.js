@@ -21,7 +21,7 @@ Ext.define('Ext.cubes.view.Workspace', {
         function handle(items) {
             return Ext.Array.map(items, function (item) {
                 if (Ext.isString(item) && item[0] === '@') {
-                    item = Ext.getApplication().shortcuts[item.substr(1)];
+                    item = Ext.getApplication().shortcuts.get(item.substr(1));
                 }
                 return item;
             })
@@ -37,7 +37,7 @@ Ext.define('Ext.cubes.view.Workspace', {
     openTab: function (itemId) {
         var tab = this.down('#' + itemId);
         if (!tab) {
-            tab = this.add(Ext.getApplication().shortcuts[itemId]);
+            tab = this.add(Ext.getApplication().shortcuts.get(itemId));
         }
         this.setActiveTab(tab);
 

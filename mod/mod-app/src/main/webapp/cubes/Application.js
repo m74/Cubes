@@ -32,16 +32,14 @@ Ext.define('Ext.cubes.Application', {
 
         this.params = Ext.Object.fromQueryString(location.search);
 
-        this.store = Ext.StoreMgr.lookup({
-            storeId: 'shortcuts',
-            type: 'array',
-            model: 'Ext.cubes.model.Shortcut'
-        });
         for (var id in this.shortcuts) {
             var data = this.shortcuts[id];
             data.itemId = id;
-            this.store.add(data);
         }
+
+        var shortcuts = new Ext.util.MixedCollection();
+        shortcuts.addAll(this.shortcuts);
+        this.shortcuts = shortcuts;
     },
 
     onAppUpdate: function () {
