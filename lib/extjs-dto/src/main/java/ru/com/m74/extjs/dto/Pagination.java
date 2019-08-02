@@ -1,5 +1,7 @@
 package ru.com.m74.extjs.dto;
 
+import java.util.Map;
+
 /**
  * Пагинация
  *
@@ -38,4 +40,10 @@ public class Pagination {
     public boolean isValid() {
         return start != null && limit != null && page != null;
     }
+
+    public void applyParams(Map<String, Object> params) {
+        params.put("start", start);
+        params.put("limit", limit);
+    }
+
 }
