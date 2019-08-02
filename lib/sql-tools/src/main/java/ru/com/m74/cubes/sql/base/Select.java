@@ -207,8 +207,8 @@ public class Select<T> implements Serializable {
                 }
             }
         } else {
-//            if (pagging)
-//                sql += "select t_.* from (" + delim + "select data_.*, rownum rn_" + delim + "from (" + delim;
+            if (pagging)
+                sql += "select t_.* from (" + delim + "select data_.*, rownum rn_" + delim + "from (" + delim;
 
             sql += "select" + delim;
 
@@ -236,11 +236,11 @@ public class Select<T> implements Serializable {
             if (!orderBy.isEmpty())
                 sql += delim + "order by " + String.join("," + delim, orderBy);
 
-            if (pagging) sql += delim + "OFFSET :start ROWS FETCH NEXT :limit ROWS ONLY";
-//            if (pagging) {
-//                sql += delim + ") data_" + delim + "where rownum <= (:start + :limit)) t_ " + delim +
-//                        "where t_.rn_ > :start";
-//            }
+//            if (pagging) sql += delim + "OFFSET :start ROWS FETCH NEXT :limit ROWS ONLY";
+            if (pagging) {
+                sql += delim + ") data_" + delim + "where rownum <= (:start + :limit)) t_ " + delim +
+                        "where t_.rn_ > :start";
+            }
         }
 
         return sql;

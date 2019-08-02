@@ -21,7 +21,7 @@
 
         <dependency>
             <groupId>ru.com.m74.cubes</groupId>
-            <artifactId>jdbc-repository</artifactId>
+            <artifactId>jpa-repository</artifactId>
         </dependency>
         <!--<dependency>-->
         <!--<groupId>com.fasterxml.jackson.core</groupId>-->
