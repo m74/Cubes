@@ -26,7 +26,12 @@ public class AbstractRepoImpl<T> implements AbstractRepo<T> {
     @Override
     public Iterable<T> getAll(Pagination pagination) {
         Map<String, Object> params = map();
-        return em.getList(createQuery(params), params, null);
+        Select<T> q = createQuery(params);
+        if(pagination.isValid()){
+            pagination.applyParams(params);
+            q.setPagging(true);
+        }
+        return em.getList(q, params, null);
     }
 
     @Override
