@@ -34,6 +34,12 @@ Ext.define('Test.view.Users', {
         },
         dataIndex: 'password'
     }, {
+        text: 'Тип',
+        renderer: function (v) {
+            return v && v.title;
+        },
+        dataIndex: 'type'
+    }, {
         text: 'Создан',
         xtype: 'datecolumn',
         dataIndex: 'createAt'

@@ -8,7 +8,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import ru.com.m74.cubes.jdbc.annotations.Column;
 import ru.com.m74.cubes.jdbc.annotations.Id;
-import ru.com.m74.cubes.jdbc.annotations.ManyToOne;
+import ru.com.m74.cubes.jdbc.annotations.LinkTo;
 import ru.com.m74.cubes.jdbc.annotations.Table;
 import ru.com.m74.cubes.jdbc.sql.Select;
 import ru.com.m74.cubes.jdbc.utils.DTOUtils;
@@ -181,8 +181,8 @@ public class EntityManager {
 //                }
 //            }
 
-            if (field.isAnnotationPresent(ManyToOne.class)) {
-                c = field.getAnnotation(ManyToOne.class).idType();
+            if (field.isAnnotationPresent(LinkTo.class)) {
+                c = field.getAnnotation(LinkTo.class).idType();
             }
 
             if (c == Date.class && values.get(key).getClass() == Date.class) continue;

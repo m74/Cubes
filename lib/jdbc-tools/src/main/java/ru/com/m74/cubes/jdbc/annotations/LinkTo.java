@@ -11,14 +11,14 @@ import java.lang.annotation.Target;
  */
 @Target(value = ElementType.FIELD)
 @Retention(value = RetentionPolicy.RUNTIME)
-public @interface ManyToOne {
+public @interface LinkTo {
     String table();
 
     String id() default "ID";
 
     Class idType() default Long.class;
 
-    String title();
+    String title() default "";
 
     /**
      * Business key field
@@ -39,7 +39,7 @@ public @interface ManyToOne {
      *
      * @return
      */
-    String query() default "";
+    String titleQuery() default "";
 
     /**
      * Alias

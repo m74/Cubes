@@ -1,7 +1,8 @@
 package ru.com.m74.cubes.jdbc.utils;
 
 import ru.com.m74.cubes.jdbc.ColumnNotFoundException;
-import ru.com.m74.cubes.jdbc.annotations.ManyToOne;
+import ru.com.m74.cubes.jdbc.Link;
+import ru.com.m74.cubes.jdbc.annotations.LinkTo;
 
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
@@ -76,17 +77,17 @@ public class EMUtils {
 //            }
 //        }
 
-        if (field.isAnnotationPresent(ManyToOne.class)) {
-            ManyToOne annotation = field.getAnnotation(ManyToOne.class);
-            Object id = get(rs, field.getName() + "_" + annotation.id());
-            if (id == null) return null;
-            String title = get(rs, field.getName() + "_" + annotation.title(), String.class);
-//            if (fieldType.equals(ListItemDTO.class)) {
-//                ListItemDTO item = new ListItemDTO(id, title);
-//                if (Utils.isNotEmpty(annotation.bk())) {
-//                    item.setBusinessKey(get(rs, field.getName() + "_" + annotation.bk(), String.class));
-//                }
-//                return item;
+        if (field.isAnnotationPresent(LinkTo.class)) {
+            LinkTo annotation = field.getAnnotation(LinkTo.class);
+            if (fieldType.equals(Link.class)) {
+                Object id = get(rs, field.getName() + "_" + annotation.id());
+                if (id == null) return null;
+                String title = get(rs, field.getName() + "_" + annotation.title(), String.class);
+                Link item = new Link(id, title);
+                if (Utils.isNotEmpty(annotation.bk())) {
+                    item.setBusinessKey(get(rs, field.getName() + "_" + annotation.bk(), String.class));
+                }
+                return item;
 //            } else if (fieldType.equals(AttachmentDTO.class)) {
 //                AttachmentDTO dto = new AttachmentDTO();
 //                dto.setId(((BigDecimal) id).longValue());
@@ -96,7 +97,7 @@ public class EMUtils {
 //                dto.setRealFileName(get(rs, field.getName() + "_realFileName", String.class));
 //                dto.setPutDate(get(rs, field.getName() + "_putDate", Date.class));
 //                return dto;
-//            }
+            }
             throw new RuntimeException("Не совместимы тип: " + fieldType);
         }
 
@@ -116,6 +117,7 @@ public class EMUtils {
     private static Object get(ResultSet rs, String name) throws ColumnNotFoundException {
         return get(rs, name, null);
     }
+
     private static <T> T get(ResultSet rs, String name, Class<T> type) throws ColumnNotFoundException {
         try {
             return type != null ? rs.getObject(name, type) : (T) rs.getObject(name);

@@ -1,8 +1,9 @@
 package ru.com.m74.cubes.jdbc.sql;
 
+import ru.com.m74.cubes.jdbc.Link;
 import ru.com.m74.cubes.jdbc.annotations.Column;
 import ru.com.m74.cubes.jdbc.annotations.Join;
-import ru.com.m74.cubes.jdbc.annotations.ManyToOne;
+import ru.com.m74.cubes.jdbc.annotations.LinkTo;
 import ru.com.m74.cubes.jdbc.annotations.Table;
 import ru.com.m74.cubes.jdbc.utils.DTOUtils;
 import ru.com.m74.cubes.jdbc.utils.SqlUtils;
@@ -63,27 +64,29 @@ public class Select<T> extends ru.com.m74.cubes.sql.base.Select<T> {
 //                    this.field(fieldName(field) + ".PREFIX as " + field.getName() + "_CODE");
 //                    this.field(fieldName(field) + ".SHORT_BUSINESS_KEY as " + field.getName() + "_BK");
 //                } else
-                if (field.isAnnotationPresent(ManyToOne.class)) {
-                    ManyToOne annotation = field.getAnnotation(ManyToOne.class);
-                    String alias = annotation.as();
-                    if (Utils.isEmpty(alias)) alias = fieldName(field);
+                if (field.isAnnotationPresent(LinkTo.class)) {
+                    if (field.getType().equals(Link.class)) {
+                        LinkTo annotation = field.getAnnotation(LinkTo.class);
+                        String alias = annotation.as();
+                        if (Utils.isEmpty(alias)) alias = fieldName(field);
 
-                    if (Utils.isEmpty(annotation.on())) {
-                        this.join(
-                                "left join " + annotation.table() + " " + alias + " " +
-                                        "ON(" + alias + "." + annotation.id() + "=" + column + ")");
-                    } else {
-                        this.join(
-                                "left join " + annotation.table() + " " + alias + " " + "ON(" + annotation.on() + ")");
-                    }
-                    this.field(alias + "." + annotation.id() + " as " + field.getName() + "_" + annotation.id());
-                    String query = annotation.query();
-                    if (Utils.isEmpty(query)) {
-                        query = alias + "." + annotation.title();
-                    }
-                    this.field(query + " as " + field.getName() + "_" + annotation.title());
-                    if (Utils.isNotEmpty(annotation.bk())) {
-                        this.field(alias + "." + annotation.bk() + " as " + field.getName() + "_" + annotation.bk());
+                        if (Utils.isEmpty(annotation.on())) {
+                            this.join(
+                                    "left join " + annotation.table() + " " + alias + " " +
+                                            "ON(" + alias + "." + annotation.id() + "=" + column + ")");
+                        } else {
+                            this.join(
+                                    "left join " + annotation.table() + " " + alias + " " + "ON(" + annotation.on() + ")");
+                        }
+                        this.field(alias + "." + annotation.id() + " as " + field.getName() + "_" + annotation.id());
+                        String query = annotation.titleQuery();
+                        if (Utils.isEmpty(query)) {
+                            query = alias + "." + annotation.title();
+                        }
+                        this.field("(" + query + ") as " + field.getName() + "_" + annotation.title());
+                        if (Utils.isNotEmpty(annotation.bk())) {
+                            this.field(alias + "." + annotation.bk() + " as " + field.getName() + "_" + annotation.bk());
+                        }
                     }
 //                    if (field.getType().equals(AttachmentDTO.class)) {
 //                        this.field(alias + ".CONTENT_TYPE" + " as " + field.getName() + "_contentType");

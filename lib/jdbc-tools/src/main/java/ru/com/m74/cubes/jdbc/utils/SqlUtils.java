@@ -1,7 +1,7 @@
 package ru.com.m74.cubes.jdbc.utils;
 
 import ru.com.m74.cubes.jdbc.annotations.Column;
-import ru.com.m74.cubes.jdbc.annotations.ManyToOne;
+import ru.com.m74.cubes.jdbc.annotations.LinkTo;
 import ru.com.m74.cubes.jdbc.annotations.Table;
 
 import java.lang.reflect.Field;
@@ -29,9 +29,9 @@ public class SqlUtils {
 //            if (field.isAnnotationPresent(Nsi.class)) {
 //                return new String[]{field.getName() + "_TEXT"};
 //            } else
-            if (field.isAnnotationPresent(ManyToOne.class)) {
-                ManyToOne manyToOne = field.getAnnotation(ManyToOne.class);
-                return new String[]{field.getName() + "_" + manyToOne.title()};
+            if (field.isAnnotationPresent(LinkTo.class)) {
+                LinkTo linkTo = field.getAnnotation(LinkTo.class);
+                return new String[]{field.getName() + "_" + linkTo.title()};
             } else {
                 return new String[]{getColumnName(type, field)};
             }

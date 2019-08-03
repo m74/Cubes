@@ -1,13 +1,15 @@
 package test.ru.com.m74.cubes.springboot.example.jdbc.domain;
 
 
+import ru.com.m74.cubes.jdbc.Link;
 import ru.com.m74.cubes.jdbc.annotations.Column;
 import ru.com.m74.cubes.jdbc.annotations.Id;
+import ru.com.m74.cubes.jdbc.annotations.LinkTo;
 import ru.com.m74.cubes.jdbc.annotations.Table;
 
 import java.util.Date;
 
-@Table("USER")
+@Table("USER usr")
 public class User {
     @Id
     @Column("ID")
@@ -36,6 +38,10 @@ public class User {
      */
     @Column("IS_ACTIVE")
     private boolean active = false;
+
+    @LinkTo(table = "USER_TYPE", titleQuery = "type.TITLE || '-' || type.ID")
+    @Column("TYPE_ID")
+    private Link type;
 
     public Long getId() {
         return id;
@@ -99,5 +105,13 @@ public class User {
 
     public void setComments(String comments) {
         this.comments = comments;
+    }
+
+    public Link getType() {
+        return type;
+    }
+
+    public void setType(Link type) {
+        this.type = type;
     }
 }
