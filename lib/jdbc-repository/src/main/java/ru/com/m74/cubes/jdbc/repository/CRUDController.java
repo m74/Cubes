@@ -1,9 +1,11 @@
 package ru.com.m74.cubes.jdbc.repository;
 
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import ru.com.m74.extjs.dto.Pagination;
 import ru.com.m74.extjs.dto.Response;
-import ru.com.m74.cubes.jdbc.repository.AbstractRepo;
 
 import java.util.Map;
 
