@@ -10,11 +10,11 @@ import ru.com.m74.cubes.jdbc.annotations.Column;
 import ru.com.m74.cubes.jdbc.annotations.Id;
 import ru.com.m74.cubes.jdbc.annotations.LinkTo;
 import ru.com.m74.cubes.jdbc.annotations.Table;
-import ru.com.m74.cubes.jdbc.sql.Select;
 import ru.com.m74.cubes.jdbc.utils.DTOUtils;
 import ru.com.m74.cubes.jdbc.utils.SqlUtils;
 import ru.com.m74.cubes.jdbc.utils.Utils;
 import ru.com.m74.cubes.sql.base.Insert;
+import ru.com.m74.cubes.sql.base.Select;
 import ru.com.m74.cubes.sql.base.Update;
 
 import java.lang.reflect.Field;
@@ -329,30 +329,22 @@ public class EntityManager {
                         || field.isAnnotationPresent(Column.class));
     }
 
-//    /**
-//     * Получить список полей, аннотированных @ResultSetField, исключая аннотированные @PrimaryKey; Обход ORA-32796
-//     *
-//     * @param dtoClass класс сущности/DTO
-//     * @return список полей
-//     */
-//    private static List<Field> getAnnotatedFieldsWithoutPrimaryKey(Class<?> dtoClass) {
-//        return DTOUtils.getModelFields(dtoClass, field -> field.isAnnotationPresent(Column.class) && !field.isAnnotationPresent(Id.class));
+    public <T> T get(Class<T> type, Object id) {
+        return get(type, DTOUtils.getPrimaryKeyField(type), id);
+    }
+
+    private <T> T get(Class<T> type, Field field, Object value) {
+        return getSingleResult(select(type).where(SqlUtils.getColumnName(type, field) + "=:id"), map("id", value));
+    }
+
+//    public <T> T getSingleResult(Select<T> query, Map<String, Object> params, RowMapper<T> mapper) {
+//        return jdbcTemplate.queryForObject(
+//                query.toString(), params, mapper);
 //    }
 
-    public <T> T get(Class<T> type, Object id) {
-        return get(type, DTOUtils.getPrimaryKeyField(type), id, (rs, rowNum) -> create(rs, type));
-    }
-
-    public <T> T get(Class<T> type, String field, Object value) {
-        return get(type, DTOUtils.findField(type, field), value, (rs, rowNum) -> create(rs, type));
-    }
-
-    private <T> T get(Class<T> type, Field field, Object value, RowMapper<T> mapper) {
-        if (value == null) return null;
+    public <T> T getSingleResult(Select<T> query, Map<String, Object> params) {
         return jdbcTemplate.queryForObject(
-                select(type)
-                        .where(SqlUtils.getColumnName(type, field) + "=:id").toString(), map("id", value), mapper);
-
+                query.toString(), params, (resultSet, i) -> create(resultSet, query.getType()));
     }
 
     public void remove(Class type, Object idValue) {
