@@ -202,7 +202,7 @@ public class EntityManager {
         }
     }
 
-    private <T> T create(ResultSet rs, Class<T> type) {
+    public <T> T createEntity(ResultSet rs, Class<T> type) {
         try {
             if (Number.class.isAssignableFrom(type) ||
                     Date.class.isAssignableFrom(type) ||
@@ -231,12 +231,12 @@ public class EntityManager {
         return jdbcTemplate.queryForObject(q.getCountSql(), params, Long.class);
     }
 
-    public <T> Iterable<T> getList(Select<T> q, Map<String, Object> params, EntityMapper<T> entityMapper) {
-        return jdbcTemplate.query(q.toString(), params, (resultSet, i) -> {
-            T entity = create(resultSet, q.getType());
-            if (entityMapper != null) entityMapper.map(entity, resultSet, i);
-            return entity;
-        });
+    public <T> Iterable<T> getResultList(String q, Map<String, Object> params, RowMapper<T> mapper) {
+        return jdbcTemplate.query(q, params, mapper);
+    }
+
+    public <T> Iterable<T> getResultList(Select<T> q, Map<String, Object> params) {
+        return getResultList(q.toString(), params, (resultSet, i) -> createEntity(resultSet, q.getType()));
     }
 
 
@@ -344,7 +344,7 @@ public class EntityManager {
 
     public <T> T getSingleResult(Select<T> query, Map<String, Object> params) {
         return jdbcTemplate.queryForObject(
-                query.toString(), params, (resultSet, i) -> create(resultSet, query.getType()));
+                query.toString(), params, (resultSet, i) -> createEntity(resultSet, query.getType()));
     }
 
     public void remove(Class type, Object idValue) {

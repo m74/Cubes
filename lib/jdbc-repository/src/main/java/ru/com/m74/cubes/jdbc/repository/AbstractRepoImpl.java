@@ -1,7 +1,7 @@
 package ru.com.m74.cubes.jdbc.repository;
 
 import ru.com.m74.cubes.jdbc.EntityManager;
-import ru.com.m74.cubes.jdbc.sql.Select;
+import ru.com.m74.cubes.sql.base.Select;
 import ru.com.m74.extjs.dto.Pagination;
 
 import java.util.Map;
@@ -27,11 +27,11 @@ public class AbstractRepoImpl<T> implements AbstractRepo<T> {
     public Iterable<T> getAll(Pagination pagination) {
         Map<String, Object> params = map();
         Select<T> q = createQuery(params);
-        if(pagination.isValid()){
+        if (pagination.isValid()) {
             pagination.applyParams(params);
             q.setPagging(true);
         }
-        return em.getList(q, params, null);
+        return em.getResultList(q, params);
     }
 
     @Override
