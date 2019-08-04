@@ -10,7 +10,7 @@ import static ru.com.m74.cubes.jdbc.utils.Utils.map;
 
 public class AbstractRepoImpl<T> implements AbstractRepo<T> {
 
-    private final EntityManager em;
+    protected final EntityManager em;
 
     private final Class<T> type;
 
