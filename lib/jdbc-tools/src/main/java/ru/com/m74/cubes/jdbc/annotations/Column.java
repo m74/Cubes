@@ -22,12 +22,6 @@ import java.sql.ResultSet;
 @Retention(value = RetentionPolicy.RUNTIME)
 public @interface Column {
     String value() default "";
-
-    /**
-     * @deprecated use value = "alias.field_name"
-     * @return
-     */
-    String alias() default "";
     String as() default "";
     String sql() default "";
     String[] orderBy() default {};

@@ -14,13 +14,14 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import static ru.com.m74.cubes.jdbc.utils.Utils.isEmpty;
+import static ru.com.m74.cubes.common.ObjectUtils.isEmpty;
+import static ru.com.m74.cubes.common.ObjectUtils.isNotEmpty;
 
 public class EMUtils {
     public static final String TIMESTAMP_FORMAT = "yyyy-MM-dd'T'HH:mm:ssXXX";
 
     public static <T> void sort(Select<T> q, Sorter sorters[]) {
-        if (Utils.isNotEmpty(sorters)) {
+        if (isNotEmpty(sorters)) {
             for (Sorter sorter : sorters) {
                 q.addOrderBy(SqlUtils.getOrderBy(q.getType(), sorter.getProperty()), sorter.getDirection());
             }
@@ -40,53 +41,6 @@ public class EMUtils {
         Class fieldType = field.getType();
         String colName = SqlUtils.getResultSetFieldName(field);
 
-
-//        if (field.isAnnotationPresent(DictionaryValue.class)) {
-//            Object id = get(rs, field.getName() + "_ID");
-//            return id == null ? null : new ListItemDTO(
-//                    id,
-//                    get(rs, field.getName() + "_TEXT", String.class),
-//                    get(rs, field.getName() + "_BK", String.class),
-//                    get(rs, field.getName() + "_CODE", String.class)
-//            );
-//        }
-
-
-//        if (field.isAnnotationPresent(Nsi.class)) {
-//            try {
-//                String nsiAlias = field.getName();
-//
-//                Object id = get(rs, nsiAlias + "_ID");
-//                if (id == null) return null;
-//
-//                ListItemDTO nsiValue = (ListItemDTO) fieldType.newInstance();
-//                nsiValue.setValue(id);
-//                nsiValue.setText(rs.getString(nsiAlias + "_TEXT"));
-//                nsiValue.setBusinessKey(rs.getString(nsiAlias + "_BK"));
-//
-//                try {
-//                    nsiValue.setCode(rs.getString(nsiAlias + "_CODE"));
-//                } catch (SQLException e) {
-//                    nsiValue.setCode(null);
-//                }
-//
-//                // проверка на наличие атрибутов
-//                List<Field> fieldsNsiAttrib = DTOUtils.getModelFields(field.getType(), fieldAttr -> fieldAttr.isAnnotationPresent(NsiAttribute.class));
-//
-//                for (Field fieldAttrib : fieldsNsiAttrib) {
-//                    Object attr = rs.getObject(nsiAlias + "ATTR_" + fieldAttrib.getName(), fieldType.getDeclaredField(fieldAttrib.getName()).getType());
-//
-//                    String methodName = "set" + org.apache.commons.lang3.StringUtils.capitalize(fieldAttrib.getName());
-//                    Method method = fieldType.getMethod(methodName, fieldType.getDeclaredField(fieldAttrib.getName()).getType());
-//                    method.invoke(nsiValue, attr);
-//                }
-//
-//                return nsiValue;
-//            } catch (Exception e) {
-//                throw new SddSystemException("Ошибка при получении данных НСИ. ", e);
-//            }
-//        }
-
         if (field.isAnnotationPresent(LinkTo.class)) {
             LinkTo annotation = field.getAnnotation(LinkTo.class);
             if (fieldType.equals(Link.class)) {
@@ -94,19 +48,10 @@ public class EMUtils {
                 if (id == null) return null;
                 String title = get(rs, field.getName() + "_" + annotation.title(), String.class);
                 Link item = new Link(id, title);
-                if (Utils.isNotEmpty(annotation.bk())) {
+                if (isNotEmpty(annotation.bk())) {
                     item.setBusinessKey(get(rs, field.getName() + "_" + annotation.bk(), String.class));
                 }
                 return item;
-//            } else if (fieldType.equals(AttachmentDTO.class)) {
-//                AttachmentDTO dto = new AttachmentDTO();
-//                dto.setId(((BigDecimal) id).longValue());
-//                dto.setFileName(title);
-//                dto.setContentType(get(rs, field.getName() + "_contentType", String.class));
-//                dto.setFilePath(get(rs, field.getName() + "_filePath", String.class));
-//                dto.setRealFileName(get(rs, field.getName() + "_realFileName", String.class));
-//                dto.setPutDate(get(rs, field.getName() + "_putDate", Date.class));
-//                return dto;
             }
             throw new RuntimeException("Не совместимы тип: " + fieldType);
         }
@@ -211,9 +156,6 @@ public class EMUtils {
                 throw new RuntimeException("Ошибка при конвертации строки в большое число", e);
             }
         }
-//        if (cls.isAnnotationPresent(Dictionary.class)) {
-//            return (T) Enum.valueOf((Class<Enum>) cls, strVal);
-//        }
 
         throw new RuntimeException("Unsupported type: " + cls);
     }

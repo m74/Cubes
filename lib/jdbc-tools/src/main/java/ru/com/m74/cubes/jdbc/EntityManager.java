@@ -9,11 +9,9 @@ import org.springframework.jdbc.support.KeyHolder;
 import ru.com.m74.cubes.jdbc.annotations.*;
 import ru.com.m74.cubes.jdbc.utils.DTOUtils;
 import ru.com.m74.cubes.jdbc.utils.SqlUtils;
-import ru.com.m74.cubes.jdbc.utils.Utils;
 import ru.com.m74.cubes.sql.base.Insert;
 import ru.com.m74.cubes.sql.base.Select;
 import ru.com.m74.cubes.sql.base.Update;
-import ru.com.m74.extjs.dto.Sorter;
 
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
@@ -25,11 +23,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static ru.com.m74.cubes.common.MapUtils.map;
+import static ru.com.m74.cubes.common.ObjectUtils.isEmpty;
+import static ru.com.m74.cubes.common.ObjectUtils.isNotEmpty;
 import static ru.com.m74.cubes.jdbc.utils.DTOUtils.*;
 import static ru.com.m74.cubes.jdbc.utils.EMUtils.cast;
 import static ru.com.m74.cubes.jdbc.utils.EMUtils.getResultSetValue;
 import static ru.com.m74.cubes.jdbc.utils.SqlUtils.*;
-import static ru.com.m74.cubes.jdbc.utils.Utils.map;
 
 public class EntityManager {
 
@@ -50,7 +50,7 @@ public class EntityManager {
         String tableAlias = tableAlias(table);
 
         String tableName = tableName(table);
-        select.from(Utils.isEmpty(tableAlias) ? tableName : tableName + " " + aliasName(tableAlias));
+        select.from(isEmpty(tableAlias) ? tableName : tableName + " " + aliasName(tableAlias));
 
         Join join = type.getAnnotation(Join.class);
         if (join != null) {
@@ -65,17 +65,17 @@ public class EntityManager {
 
             Column rsfa = field.getAnnotation(Column.class);
 
-            if (Utils.isNotEmpty(rsfa.sql())) {
-                select.field("(" + rsfa.sql() + ") as " + (Utils.isNotEmpty(rsfa.as()) ? rsfa.as() : field.getName()));
+            if (isNotEmpty(rsfa.sql())) {
+                select.field("(" + rsfa.sql() + ") as " + (isNotEmpty(rsfa.as()) ? rsfa.as() : field.getName()));
             } else {
                 String column = getColumnName(type, field);
                 if (field.isAnnotationPresent(LinkTo.class)) {
                     if (field.getType().equals(Link.class)) {
                         LinkTo annotation = field.getAnnotation(LinkTo.class);
                         String alias = annotation.as();
-                        if (Utils.isEmpty(alias)) alias = aliasName(field.getName());
+                        if (isEmpty(alias)) alias = aliasName(field.getName());
 
-                        if (Utils.isEmpty(annotation.on())) {
+                        if (isEmpty(annotation.on())) {
                             select.join(
                                     "left join " + annotation.table() + " " + alias + " " +
                                             "ON(" + alias + "." + annotation.id() + "=" + column + ")");
@@ -85,17 +85,17 @@ public class EntityManager {
                         }
                         select.field(alias + "." + annotation.id() + " as " + field.getName() + "_" + annotation.id());
                         String query = annotation.titleQuery();
-                        if (Utils.isEmpty(query)) {
+                        if (isEmpty(query)) {
                             query = alias + "." + annotation.title();
                         }
                         select.field("(" + query + ") as " + field.getName() + "_" + annotation.title());
-                        if (Utils.isNotEmpty(annotation.bk())) {
+                        if (isNotEmpty(annotation.bk())) {
                             select.field(alias + "." + annotation.bk() + " as " + field.getName() + "_" + annotation.bk());
                         }
                     }
                 } else {
                     String as = rsfa.as();
-                    if (Utils.isNotEmpty(as)) {
+                    if (isNotEmpty(as)) {
                         select.field(column + " as " + rsfa.as());
                     } else {
                         select.field(column);
@@ -120,7 +120,7 @@ public class EntityManager {
             if (field.isAnnotationPresent(Id.class) && !withId) continue;
 
             Column rsfa = field.getAnnotation(Column.class);
-            if (Utils.isNotEmpty(rsfa.value()) && rsfa.value().indexOf('.') == -1 && (Utils.isEmpty(rsfa.alias()) || Utils.isEquals(rsfa.alias(), tableAlias(table)))) {
+            if (isNotEmpty(rsfa.value()) && rsfa.value().indexOf('.') == -1) {
                 q.value(SqlUtils.getResultSetFieldName(field), ":" + field.getName());
             }
         }
@@ -188,7 +188,7 @@ public class EntityManager {
 
                 if (field.isAnnotationPresent(Column.class)) {
                     Column rsf = field.getAnnotation(Column.class);
-                    if (Utils.isNotEmpty(rsf.value()) && (Utils.isEmpty(SqlUtils.getFieldAlias(rsf)))) {
+                    if (isNotEmpty(rsf.value()) && (isEmpty(SqlUtils.getFieldAlias(rsf)))) {
                         q.set(rsf.value(), ":" + field.getName());
                     }
                 }
@@ -206,7 +206,7 @@ public class EntityManager {
         values = new HashMap<>(values);
 
         for (String key : values.keySet()) {
-            if (Utils.isEmpty(values.get(key))) continue;
+            if (isEmpty(values.get(key))) continue;
 
             Field field = DTOUtils.findField(clazz, key);
             if (field == null

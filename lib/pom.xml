@@ -20,5 +20,6 @@
         <module>sql-tools</module>
         <module>jdbc-tools</module>
         <module>jdbc-repository</module>
+        <module>common-utils</module>
     </modules>
 </project>

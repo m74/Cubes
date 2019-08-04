@@ -23,23 +23,6 @@ public class Insert {
         return this;
     }
 
-//    /**
-//     * Добавление в INSERT параметра VALUE если ключ для поля существует
-//     *
-//     * @param key      поле для обновления
-//     * @param params   - параметры
-//     * @param paramKey - ключ
-//     * @return
-//     */
-//    public Insert valueIfExist(String key, Map<String, Object> params, String paramKey) {
-//        if (Utils.isNotEmpty(params.get(paramKey))) {
-//            fields.add(key);
-//            values.add(":" + paramKey);
-//        }
-//        return this;
-//    }
-
-
     @Override
     public String toString() {
         return toString(" ");

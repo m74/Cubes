@@ -20,15 +20,6 @@ import java.util.stream.Stream;
  */
 public class DTOUtils {
 
-//    public static <T> void applyIfNull(T src, T dst) {
-//        Arrays.stream(src.getClass().getDeclaredFields()).forEach(field -> {
-//            if (get(dst, field) == null) {
-//                set(dst, field, get(src, field));
-//            }
-//        });
-//    }
-
-
     public static Object get(Object dto, Field field) {
         try {
             boolean isPrivate = !field.isAccessible();
@@ -75,20 +66,6 @@ public class DTOUtils {
 
     }
 
-//    public static String getNsiAttibFieldName(Field field) {
-//        Class type = field.getType();
-//        String fieldName = "";
-//
-//        if (Number.class.isAssignableFrom(type)) {
-//            fieldName = "NUM_DESC_VALUE";
-//        } else if (String.class.isAssignableFrom(type)) {
-//            fieldName = "CHAR_DESC_VALUE";
-//        } else if (Date.class.isAssignableFrom(type)) {
-//            fieldName = "DATE_DESC_VALUE";
-//        }
-//        return fieldName;
-//    }
-
     /**
      * Получить все свойства модели кроме статических
      *
@@ -96,9 +73,6 @@ public class DTOUtils {
      * @param predicates Дополнительные условия фильтрации
      * @return список свойств
      */
-//    public static List<Field> getModelFields(Class type, Predicate<Field>... predicates) {
-//        return getModelFields(type, false, predicates);
-//    }
     public static List<Field> getModelFields(Class type, Predicate<Field>... predicates) {
         Class superType = type.getSuperclass();
 
@@ -149,14 +123,6 @@ public class DTOUtils {
         if (value instanceof Boolean) {
             return ((Boolean) value) ? 1 : 0;
         }
-
-//        if (value instanceof ListItemDTO) {
-//            return ((ListItemDTO) value).getValue();
-//        }
-//
-//        if (value instanceof AttachmentDTO) {
-//            return ((AttachmentDTO) value).getId();
-//        }
 
         if (field.getType().isEnum()) {
             return ((Enum<?>) value).name();

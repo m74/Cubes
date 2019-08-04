@@ -23,21 +23,6 @@ public class Update {
     }
 
     /**
-     * Добавление в UPDATE параметра SET если ключ для поля существует
-     * @param column поле для обновления
-     * @param params - параметры
-     * @param paramKey - ключ
-     * @return
-     */
-    public Update setIfExist(String column, Map<String, Object> params, String paramKey) {
-//        if (Utils.isNotEmpty(params.get(paramKey))) {
-        if (params.containsKey(paramKey)) {
-            values.add(column + " = :" + paramKey);
-        }
-        return this;
-    }
-
-    /**
      * Обнулить условия и добавить новое
      *
      * @param str

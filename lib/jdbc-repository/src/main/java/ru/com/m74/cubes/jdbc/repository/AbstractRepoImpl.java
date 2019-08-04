@@ -6,7 +6,8 @@ import ru.com.m74.extjs.dto.Pagination;
 
 import java.util.Map;
 
-import static ru.com.m74.cubes.jdbc.utils.Utils.map;
+import static ru.com.m74.cubes.common.MapUtils.map;
+
 
 public class AbstractRepoImpl<T> implements AbstractRepo<T> {
 
