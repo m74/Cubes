@@ -3,6 +3,8 @@ package ru.com.m74.cubes.jdbc.utils;
 import ru.com.m74.cubes.jdbc.ColumnNotFoundException;
 import ru.com.m74.cubes.jdbc.Link;
 import ru.com.m74.cubes.jdbc.annotations.LinkTo;
+import ru.com.m74.cubes.sql.base.Select;
+import ru.com.m74.extjs.dto.Sorter;
 
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
@@ -16,6 +18,14 @@ import static ru.com.m74.cubes.jdbc.utils.Utils.isEmpty;
 
 public class EMUtils {
     public static final String TIMESTAMP_FORMAT = "yyyy-MM-dd'T'HH:mm:ssXXX";
+
+    public static <T> void sort(Select<T> q, Sorter sorters[]) {
+        if (Utils.isNotEmpty(sorters)) {
+            for (Sorter sorter : sorters) {
+                q.addOrderBy(SqlUtils.getOrderBy(q.getType(), sorter.getProperty()), sorter.getDirection());
+            }
+        }
+    }
 
     /**
      * Получить значение из базы

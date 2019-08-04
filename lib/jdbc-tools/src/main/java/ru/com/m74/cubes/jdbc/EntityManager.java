@@ -6,16 +6,14 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
-import ru.com.m74.cubes.jdbc.annotations.Column;
-import ru.com.m74.cubes.jdbc.annotations.Id;
-import ru.com.m74.cubes.jdbc.annotations.LinkTo;
-import ru.com.m74.cubes.jdbc.annotations.Table;
+import ru.com.m74.cubes.jdbc.annotations.*;
 import ru.com.m74.cubes.jdbc.utils.DTOUtils;
 import ru.com.m74.cubes.jdbc.utils.SqlUtils;
 import ru.com.m74.cubes.jdbc.utils.Utils;
 import ru.com.m74.cubes.sql.base.Insert;
 import ru.com.m74.cubes.sql.base.Select;
 import ru.com.m74.cubes.sql.base.Update;
+import ru.com.m74.extjs.dto.Sorter;
 
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
@@ -30,8 +28,7 @@ import java.util.Map;
 import static ru.com.m74.cubes.jdbc.utils.DTOUtils.*;
 import static ru.com.m74.cubes.jdbc.utils.EMUtils.cast;
 import static ru.com.m74.cubes.jdbc.utils.EMUtils.getResultSetValue;
-import static ru.com.m74.cubes.jdbc.utils.SqlUtils.tableAlias;
-import static ru.com.m74.cubes.jdbc.utils.SqlUtils.tableName;
+import static ru.com.m74.cubes.jdbc.utils.SqlUtils.*;
 import static ru.com.m74.cubes.jdbc.utils.Utils.map;
 
 public class EntityManager {
@@ -43,7 +40,71 @@ public class EntityManager {
     }
 
     public <T> Select<T> select(Class<T> type) {
-        return new Select<>(type);
+        Select<T> select = new Select<>();
+
+        Table table = type.getAnnotation(Table.class);
+        if (table == null) {
+            throw new RuntimeException("Annotation not present: " + Table.class);
+        }
+
+        String tableAlias = tableAlias(table);
+
+        String tableName = tableName(table);
+        select.from(Utils.isEmpty(tableAlias) ? tableName : tableName + " " + aliasName(tableAlias));
+
+        Join join = type.getAnnotation(Join.class);
+        if (join != null) {
+            select.join(join.value());
+        }
+
+        for (Field field : DTOUtils.getAnnotatedModelFields(type)) {
+//            Id id = field.getAnnotation(Id.class);
+//            if (id != null && isNotEmpty(id.name())) {
+//                setHint("/*+ INDEX (" + tableName + " " + id.name() + ") */");
+//            }
+
+            Column rsfa = field.getAnnotation(Column.class);
+
+            if (Utils.isNotEmpty(rsfa.sql())) {
+                select.field("(" + rsfa.sql() + ") as " + (Utils.isNotEmpty(rsfa.as()) ? rsfa.as() : field.getName()));
+            } else {
+                String column = getColumnName(type, field);
+                if (field.isAnnotationPresent(LinkTo.class)) {
+                    if (field.getType().equals(Link.class)) {
+                        LinkTo annotation = field.getAnnotation(LinkTo.class);
+                        String alias = annotation.as();
+                        if (Utils.isEmpty(alias)) alias = aliasName(field.getName());
+
+                        if (Utils.isEmpty(annotation.on())) {
+                            select.join(
+                                    "left join " + annotation.table() + " " + alias + " " +
+                                            "ON(" + alias + "." + annotation.id() + "=" + column + ")");
+                        } else {
+                            select.join(
+                                    "left join " + annotation.table() + " " + alias + " " + "ON(" + annotation.on() + ")");
+                        }
+                        select.field(alias + "." + annotation.id() + " as " + field.getName() + "_" + annotation.id());
+                        String query = annotation.titleQuery();
+                        if (Utils.isEmpty(query)) {
+                            query = alias + "." + annotation.title();
+                        }
+                        select.field("(" + query + ") as " + field.getName() + "_" + annotation.title());
+                        if (Utils.isNotEmpty(annotation.bk())) {
+                            select.field(alias + "." + annotation.bk() + " as " + field.getName() + "_" + annotation.bk());
+                        }
+                    }
+                } else {
+                    String as = rsfa.as();
+                    if (Utils.isNotEmpty(as)) {
+                        select.field(column + " as " + rsfa.as());
+                    } else {
+                        select.field(column);
+                    }
+                }
+            }
+        }
+//        return new ru.com.m74.cubes.jdbc.sql.Select<>(type);
+        return select;
     }
 
     private Insert insert(Class<?> type, boolean withId) {
@@ -360,5 +421,4 @@ public class EntityManager {
 //        if (primaryKeyField == null) throw new RuntimeException("PrimaryKey not fount: " + dto.getClass());
 //        remove(dto.getClass(), getValue(dto, primaryKeyField));
 //    }
-
 }
