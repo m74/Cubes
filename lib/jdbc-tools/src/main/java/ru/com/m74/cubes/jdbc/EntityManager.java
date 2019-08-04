@@ -40,7 +40,7 @@ public class EntityManager {
     }
 
     public <T> Select<T> select(Class<T> type) {
-        Select<T> select = new Select<>();
+        Select<T> select = new Select<>(type);
 
         Table table = type.getAnnotation(Table.class);
         if (table == null) {
