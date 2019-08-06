@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.com.m74.cubes.security.dao.RolesRepository;
 import ru.com.m74.cubes.security.domain.Role;
-import ru.com.m74.extjs.CrudController;
+import ru.com.m74.extjs.CRUDController;
 
 /**
  * @author mixam
@@ -13,7 +13,7 @@ import ru.com.m74.extjs.CrudController;
  */
 @RestController
 @RequestMapping(path = "/Role")
-public class RolesController extends CrudController<Role> {
+public class RolesController extends CRUDController<Role> {
 
     @Autowired
     public RolesController(RolesRepository repository) {

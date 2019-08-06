@@ -91,6 +91,8 @@ Ext.define('Ext.cubes.ux.Grid', {
         Ext.apply(this, {
             store: {
                 model: this.model,
+                remoteFilter: true,
+                remoteSort: true,
                 autoSync: true,
                 autoLoad: true
             }

@@ -1,6 +1,6 @@
 package ru.com.m74.extjs;
 
-import ru.com.m74.extjs.dto.Pagination;
+import ru.com.m74.extjs.dto.Request;
 
 import java.util.Map;
 
@@ -14,7 +14,7 @@ public interface JpaRepository<T> {
     /**
      * @return
      */
-    Iterable<T> getAll(Pagination pagination);
+    Iterable<T> getAll(Request pagination);
 
     /**
      * @return

@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import ru.com.m74.extjs.dto.Pagination;
+import ru.com.m74.extjs.dto.Request;
 import ru.com.m74.extjs.dto.Response;
 
 import java.util.Map;
@@ -18,9 +18,9 @@ public class CRUDController<T> {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public Response<Iterable<T>> getAll(Pagination pagination) {
-        Response<Iterable<T>> response = new Response<>(repository.getAll(pagination));
-        if (pagination.isValid()) {
+    public Response<Iterable<T>> getAll(Request request) {
+        Response<Iterable<T>> response = new Response<>(repository.getAll(request));
+        if (request.isPaging()) {
             response.setTotalCount(repository.count());
         }
         return response;

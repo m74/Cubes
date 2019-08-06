@@ -1,23 +1,23 @@
 package ru.com.m74.extjs;
 
 import org.springframework.web.bind.annotation.*;
-import ru.com.m74.extjs.dto.Pagination;
+import ru.com.m74.extjs.dto.Request;
 import ru.com.m74.extjs.dto.Response;
 
 import java.util.Map;
 
-public class CrudController<T> {
+public class CRUDController<T> {
 
     private JpaRepository<T> repository;
 
-    public CrudController(JpaRepository<T> repository) {
+    public CRUDController(JpaRepository<T> repository) {
         this.repository = repository;
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public Response<Iterable<T>> getAll(Pagination pagination) {
+    public Response<Iterable<T>> getAll(Request pagination) {
         Response<Iterable<T>> response = new Response<>(repository.getAll(pagination));
-        if (pagination.isValid()) {
+        if (pagination.isPaging()) {
             response.setTotalCount(repository.count());
         }
         return response;

@@ -1,7 +1,7 @@
 package ru.com.m74.extjs;
 
 import org.springframework.transaction.annotation.Transactional;
-import ru.com.m74.extjs.dto.Pagination;
+import ru.com.m74.extjs.dto.Request;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -35,16 +35,16 @@ public class JpaRepositoryImpl<T> implements JpaRepository<T> {
     }
 
     @Override
-    public Iterable<T> getAll(Pagination pagination) {
+    public Iterable<T> getAll(Request request) {
         CriteriaBuilder builder = em.getCriteriaBuilder();
         CriteriaQuery<T> q = builder.createQuery(domain);
         q.select(q.from(domain));
 
         TypedQuery<T> tq = em.createQuery(q);
 
-        if (pagination.isValid()) {
-            tq.setFirstResult(pagination.getStart());
-            tq.setMaxResults(pagination.getLimit());
+        if (request.isPaging()) {
+            tq.setFirstResult(request.getStart());
+            tq.setMaxResults(request.getLimit());
         }
 
         return tq.getResultList();

@@ -10,9 +10,9 @@ Ext.define('Test.view.Users', {
 
     model: 'Test.model.User',
 
-    plugins: {
+    plugins: [{
         cellediting: true
-    },
+    }],
 
     columns: [{
         text: '#',

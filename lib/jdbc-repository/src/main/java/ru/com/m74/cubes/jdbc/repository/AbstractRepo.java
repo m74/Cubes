@@ -1,12 +1,12 @@
 package ru.com.m74.cubes.jdbc.repository;
 
-import ru.com.m74.extjs.dto.Pagination;
+import ru.com.m74.extjs.dto.Request;
 
 import java.util.Map;
 
 public interface AbstractRepo<T> {
 
-    Iterable<T> getAll(Pagination pagination);
+    Iterable<T> getAll(Request request);
 
     long count();
 
