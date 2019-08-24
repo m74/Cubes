@@ -8,6 +8,7 @@ public class Response<T> {
 
     private String message;
 
+    private final MetaData metaData = new MetaData();
 
     public Response(T records) {
         this.records = records;
@@ -29,7 +30,7 @@ public class Response<T> {
         this.totalCount = totalCount;
     }
 
-    public boolean getSuccess() {
+    public boolean isSuccess() {
         return success;
     }
 
@@ -43,5 +44,9 @@ public class Response<T> {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public MetaData getMetaData() {
+        return metaData;
     }
 }
