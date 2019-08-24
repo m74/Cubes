@@ -6,8 +6,10 @@ import ru.com.m74.cubes.jdbc.annotations.Table;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Objects;
 
 import static ru.com.m74.cubes.common.ObjectUtils.*;
+import static ru.com.m74.cubes.common.StringUtils.camel2snake;
 
 /**
  * @author mixam
@@ -32,7 +34,7 @@ public class SqlUtils {
                 LinkTo linkTo = field.getAnnotation(LinkTo.class);
                 return new String[]{field.getName() + "_" + linkTo.title()};
             } else {
-                return new String[]{getColumnName(type, field)};
+                return new String[]{getColumnNameWithAlias(type, field)};
             }
         } else {
             return columns;
@@ -44,31 +46,55 @@ public class SqlUtils {
         return alias;
     }
 
-    public static String tableAlias(Table tna) {
-        if (isNotEmpty(tna.alias())) return tna.alias();
+    public static String tableAlias(Class<?> type) {
+        Table tna = type.getAnnotation(Table.class);
+        if (tna == null) {
+            throw new RuntimeException("Annotation not present: " + Table.class);
+        }
+
+//        if (isNotEmpty(tna.alias())) return tna.alias();
         if (isEmpty(tna.value())) return null;
         String arr[] = tna.value().split(" ");
         return arr.length == 2 ? arr[1] : null;
     }
 
-    public static String tableName(Table tna) {
-        if (isEmpty(tna.value())) return null;
-        if (isEmpty(tna.alias())) return tna.value().split(" ")[0];
-        return tna.value();
+    public static String tableName(Class<?> type) {
+        Table a = type.getAnnotation(Table.class);
+        if (a != null && isNotEmpty(a.value()))
+            return a.value().split(" ")[0];
+        else return camel2snake(type.getSimpleName());
     }
 
-    public static <T> String getColumnName(Class<T> type, Field field) {
-        Table tna = type.getAnnotation(Table.class);
-        Column rsfa = field.getAnnotation(Column.class);
-        String column = rsfa.value();
-        if (column.contains(".")) return column;
+    public static <T> String getColumnNameWithAlias(Class<T> type, String fieldName) {
+        return getColumnNameWithAlias(type, Objects.requireNonNull(DTOUtils.findField(type, fieldName)));
+    }
 
-        String alias = getFieldAlias(rsfa);
-        if (isEmpty(alias)) alias = tableAlias(tna);
+    public static String getColumnName(Field field) {
+        Column col = field.getAnnotation(Column.class);
+        String cname = col.value();
+        if (isEmpty(cname)) cname = camel2snake(field.getName());
+        return cname;
+    }
+
+    public static <T> String getColumnNameWithAlias(Class<T> type, Field field) {
+        Column col = field.getAnnotation(Column.class);
+        String column = col.value();
+        if (isEmpty(column)) {
+            column = camel2snake(field.getName());
+        } else if (column.contains(".")) {
+            return column;
+        }
+
+        String alias = getFieldAlias(col);
+        if (isEmpty(alias)) alias = tableAlias(type);
         if (isNotEmpty(alias)) {
-            column = aliasName(alias) + "." + column;
+            column = alias + "." + quote(column);
         }
         return column;
+    }
+
+    public static String quote(String name) {
+        return "\"" + name + "\"";
     }
 
 
@@ -77,16 +103,16 @@ public class SqlUtils {
 //    }
 
     public static String getResultSetFieldName(Field field) {
-        Column rsf = field.getAnnotation(Column.class);
-        if (isNotEmpty(rsf.as())) {
-            return rsf.as();
-        }
+//        Column rsf = field.getAnnotation(Column.class);
+//        if (isNotEmpty(rsf.as())) {
+//            return rsf.as();
+//        }
 
-        String value = rsf.value();
-        if (isNotEmpty(value)) {
-            int i = value.lastIndexOf('.');
-            return i != -1 ? value.substring(i + 1) : value;
-        }
+//        String value = rsf.value();
+//        if (isNotEmpty(value)) {
+//            int i = value.lastIndexOf('.');
+//            return i != -1 ? value.substring(i + 1) : value;
+//        }
 
         return field.getName();
     }
@@ -100,16 +126,16 @@ public class SqlUtils {
         return dtoClass.getDeclaredMethod("set" + field.getName().substring(0, 1).toUpperCase() + field.getName().substring(1), field.getType());
     }
 
-    public static <T> boolean isFieldInTable(Class<T> dtoClass, Field field) {
+    public static <T> boolean isFieldInTable(Class<T> type, Field field) {
         try {
             findSetter(field.getDeclaringClass(), field);
-            Column rsf = field.getAnnotation(Column.class);
-            if (isEmpty(rsf.value())) return false;
-            String fieldAlias = getFieldAlias(rsf);
-            return isEmpty(fieldAlias) || isEquals(tableAlias(dtoClass.getAnnotation(Table.class)), fieldAlias);
         } catch (NoSuchMethodException e) {
             return false;
         }
-
+        Column col = field.getAnnotation(Column.class);
+        if (isNotEmpty(col.sql())) return false;
+        String fieldAlias = getFieldAlias(col);
+        return isEmpty(fieldAlias) || isEquals(tableAlias(type), fieldAlias);
     }
+
 }

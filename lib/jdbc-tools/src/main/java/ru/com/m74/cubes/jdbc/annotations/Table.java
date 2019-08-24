@@ -11,5 +11,5 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 public @interface Table {
     String value() default "";
-    String alias() default "";
+//    String alias() default "";
 }

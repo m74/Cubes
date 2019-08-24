@@ -32,7 +32,7 @@ public @interface LinkTo {
      *
      * @return
      */
-    String on() default "";
+//    String on() default "";
 
     /**
      * Запрос для получения значения поля title
@@ -46,5 +46,5 @@ public @interface LinkTo {
      *
      * @return
      */
-    String as() default "";
+//    String as() default "";
 }

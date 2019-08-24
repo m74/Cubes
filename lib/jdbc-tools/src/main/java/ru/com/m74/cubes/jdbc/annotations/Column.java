@@ -22,7 +22,7 @@ import java.sql.ResultSet;
 @Retention(value = RetentionPolicy.RUNTIME)
 public @interface Column {
     String value() default "";
-    String as() default "";
+//    String as() default "";
     String sql() default "";
     String[] orderBy() default {};
 }

@@ -16,6 +16,7 @@ import java.util.Date;
 
 import static ru.com.m74.cubes.common.ObjectUtils.isEmpty;
 import static ru.com.m74.cubes.common.ObjectUtils.isNotEmpty;
+import static ru.com.m74.cubes.jdbc.utils.SqlUtils.getResultSetFieldName;
 
 public class EMUtils {
     public static final String TIMESTAMP_FORMAT = "yyyy-MM-dd'T'HH:mm:ssXXX";
@@ -39,17 +40,17 @@ public class EMUtils {
     public static Object getResultSetValue(ResultSet rs, Field field) throws ColumnNotFoundException {
 
         Class fieldType = field.getType();
-        String colName = SqlUtils.getResultSetFieldName(field);
+        String colName = getResultSetFieldName(field);
 
         if (field.isAnnotationPresent(LinkTo.class)) {
             LinkTo annotation = field.getAnnotation(LinkTo.class);
             if (fieldType.equals(Link.class)) {
-                Object id = get(rs, field.getName() + "_" + annotation.id());
+                Object id = get(rs, field.getName() + "Id");
                 if (id == null) return null;
-                String title = get(rs, field.getName() + "_" + annotation.title(), String.class);
+                String title = get(rs, field.getName() + "Title", String.class);
                 Link item = new Link(id, title);
                 if (isNotEmpty(annotation.bk())) {
-                    item.setBusinessKey(get(rs, field.getName() + "_" + annotation.bk(), String.class));
+                    item.setBusinessKey(get(rs, field.getName() + "Bk", String.class));
                 }
                 return item;
             }

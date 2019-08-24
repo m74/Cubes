@@ -42,14 +42,9 @@ public class EntityManager {
     public <T> Select<T> select(Class<T> type) {
         Select<T> select = new Select<>(type);
 
-        Table table = type.getAnnotation(Table.class);
-        if (table == null) {
-            throw new RuntimeException("Annotation not present: " + Table.class);
-        }
+        String tableAlias = tableAlias(type);
+        String tableName = tableName(type);
 
-        String tableAlias = tableAlias(table);
-
-        String tableName = tableName(table);
         select.from(isEmpty(tableAlias) ? tableName : tableName + " " + aliasName(tableAlias));
 
         Join join = type.getAnnotation(Join.class);
@@ -63,43 +58,46 @@ public class EntityManager {
 //                setHint("/*+ INDEX (" + tableName + " " + id.name() + ") */");
 //            }
 
-            Column rsfa = field.getAnnotation(Column.class);
+            Column a = field.getAnnotation(Column.class);
 
-            if (isNotEmpty(rsfa.sql())) {
-                select.field("(" + rsfa.sql() + ") as " + (isNotEmpty(rsfa.as()) ? rsfa.as() : field.getName()));
+            if (isNotEmpty(a.sql())) {
+//                select.field("(" + a.sql() + ") as " + (isNotEmpty(a.as()) ? a.as() : field.getName()));
+                select.field("(" + a.sql() + ") as " + quote(field.getName()));
             } else {
-                String column = getColumnName(type, field);
+                String column = getColumnNameWithAlias(type, field);
                 if (field.isAnnotationPresent(LinkTo.class)) {
                     if (field.getType().equals(Link.class)) {
                         LinkTo annotation = field.getAnnotation(LinkTo.class);
-                        String alias = annotation.as();
-                        if (isEmpty(alias)) alias = aliasName(field.getName());
+//                        String alias = annotation.as();
+//                        if (isEmpty(alias)) alias = aliasName(field.getName());
 
-                        if (isEmpty(annotation.on())) {
-                            select.join(
-                                    "left join " + annotation.table() + " " + alias + " " +
-                                            "ON(" + alias + "." + annotation.id() + "=" + column + ")");
-                        } else {
-                            select.join(
-                                    "left join " + annotation.table() + " " + alias + " " + "ON(" + annotation.on() + ")");
-                        }
-                        select.field(alias + "." + annotation.id() + " as " + field.getName() + "_" + annotation.id());
+                        String alias = quote(field.getName());
+
+//                        if (isEmpty(annotation.on())) {
+                        select.join(
+                                "left join " + annotation.table() + " " + alias + " " +
+                                        "ON(" + alias + "." + quote(annotation.id()) + "=" + column + ")");
+//                        } else {
+//                        select.join(
+//                                "left join " + annotation.table() + " " + alias + " " + "ON(" + annotation.on() + ")");
+//                        }
+                        select.field(alias + "." + annotation.id() + " as " + quote(field.getName() + "Id"));
                         String query = annotation.titleQuery();
                         if (isEmpty(query)) {
                             query = alias + "." + annotation.title();
                         }
-                        select.field("(" + query + ") as " + field.getName() + "_" + annotation.title());
+                        select.field("(" + query + ") as " + quote(field.getName() + "Title"));
                         if (isNotEmpty(annotation.bk())) {
-                            select.field(alias + "." + annotation.bk() + " as " + field.getName() + "_" + annotation.bk());
+                            select.field(alias + "." + annotation.bk() + " as " + quote(field.getName() + "Bk"));
                         }
                     }
+                } else if (field.isAnnotationPresent(ManyToOne.class)) {
+
                 } else {
-                    String as = rsfa.as();
-                    if (isNotEmpty(as)) {
-                        select.field(column + " as " + rsfa.as());
-                    } else {
-                        select.field(column);
-                    }
+//                    String as = a.as();
+//                    if (isEmpty(as)) as = field.getName();
+//                    select.field(column + " as " + quote(as));
+                    select.field(column + " as " + quote(field.getName()));
                 }
             }
         }
@@ -107,22 +105,12 @@ public class EntityManager {
         return select;
     }
 
-    private Insert insert(Class<?> type, boolean withId) {
+    private Insert insert(Class<?> type) {
         Insert q = new Insert();
-        Table table = type.getAnnotation(Table.class);
+        q.into(tableName(type));
 
-        if (table == null)
-            throw new RuntimeException("Annotation not present: " + Table.class);
-
-        q.into(tableName(table));
-
-        for (Field field : DTOUtils.getAnnotatedModelFields(type)) {
-            if (field.isAnnotationPresent(Id.class) && !withId) continue;
-
-            Column rsfa = field.getAnnotation(Column.class);
-            if (isNotEmpty(rsfa.value()) && rsfa.value().indexOf('.') == -1) {
-                q.value(SqlUtils.getResultSetFieldName(field), ":" + field.getName());
-            }
+        for (Field field : getUpdatableFields(type)) {
+            q.value(getColumnName(field), ":" + field.getName());
         }
 
         return q;
@@ -148,7 +136,10 @@ public class EntityManager {
         Field idField = getPrimaryKeyField(type);
         if (idField == null) throw new RuntimeException("@PrimaryKey annotation not present in: " + type);
         Object idValue = getValue(dto, idField);
-        jdbcTemplate.update(insert(type, idValue != null).toString(), namedParameters, keyHolder, new String[]{SqlUtils.getResultSetFieldName(idField)});
+        Insert q = insert(type);
+        if (idValue != null)
+            q.value(getColumnName(idField), ":" + idField.getName());
+        jdbcTemplate.update(q.toString(), namedParameters, keyHolder, new String[]{SqlUtils.getResultSetFieldName(idField)});
 
         // safe PK setting
         final Class<?> idFieldType = idField.getType();
@@ -170,12 +161,7 @@ public class EntityManager {
 
 
     private <T> Update update(Class<T> type, Map<String, Object> values) {
-        Table table = type.getAnnotation(Table.class);
-
-        if (table == null)
-            throw new RuntimeException("Annotation not present: " + Table.class);
-
-        Update q = new Update(tableName(table));
+        Update q = new Update(tableName(type));
 
         for (String key : values.keySet()) {
             Field field = DTOUtils.findField(type, key);
@@ -258,7 +244,7 @@ public class EntityManager {
 
         Update q = update(clazz, values);
         if (q.isNotEmpty()) {
-            values.put(DTOUtils.getPrimaryKeyField(clazz).getName(), idValue);
+            values.put(getPrimaryKeyField(clazz).getName(), idValue);
             jdbcTemplate.update(q.toPrettyString(), values);
         }
     }
@@ -313,89 +299,68 @@ public class EntityManager {
 
 
     public void update(Object dto) {
-//        singleQueriesUpdate(dto);
-        multiQueriesUpdate(dto);
+        singleQueriesUpdate(dto);
+//        multiQueriesUpdate(dto);
     }
 
     private void singleQueriesUpdate(Object dto) {
-        Class<?> dtoClass = dto.getClass();
+        Class<?> type = dto.getClass();
 
-        String tableName = SqlUtils.tableName(dtoClass.getAnnotation(Table.class));
+        String tableName = tableName(type);
 
         Update sql = new Update(tableName);
 
         Map<String, Object> values = new HashMap<>();
 
-        Field primaryKeyField = getPrimaryKeyField(dtoClass);
+        Field primaryKeyField = getPrimaryKeyField(type);
 
-        for (Field field : getModelAnnotatedFieldsWithoutId(dtoClass)) {
-            if (primaryKeyField == field) continue;
-            if (SqlUtils.isFieldInTable(dtoClass, field)) {
-
-                String sqlFieldName = SqlUtils.getResultSetFieldName(field);
-                String fieldName = field.getName();
-                Object value = getValue(dto, field);
-                values.put(fieldName, value);
-
-                sql.set(sqlFieldName, ":" + fieldName);
-            }
+        for (Field field : getUpdatableFields(type)) {
+            String fieldName = field.getName();
+            values.put(fieldName, getValue(dto, field));
+            sql.set(getColumnName(field), ":" + fieldName);
         }
 
-        sql.where(SqlUtils.getResultSetFieldName(primaryKeyField) + "=:" + primaryKeyField.getName());
+        sql.where(getColumnName(primaryKeyField) + "=:" + primaryKeyField.getName());
 
         values.put(primaryKeyField.getName(), getValue(dto, primaryKeyField));
-
-//        LOG.debug("sql: {}", sql);
-//        LOG.debug("values: {}", values);
 
         jdbcTemplate.update(sql.toString(), values);
     }
 
     private void multiQueriesUpdate(Object dto) {
-        Class<?> dtoClass = dto.getClass();
-        String tableName = getTableName(dtoClass);
-//        String tableAlias = dtoClass.getAnnotation(TableName.class).alias();
+        Class<?> type = dto.getClass();
+        String tableName = tableName(type);
+//        String tableAlias = type.getAnnotation(TableName.class).alias();
 
-        Field primaryKeyField = getPrimaryKeyField(dtoClass);
-        String sqlPrimaryKeyName = SqlUtils.getResultSetFieldName(primaryKeyField);
+        Field primaryKeyField = getPrimaryKeyField(type);
+        String sqlPrimaryKeyName = getColumnName(primaryKeyField);
         Object idValue = getValue(dto, primaryKeyField);
 
-        for (Field field : getModelAnnotatedFieldsWithoutId(dtoClass)) {
-            if (primaryKeyField == field) continue;
-            if (SqlUtils.isFieldInTable(dtoClass, field)) {
-                Object value = getValue(dto, field);
-                jdbcTemplate.update("UPDATE " + tableName + " set " + SqlUtils.getResultSetFieldName(field) + "=:value where " + sqlPrimaryKeyName + "=:id", map().add("value", value).add("id", idValue));
-            }
+        for (Field field : getUpdatableFields(type)) {
+            Object value = getValue(dto, field);
+            jdbcTemplate.update("UPDATE " + tableName + " set " + getColumnName(field) + "=:value where " + sqlPrimaryKeyName + "=:id", map().add("value", value).add("id", idValue));
         }
-    }
-
-    private static String getTableName(Class<?> dtoClass) {
-        Table tableNameAnnotation = dtoClass.getAnnotation(Table.class);
-        if (tableNameAnnotation == null) {
-            throw new IllegalStateException("Table name can't be determined " +
-                    "because it is not annotated using @TableName");
-        }
-        return tableName(tableNameAnnotation);
     }
 
     /**
      * Все поля модели аннотированные как @ResultsetField исключая @Id
      *
-     * @param dtoClass
+     * @param type
      * @return
      */
-    private static List<Field> getModelAnnotatedFieldsWithoutId(Class<?> dtoClass) {
-        return DTOUtils.getModelFields(dtoClass,
-                field -> field.isAnnotationPresent(Id.class)
-                        || field.isAnnotationPresent(Column.class));
+    private static List<Field> getUpdatableFields(Class<?> type) {
+        return DTOUtils.getModelFields(type,
+                field -> field.isAnnotationPresent(Column.class),
+                field -> !field.isAnnotationPresent(Id.class),
+                field -> isFieldInTable(type, field));
     }
 
     public <T> T get(Class<T> type, Object id) {
-        return get(type, DTOUtils.getPrimaryKeyField(type), id);
+        return get(type, getPrimaryKeyField(type), id);
     }
 
     private <T> T get(Class<T> type, Field field, Object value) {
-        return getSingleResult(select(type).where(SqlUtils.getColumnName(type, field) + "=:id"), map("id", value));
+        return getSingleResult(select(type).where(getColumnNameWithAlias(type, field) + "=:id"), map("id", value));
     }
 
 //    public <T> T getSingleResult(Select<T> query, Map<String, Object> params, RowMapper<T> mapper) {
@@ -411,7 +376,7 @@ public class EntityManager {
     public void remove(Class type, Object idValue) {
         Field primaryKeyField = getPrimaryKeyField(type);
         String primaryKeyFieldName = SqlUtils.getResultSetFieldName(primaryKeyField);
-        String tableName = getTableName(type);
+        String tableName = tableName(type);
 
         jdbcTemplate.update("DELETE " + tableName + " WHERE " + primaryKeyFieldName + " = :id", map("id", idValue));
     }
