@@ -2,6 +2,8 @@ package ru.com.m74.extjs.dto;
 
 import java.util.Map;
 
+import static ru.com.m74.cubes.common.ObjectUtils.forEach;
+
 /**
  * Стандартные параметры запроса для Ext.data.Store
  *
@@ -69,7 +71,8 @@ public class Request {
     }
 
     public void applyParams(Map<String, Object> params) {
-        params.put("query", query);
+        if (query != null) params.put("query", query);
+        forEach(filter, f -> params.put(f.getProperty(), f.getValue()));
         params.put("start", start);
         params.put("limit", limit);
     }
