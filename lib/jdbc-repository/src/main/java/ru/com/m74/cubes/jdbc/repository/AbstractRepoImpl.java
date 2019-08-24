@@ -1,12 +1,11 @@
 package ru.com.m74.cubes.jdbc.repository;
 
 import ru.com.m74.cubes.jdbc.EntityManager;
+import ru.com.m74.cubes.jdbc.utils.EMUtils;
 import ru.com.m74.cubes.sql.base.Select;
 import ru.com.m74.extjs.dto.Request;
 
 import java.util.Map;
-
-import static ru.com.m74.cubes.common.MapUtils.map;
 
 
 public class AbstractRepoImpl<T> implements AbstractRepo<T> {
@@ -20,25 +19,25 @@ public class AbstractRepoImpl<T> implements AbstractRepo<T> {
         this.em = em;
     }
 
-    protected Select<T> createQuery(Map<String, Object> params) {
+    protected Select<T> createAllQuery(Request request, Map<String, Object> params) {
         return em.select(type);
     }
 
     @Override
-    public Iterable<T> getAll(Request request) {
-        Map<String, Object> params = map();
-        Select<T> q = createQuery(params);
+    public Iterable<T> getAll(Request request, Map<String, Object> params) {
+        Select<T> q = createAllQuery(request, params);
         if (request.isPaging()) {
-            request.applyParams(params);
             q.setPagging(true);
         }
+        request.applyParams(params);
+        EMUtils.sort(q, request.getSort());
         return em.getResultList(q, params);
     }
 
     @Override
-    public long count() {
-        Map<String, Object> params = map();
-        return em.count(createQuery(params), params);
+    public long count(Request request, Map<String, Object> params) {
+        request.applyParams(params);
+        return em.count(createAllQuery(request, params), params);
     }
 
     @Override

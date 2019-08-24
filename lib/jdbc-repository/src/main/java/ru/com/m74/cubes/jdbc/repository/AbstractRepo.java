@@ -6,9 +6,9 @@ import java.util.Map;
 
 public interface AbstractRepo<T> {
 
-    Iterable<T> getAll(Request request);
+    Iterable<T> getAll(Request request, Map<String, Object> params);
 
-    long count();
+    long count(Request request, Map<String, Object> params);
 
     T get(Object id);
 
