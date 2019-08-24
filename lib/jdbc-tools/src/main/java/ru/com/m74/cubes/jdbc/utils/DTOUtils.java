@@ -130,4 +130,15 @@ public class DTOUtils {
 
         return value;
     }
+//
+//    public static <T> Map getColumnsMap(Class<T> type) {
+//        Map<String, Object> map = map();
+//
+//        forEach(getAnnotatedModelFields(type), field -> {
+//            String name = field.getName();
+//            map.put(name, SqlUtils.getColumnNameWithAlias(type, name));
+//        });
+//        return map;
+//    }
+//
 }
