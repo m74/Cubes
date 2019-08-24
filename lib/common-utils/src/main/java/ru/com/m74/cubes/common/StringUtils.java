@@ -25,6 +25,10 @@ public class StringUtils {
         return result;
     }
 
+    public static String camel2snake(String str) {
+        return str.replaceAll("(.)(\\p{Upper})", "$1_$2").toUpperCase();
+    }
+
     /**
      * Убирает из строки лишние пробелы
      *

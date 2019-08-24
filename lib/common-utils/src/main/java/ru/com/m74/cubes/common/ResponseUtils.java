@@ -1,12 +1,20 @@
 package ru.com.m74.cubes.common;
 
+import org.apache.commons.io.FileUtils;
+
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 public class ResponseUtils {
+
+    public static void write(HttpServletResponse response, File file) throws IOException {
+
+        write(response, FileUtils.readFileToByteArray(file));
+    }
 
     public static void write(HttpServletResponse response, byte[] data) throws IOException {
         response.setContentLength(data.length);
