@@ -1,3 +1,4 @@
+Ext.Loader.loadScriptsSync('cubes/view/Dashboard.css');
 /**
  * Ext.cubes.view.Dashboard
  *
