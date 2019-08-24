@@ -8,7 +8,8 @@ Ext.define('Ext.cubes.Application', {
     extend: 'Ext.app.Application',
 
     requires: [
-        'overrides.util.Format', 'overrides.Date', 'overrides.grid.column.Boolean', 'overrides.form.field.Date', 'overrides.data.field.Date',
+        'overrides.util.Format', 'overrides.Date', 'overrides.grid.column.Boolean', 'overrides.form.field.Date',
+        'overrides.data.field.Date', 'overrides.Action','overrides.Component', 'overrides.view.Table',
         'Ext.cubes.model.Shortcut',
         'Ext.cubes.view.MenuItem'
     ],
