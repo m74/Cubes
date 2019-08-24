@@ -8,7 +8,7 @@ import java.util.List;
  * @author mixam
  * @since 01.07.16 23:50
  */
-public class Where implements Serializable {
+public class Where<T> implements Serializable {
     private List<String> conditions = new ArrayList<>();
 
     public Where(String... conditions) {
