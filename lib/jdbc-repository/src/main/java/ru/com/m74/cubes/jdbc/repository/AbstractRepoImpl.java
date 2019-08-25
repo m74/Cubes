@@ -1,11 +1,12 @@
 package ru.com.m74.cubes.jdbc.repository;
 
 import ru.com.m74.cubes.jdbc.EntityManager;
-import ru.com.m74.cubes.jdbc.utils.EMUtils;
 import ru.com.m74.cubes.sql.base.Select;
 import ru.com.m74.extjs.dto.Request;
 
 import java.util.Map;
+
+import static ru.com.m74.cubes.jdbc.utils.EMUtils.sort;
 
 
 public class AbstractRepoImpl<T> implements AbstractRepo<T> {
@@ -30,7 +31,7 @@ public class AbstractRepoImpl<T> implements AbstractRepo<T> {
             q.setPagging(true);
         }
         request.applyParams(params);
-        EMUtils.sort(q, request.getSort());
+        sort(q, request.getSort());
         return em.getResultList(q, params);
     }
 
