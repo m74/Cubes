@@ -39,6 +39,10 @@ public class EntityManager {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    public NamedParameterJdbcTemplate getJdbcTemplate() {
+        return jdbcTemplate;
+    }
+
     public <T> Select<T> select(Class<T> type) {
         Select<T> select = new Select<>(type);
 
@@ -278,14 +282,9 @@ public class EntityManager {
         return jdbcTemplate.queryForObject(q.getCountSql(), params, Long.class);
     }
 
-    public <T> Iterable<T> getResultList(String q, Map<String, Object> params, RowMapper<T> mapper) {
-        return jdbcTemplate.query(q, params, mapper);
-    }
-
     public <T> Iterable<T> getResultList(Select<T> q, Map<String, Object> params) {
-        return getResultList(q.toString(), params, (resultSet, i) -> createEntity(resultSet, q.getType()));
+        return jdbcTemplate.query(q.toString(), params, (resultSet, i) -> createEntity(resultSet, q.getType()));
     }
-
 
     public void save(Object dto) {
         Field primaryKeyField = getPrimaryKeyField(dto.getClass());
