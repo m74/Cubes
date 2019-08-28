@@ -21,6 +21,34 @@ Ext.define('Ext.cubes.features.HotKeys', {
         Ext.each(this.map[this.key(e)], function (a) {
             console.log('onKeyDown: ', arguments, this);
             if (me.checkVisible(a.actionTarget)) {
+                var isSpecialKey = e.isSpecialKey();
+                var tc = Ext.fly(e.target).component;
+                if(tc){
+                    // Если это поле ввода пагинатора то отключаем обработку
+                    if (tc.hasCls('x-tbar-page-number')) {
+                        return;
+                    }
+
+                    // Не обрабатываем горячие клавиши есть у нас открыт пикер
+                    if (isSpecialKey && tc.picker && !tc.picker.hidden) {
+                        return;
+                    }
+
+                    // if (isSpecialKey) {
+                    //     // Обрабатываем случай когда курсор стоит в поле и нажимает Enter для фильтрации. В тот же момент у формы есть кнопка с Enter.
+                    //     // Случай когда надо чтобы работала и фильрация и сохранение по Enter в форме
+                    //     Ext.mixin.Observable.prototype.fireEventArgs.apply(tc, ['specialkey', [tc, event]]);
+                    //     tc.fireEvent = function (name) {
+                    //         if (name === 'specialkey') return;
+                    //         Ext.mixin.Observable.prototype.fireEvent.apply(tc, arguments);
+                    //     };
+                    //
+                    //     if (event.isStopped) {
+                    //         return;
+                    //     }
+                    // }
+                }
+
                 a.execute(e);
                 // if (e.getKey() >= 112 && e.getKey() <= 123)
                 e.stopEvent();
@@ -50,6 +78,9 @@ Ext.define('Ext.cubes.features.HotKeys', {
 
         if (!cmp.isVisible()) return false;
 
+        if (cmp === activeWindow) {
+            return true;
+        }
         // Если компонент находится внутри окна то он виден только если окно видимо + оно должно быть активно
         var parentWindow = cmp.up('window') || false;
         if (parentWindow &&
