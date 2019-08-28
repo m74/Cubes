@@ -282,7 +282,7 @@ public class EntityManager {
         return jdbcTemplate.queryForObject(q.getCountSql(), params, Long.class);
     }
 
-    public <T> Iterable<T> getResultList(Select<T> q, Map<String, Object> params) {
+    public <T> List<T> getResultList(Select<T> q, Map<String, Object> params) {
         return jdbcTemplate.query(q.toString(), params, (resultSet, i) -> createEntity(resultSet, q.getType()));
     }
 

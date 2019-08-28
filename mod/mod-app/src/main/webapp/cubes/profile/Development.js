@@ -17,6 +17,7 @@ Ext.define('Ext.cubes.profile.Development', {
             window.cmp = cmp;
 
             if (cmp.isXType('window')) {
+                cmp.modal = false;
                 cmp.show();
             } else {
                 if (cmp.isXType('field')) {

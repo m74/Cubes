@@ -1,9 +1,20 @@
 package ru.com.m74.cubes.jdbc;
 
+import ru.com.m74.cubes.jdbc.annotations.Column;
+
 public class Link {
+
+    @Column
     private Object id;
+
+    @Column
     private String title;
+
+    @Column
     private String businessKey;
+
+    public Link() {
+    }
 
     public Link(Object id, String title) {
         this.id = id;

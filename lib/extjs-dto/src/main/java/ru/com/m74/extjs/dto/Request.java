@@ -70,11 +70,12 @@ public class Request {
         return start != null && limit != null && page != null;
     }
 
-    public void applyParams(Map<String, Object> params) {
+    public Map<String, Object> applyParams(Map<String, Object> params) {
         if (query != null) params.put("query", query);
         forEach(filter, f -> params.put(f.getProperty(), f.getValue()));
         params.put("start", start);
         params.put("limit", limit);
+        return params;
     }
 
 }

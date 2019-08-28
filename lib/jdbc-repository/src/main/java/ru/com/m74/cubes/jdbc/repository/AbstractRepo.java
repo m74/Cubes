@@ -2,11 +2,14 @@ package ru.com.m74.cubes.jdbc.repository;
 
 import ru.com.m74.extjs.dto.Request;
 
+import java.util.List;
 import java.util.Map;
 
 public interface AbstractRepo<T> {
 
-    Iterable<T> getAll(Request request, Map<String, Object> params);
+    List<T> getAll(Request request);
+
+    List<T> getAll(Request request, Map<String, Object> params);
 
     long count(Request request, Map<String, Object> params);
 

@@ -7,44 +7,42 @@
 Ext.define('Ext.cubes.ux.Grid', {
     extend: 'Ext.grid.Panel',
 
-    controller: {
-        create: function () {
-            this.view.store.add({});
-        },
-        // edit: function () {
-        //     console.log('doEdit: ', arguments, this);
-        // },
-        remove: function () {
-            var view = this.view;
-            Ext.MessageBox.confirm('Внимание!', 'Вы действительно хотите удалить выбранные записи?', function (b) {
-                if (b === 'yes') {
-                    var recs = view.selModel.getSelection();
-                    view.store.remove(recs);
-                    //
-                    // var ids = [];
-                    // Ext.each(recs, function (rec) {
-                    //     ids.push(rec.id);
-                    // });
-                    //
-                    // Ext.Ajax.request({
-                    //     url: view.store.model.getProxy().getUrl(),
-                    //     jsonData: {
-                    //         ids: ids
-                    //     },
-                    //     params: {
-                    //         ids: ids
-                    //     },
-                    //     method: 'DELETE',
-                    //     success: function () {
-                    //         view.store.remove(recs);
-                    //     }
-                    // });
-                }
-            });
-        },
-        reload: function () {
-            this.view.store.loadPage(1);
-        }
+    defaultListenerScope: true,
+
+    doCreateRecord: function () {
+        this.store.add({});
+    },
+
+    doRemoveRecord: function () {
+        var view = this.view;
+        Ext.MessageBox.confirm('Внимание!', 'Вы действительно хотите удалить выбранные записи?', function (b) {
+            if (b === 'yes') {
+                var recs = view.selModel.getSelection();
+                view.store.remove(recs);
+                //
+                // var ids = [];
+                // Ext.each(recs, function (rec) {
+                //     ids.push(rec.id);
+                // });
+                //
+                // Ext.Ajax.request({
+                //     url: view.store.model.getProxy().getUrl(),
+                //     jsonData: {
+                //         ids: ids
+                //     },
+                //     params: {
+                //         ids: ids
+                //     },
+                //     method: 'DELETE',
+                //     success: function () {
+                //         view.store.remove(recs);
+                //     }
+                // });
+            }
+        });
+    },
+    doReload: function () {
+        this.view.store.loadPage(1);
     },
 
     selModel: {
@@ -55,23 +53,25 @@ Ext.define('Ext.cubes.ux.Grid', {
     actions: {
         create: {
             tooltip: 'Создать',
-            glyph: 'xf067@FontAwesome',
-            handler: 'create'
+            iconCls: 'x-fa fa-plus',
+            handler: 'doCreateRecord'
         },
-        // edit: {
-        //     tooltip: 'Редактировать',
-        //     glyph: 'xf044@FontAwesome',
-        //     handler: 'edit'
-        // },
+        edit: {
+            tooltip: 'Редактировать',
+            iconCls: 'x-fa fa-pencil',
+            enableOn:['singleSelect'],
+            handler: 'doEditRecord'
+        },
         remove: {
             tooltip: 'Удалить',
-            glyph: 'xf1f8@FontAwesome',
-            handler: 'remove'
+            iconCls: 'x-fa fa-trash',
+            enableOn:['singleSelect'],
+            handler: 'doRemoveRecord'
         },
         reload: {
             tooltip: 'Перезагрузить',
-            glyph: 'xf021@FontAwesome',
-            handler: 'reload'
+            iconCls: 'x-fa fa-refresh',
+            handler: 'doReload'
         }
     },
     tbar: [
@@ -88,15 +88,6 @@ Ext.define('Ext.cubes.ux.Grid', {
     },
 
     initComponent: function () {
-        Ext.apply(this, {
-            store: {
-                model: this.model,
-                remoteFilter: true,
-                remoteSort: true,
-                autoSync: true,
-                autoLoad: true
-            }
-        });
         this.callParent(arguments);
     }
 });

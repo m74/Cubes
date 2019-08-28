@@ -17,7 +17,7 @@ public class ExceptionDTO {
     private List<String> stackTrace = new ArrayList<>();
     private ExceptionDTO cause = null;
 
-    ExceptionDTO(Throwable ex) {
+    public ExceptionDTO(Throwable ex) {
         message = ex.getMessage();
         type = ex.getClass().getName();
 
