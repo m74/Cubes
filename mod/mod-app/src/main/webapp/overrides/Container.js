@@ -10,22 +10,7 @@ Ext.define('overrides.Container', {
 
     initComponent: function () {
         this.on('beforeadd', function (cnt, item) {
-            if (Ext.hasRoles(item.roles)) {
-                var app = sdd.Application;
-
-                Ext.each(item.stores, function (name) {
-                    app.getStore(name);
-                }, this);
-
-                Ext.each(item.controllers, function (name) {
-                    app.getController(name);
-                }, this);
-
-                return true;
-            } else {
-                console.log('skip: ', item.roles, item);
-                return false;
-            }
+            return Ext.hasRoles(item.roles);
         }, this);
         this.callParent(arguments);
     },
@@ -52,3 +37,17 @@ Ext.define('overrides.Container', {
 Ext.hasRoles = function () {
     return true;
 };
+
+
+Ext.define('overrides.cubes.Application', {
+    override: 'Ext.cubes.Application',
+    init: function () {
+        var me = this;
+        this.callParent(arguments);
+        this.on('login', function () {
+            me.shortcuts = me.shortcuts.filterBy(function (itm) {
+                return Ext.hasRoles(itm.roles);
+            });
+        })
+    }
+});
