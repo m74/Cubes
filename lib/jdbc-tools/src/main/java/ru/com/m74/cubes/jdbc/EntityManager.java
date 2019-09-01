@@ -1,6 +1,5 @@
 package ru.com.m74.cubes.jdbc;
 
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -132,8 +131,9 @@ public class EntityManager {
     }
 
 
-    public void persist(Object dto) {
-        Class<?> type = dto.getClass();
+    @SuppressWarnings({"unchecked"})
+    public <T> T persist(T dto) {
+        Class<T> type = (Class<T>) dto.getClass();
         SqlParameterSource namedParameters = generateSqlValues(dto);
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -150,17 +150,17 @@ public class EntityManager {
         if (idFieldType.isAssignableFrom(Long.class) || idFieldType.equals(long.class)) {
             //if long
             if (keyHolder.getKey() != null)
-                set(dto, idField, keyHolder.getKey().longValue());
+                setValue(dto, idField, keyHolder.getKey().longValue());
         } else if (idFieldType.isAssignableFrom(BigDecimal.class)) {
             // if big number
             if (keyHolder.getKey() != null)
-                set(dto, idField, new BigDecimal(keyHolder.getKey().toString()));
+                setValue(dto, idField, new BigDecimal(keyHolder.getKey().toString()));
         } else {
             throw new IllegalStateException(
                     MessageFormat.format("Неподдерживаемый тип PK поля ({1}) для сущности {0}",
                             dto.getClass().getName(), idFieldType.getName()));
         }
-
+        return get(type, getValue(dto, idField));
     }
 
 
@@ -266,7 +266,7 @@ public class EntityManager {
                 T dto = type.newInstance();
                 for (Field field : DTOUtils.getAnnotatedModelFields(type)) {
                     try {
-                        set(dto, field, getResultSetValue(rs, field));
+                        setValue(dto, field, getResultSetValue(rs, field));
                     } catch (ColumnNotFoundException ignored) {
                     }
                 }

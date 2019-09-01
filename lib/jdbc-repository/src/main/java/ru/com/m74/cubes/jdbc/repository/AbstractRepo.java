@@ -17,6 +17,8 @@ public interface AbstractRepo<T> {
 
     T save(T entity);
 
+    T persist(T entity);
+
     T save(Object id, Map<String, Object> changes);
 
     void deleteById(Object id);
