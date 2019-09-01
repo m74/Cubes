@@ -20,19 +20,38 @@ import java.util.stream.Stream;
  */
 public class DTOUtils {
 
-    public static Object get(Object dto, Field field) {
+    public static Object getValue(Object dto, Field field) {
         try {
             boolean isPrivate = !field.isAccessible();
             if (isPrivate) field.setAccessible(true);
             Object value = field.get(dto);
             if (isPrivate) field.setAccessible(false);
+
+
+            if (value == null) {
+                return null;
+            }
+
+            if (field.isAnnotationPresent(Id.class) && value instanceof Number && ((Number) value).intValue() <= 0) {
+                return null;
+            }
+
+            if (value instanceof Boolean) {
+                return ((Boolean) value) ? 1 : 0;
+            }
+
+            if (field.getType().isEnum()) {
+                return ((Enum<?>) value).name();
+            }
+
             return value;
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }
+
     }
 
-    public static void set(Object dto, Field field, Object value) {
+    public static void setValue(Object dto, Field field, Object value) {
         try {
             boolean isPrivate = !field.isAccessible();
             if (isPrivate) field.setAccessible(true);
@@ -109,27 +128,6 @@ public class DTOUtils {
         }
     }
 
-    public static Object getValue(Object dto, Field field) {
-        Object value = get(dto, field);
-
-        if (value == null) {
-            return null;
-        }
-
-        if (field.isAnnotationPresent(Id.class) && value instanceof Number && ((Number) value).intValue() <= 0) {
-            return null;
-        }
-
-        if (value instanceof Boolean) {
-            return ((Boolean) value) ? 1 : 0;
-        }
-
-        if (field.getType().isEnum()) {
-            return ((Enum<?>) value).name();
-        }
-
-        return value;
-    }
 //
 //    public static <T> Map getColumnsMap(Class<T> type) {
 //        Map<String, Object> map = map();
