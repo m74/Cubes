@@ -23,22 +23,12 @@ Ext.define('Ext.cubes.view.HistoryPlugin', {
     },
 
     onChange: function (token) {
-        // var app = Ext.getApplication();
-        // if (token !== app.lastToken) {
-        //     console.log('change: ', token);
-
         Ext.WindowManager.each(function (win) {
             if (win.modal) {
                 win.close();
             }
         });
 
-        var path = token.split('/');
-        if (Ext.isEmpty(path[0])) {
-            path.shift();
-        }
-
-        if (!Ext.isEmpty(path)) this.tabs.openTab(path);
-        // }
+        this.tabs.openTab(token);
     }
 });

@@ -9,6 +9,7 @@ Ext.define('Ext.cubes.view.Workspace', {
     requires: [
         'Ext.cubes.view.HistoryPlugin'
     ],
+    xtype: 'workspace',
     plugins: ['history'],
 
     defaults: {
@@ -34,12 +35,26 @@ Ext.define('Ext.cubes.view.Workspace', {
         }
     },
 
-    openTab: function (itemId) {
+    openTab: function (token) {
+        var itemId = token.replace(/\//, '-');
         var tab = this.down('#' + itemId);
         if (!tab) {
-            tab = this.add(Ext.getApplication().shortcuts.get(itemId));
+            var cfg = Ext.getApplication().shortcuts.get(token);
+            if (!cfg) {
+                Ext.each(Ext.getApplication().registry, function (item) {
+                    if (item.regexp.test(token)) {
+                        cfg = item;
+                        return false;
+                    }
+                });
+            }
+            if (cfg) {
+                cfg.itemId = itemId;
+                tab = this.add(cfg);
+            }
+            else console.log('config not found: ', token);
         }
-        this.setActiveTab(tab);
+        if (tab) this.setActiveTab(tab);
 
     }
 });
