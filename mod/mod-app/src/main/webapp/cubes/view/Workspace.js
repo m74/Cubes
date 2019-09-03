@@ -36,8 +36,7 @@ Ext.define('Ext.cubes.view.Workspace', {
     },
 
     openTab: function (token) {
-        var itemId = token.replace(/\//, '-');
-        var tab = this.down('#' + itemId);
+        var tab = this.down('#' + token);
         if (!tab) {
             var cfg = Ext.getApplication().shortcuts.get(token);
             if (!cfg) {
@@ -49,7 +48,7 @@ Ext.define('Ext.cubes.view.Workspace', {
                 });
             }
             if (cfg) {
-                cfg.itemId = itemId;
+                cfg.itemId = token;
                 tab = this.add(cfg);
             }
             else console.log('config not found: ', token);

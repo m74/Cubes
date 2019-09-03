@@ -29,6 +29,7 @@ Ext.define('Ext.cubes.view.HistoryPlugin', {
             }
         });
 
-        this.tabs.openTab(token);
+        token = token.replace(/\//, '-');
+        if (!Ext.isEmpty(token)) this.tabs.openTab(token);
     }
 });
