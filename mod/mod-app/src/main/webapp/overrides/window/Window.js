@@ -15,9 +15,9 @@ Ext.define('overrides.window.Window', {
         }
 
         this.on('resize', function (cmp, w, h) {
-            var vh = Ext.getBody().getViewSize().height;
+            var vh = Ext.getBody().getViewSize().height - 20;
             if (vh < h) {
-                me.setHeight(vh - 20);
+                me.setHeight(vh);
             }
             this.center();
         });
