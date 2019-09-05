@@ -11,7 +11,7 @@ Ext.define('Ext.toolbar.Button', {
     xtype: 'tdbutton',
 
     setText: function (text) {
-        if (this._hasIcon()) {
+        if (this.baseAction && this._hasIcon()) {
             this.setTooltip(text)
         } else {
             this.callParent(arguments);
