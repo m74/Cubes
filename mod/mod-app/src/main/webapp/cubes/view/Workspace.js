@@ -35,14 +35,30 @@ Ext.define('Ext.cubes.view.Workspace', {
         }
     },
 
-    openTab: function (token) {
+    loadRecord: function (model, id, success) {
+        var me = this;
+
+        me.mask('Идет загрузка ...');
+        if (Ext.isString(model)) {
+            model = Ext.Loader.syncRequire(model);
+        }
+        model.load(id, {
+            callback: function () {
+                me.unmask();
+            },
+            success: success
+        });
+    },
+
+    handleToken: function (token) {
+        var me = this;
         var tab = this.down('#' + token);
         if (!tab) {
             var cfg = Ext.getApplication().shortcuts.get(token);
             if (!cfg) {
                 Ext.each(Ext.getApplication().registry, function (item) {
                     if (item.regexp.test(token)) {
-                        cfg = item;
+                        item.fn(me, token);
                         return false;
                     }
                 });
@@ -50,8 +66,9 @@ Ext.define('Ext.cubes.view.Workspace', {
             if (cfg) {
                 cfg.itemId = token;
                 tab = this.add(cfg);
+            } else {
+                console.log('config not found: ', token);
             }
-            else console.log('config not found: ', token);
         }
         if (tab) this.setActiveTab(tab);
 

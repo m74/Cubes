@@ -30,6 +30,6 @@ Ext.define('Ext.cubes.view.HistoryPlugin', {
         // });
 
         token = token.replace(/\//, '-');
-        if (!Ext.isEmpty(token)) this.tabs.openTab(token);
+        if (!Ext.isEmpty(token)) this.tabs.handleToken(token);
     }
 });
