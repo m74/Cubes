@@ -30,8 +30,8 @@ public class CRUDController<T> {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public Response<T> create(@RequestBody T entity) throws IOException {
-        return new Response<>(repository.save(entity));
+    public Response<T> create(@RequestBody T entity) {
+        return new Response<>(repository.persist(entity));
     }
 
     @RequestMapping(method = RequestMethod.PUT, path = "/{id}")
