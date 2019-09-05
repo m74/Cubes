@@ -71,6 +71,11 @@ Ext.define('Ext.cubes.view.Workspace', {
             }
         }
         if (tab) this.setActiveTab(tab);
+    },
 
+    openTab: function (cfg) {
+        var tab = this.down('#' + cfg.itemId);
+        if (!tab) tab = this.add(cfg);
+        this.setActiveItem(tab);
     }
 });
