@@ -151,16 +151,16 @@ Ext.define('overrides.hotkeys.Action', {
         var c = this.initialConfig, hk = this.hotkey;
         this.callParent(arguments);
         if (hk && c.text) {
-            this.setText(c.text);
+            cmp.setText(c.text + ' (' + this.hotkey.getTitle() + ')');
         }
     },
 
     setText: function (text) {
+        this.initialConfig.text = text;
         if (this.hotkey) {
             text += ' (' + this.hotkey.getTitle() + ')';
         }
-        this.callParent([text]);
-        // this.callEach('setText', [text]);
+        this.callEach('setText', [text]);
     }
 });
 
