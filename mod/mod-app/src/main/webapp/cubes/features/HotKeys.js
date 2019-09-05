@@ -19,7 +19,7 @@ Ext.define('Ext.cubes.features.HotKeys', {
     onKeyDown: function (e, dom, opts) {
         var me = this;
         Ext.each(this.map[this.key(e)], function (a) {
-            console.log('onKeyDown: ', arguments, this);
+            // console.log('onKeyDown: ', arguments, this);
             if (me.checkVisible(a.actionTarget)) {
                 var isSpecialKey = e.isSpecialKey();
                 var tc = Ext.fly(e.target).component;
