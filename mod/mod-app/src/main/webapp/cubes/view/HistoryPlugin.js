@@ -23,11 +23,11 @@ Ext.define('Ext.cubes.view.HistoryPlugin', {
     },
 
     onChange: function (token) {
-        Ext.WindowManager.each(function (win) {
-            if (win.modal) {
-                win.close();
-            }
-        });
+        // Ext.WindowManager.each(function (win) {
+        //     if (win.modal) {
+        //         win.close();
+        //     }
+        // });
 
         token = token.replace(/\//, '-');
         if (!Ext.isEmpty(token)) this.tabs.openTab(token);
