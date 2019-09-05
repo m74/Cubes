@@ -4,7 +4,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.com.m74.extjs.dto.Request;
 import ru.com.m74.extjs.dto.Response;
 
-import java.io.IOException;
 import java.util.Map;
 
 public class CRUDController<T> {
