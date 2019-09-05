@@ -23,12 +23,12 @@ Ext.define('Ext.cubes.features.HotKeys', {
             if (me.checkVisible(a.actionTarget)) {
                 var isSpecialKey = e.isSpecialKey();
                 var tc = Ext.fly(e.target).component;
-                if (tc) {
+                if (tc && isSpecialKey) {
                     if (tc instanceof Ext.Button) return;
                     // Если это поле ввода пагинатора то отключаем обработку
                     if (tc.ownerCt instanceof Ext.toolbar.Paging) return;
                     // Не обрабатываем горячие клавиши есть у нас открыт пикер
-                    if (tc instanceof Ext.form.field.ComboBox) return;
+                    if (tc instanceof Ext.form.field.ComboBox && !tc.picker.hidden) return;
                     // if (isSpecialKey && tc.picker && !tc.picker.hidden) return;
 
                     // if (isSpecialKey) {
@@ -189,4 +189,3 @@ Ext.define('overrides.ZIndexManager', {
         return win;
     }
 });
-
