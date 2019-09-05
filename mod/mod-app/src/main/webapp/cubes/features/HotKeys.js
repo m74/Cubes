@@ -23,16 +23,13 @@ Ext.define('Ext.cubes.features.HotKeys', {
             if (me.checkVisible(a.actionTarget)) {
                 var isSpecialKey = e.isSpecialKey();
                 var tc = Ext.fly(e.target).component;
-                if(tc){
+                if (tc) {
+                    if (tc instanceof Ext.Button) return;
                     // Если это поле ввода пагинатора то отключаем обработку
-                    if (tc.hasCls('x-tbar-page-number')) {
-                        return;
-                    }
-
+                    if (tc.ownerCt instanceof Ext.toolbar.Paging) return;
                     // Не обрабатываем горячие клавиши есть у нас открыт пикер
-                    if (isSpecialKey && tc.picker && !tc.picker.hidden) {
-                        return;
-                    }
+                    if (tc instanceof Ext.form.field.ComboBox) return;
+                    // if (isSpecialKey && tc.picker && !tc.picker.hidden) return;
 
                     // if (isSpecialKey) {
                     //     // Обрабатываем случай когда курсор стоит в поле и нажимает Enter для фильтрации. В тот же момент у формы есть кнопка с Enter.
