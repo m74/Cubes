@@ -29,3 +29,14 @@ Ext.define('overrides.Action', {
 
     }
 });
+
+
+Ext.define('overrides.actions.Button', {
+    override: 'Ext.Button',
+    fireHandler: function (e) {
+        if (Ext.isFunction(this.handler) && !this.scope) {
+            this.scope = this.resolveListenerScope();
+        }
+        this.callParent(arguments);
+    }
+});
