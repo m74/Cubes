@@ -8,28 +8,37 @@ Ext.define('Ext.cubes.profile.Development', {
     extend: 'Ext.app.Profile',
     requires: [],
     isActive: function () {
-        return true;
-    },
-    launch: function () {
         var app = this.getApplication();
-        if (app.params.xclass) {
-            var cmp = Ext.create(app.params.xclass, {});
-            window.cmp = cmp;
+        return app.params.debug !== undefined;
+    },
+    init: function () {
+        var app = this.getApplication();
+        app.registry.push({
+            regexp: /.*/,
+            fn: function (tabs, token) {
+                var cls = Ext.Loader.syncRequire(token);
+                if (cls) {
+                    var cmp = Ext.create(token, {});
+                    window.cmp = cmp;
 
-            if (cmp.isXType('window')) {
-                cmp.modal = false;
-                cmp.show();
-            } else {
-                if (cmp.isXType('field')) {
-                    cmp.setFieldLabel('field');
-                    cmp = Ext.create({
-                        xtype: 'form',
-                        items: [cmp]
-                    });
+                    if (cmp.isXType('window')) {
+                        // cmp.modal = false;
+                        cmp.show();
+                    } else {
+                        if (cmp.isXType('field')) {
+                            cmp.setFieldLabel('field');
+                            cmp = Ext.create({
+                                xtype: 'form',
+                                items: [cmp]
+                            });
+                        }
+                        app.getMainView().add(cmp);
+                        app.getMainView().setActiveItem(cmp);
+                    }
+                } else {
+                    return false;
                 }
-                app.getMainView().add(cmp);
-                app.getMainView().setActiveItem(cmp);
             }
-        }
+        });
     }
 });
