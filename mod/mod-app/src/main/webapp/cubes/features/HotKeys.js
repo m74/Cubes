@@ -11,7 +11,8 @@ Ext.define('Ext.cubes.features.HotKeys', {
 
     constructor: function () {
         var w = Ext.getWin();
-        w.on('keydown', this.onKeyDown, this, {priority: 1000, capture: true});
+        w.on('keydown', this.onKeyDown, this, {capture: true});
+        // w.on('keydown', this.onKeyDown, this, {priority: 1000, capture: true});
         // w.on('keyup', this.onKeyUp, this, {priority: -1000});
 
     },
@@ -19,31 +20,28 @@ Ext.define('Ext.cubes.features.HotKeys', {
     onKeyDown: function (e, dom, opts) {
         var me = this;
         Ext.each(this.map[this.key(e)], function (a) {
-            // console.log('onKeyDown: ', arguments, this);
+            // console.log('onKeyDown: ', e, a);
             if (me.checkVisible(a.actionTarget)) {
                 var isSpecialKey = e.isSpecialKey();
                 var tc = Ext.fly(e.target).component;
+
                 if (tc && isSpecialKey) {
-                    if (tc instanceof Ext.Button) return;
+                    // Обрабатываем перехват события компонентом от в рамках когорого оно произошло (button например)
+                    if (tc.el.fireEvent('keydown', e, dom, opts) === false || e.stopped) {
+                        if (!e.stopped) e.stopEvent();
+                        return false;
+                    }
+                    // Обрабатываем перехват события компонентом от в рамках когорого оно произошло (sddsearchfield например)
+                    if (tc.fireEvent('specialkey', tc, e) === false || e.stopped) {
+                        if (!e.stopped) e.stopEvent();
+                        return false;
+                    }
                     // Если это поле ввода пагинатора то отключаем обработку
                     if (tc.ownerCt instanceof Ext.toolbar.Paging) return;
+                    if (tc instanceof Ext.form.field.TextArea && e.keyCode === e.ENTER && e.ctrlKey === false) return;
                     // Не обрабатываем горячие клавиши есть у нас открыт пикер
                     if (tc instanceof Ext.form.field.ComboBox && !tc.picker.hidden) return;
                     // if (isSpecialKey && tc.picker && !tc.picker.hidden) return;
-
-                    // if (isSpecialKey) {
-                    //     // Обрабатываем случай когда курсор стоит в поле и нажимает Enter для фильтрации. В тот же момент у формы есть кнопка с Enter.
-                    //     // Случай когда надо чтобы работала и фильрация и сохранение по Enter в форме
-                    //     Ext.mixin.Observable.prototype.fireEventArgs.apply(tc, ['specialkey', [tc, event]]);
-                    //     tc.fireEvent = function (name) {
-                    //         if (name === 'specialkey') return;
-                    //         Ext.mixin.Observable.prototype.fireEvent.apply(tc, arguments);
-                    //     };
-                    //
-                    //     if (event.isStopped) {
-                    //         return;
-                    //     }
-                    // }
                 }
 
                 a.execute(e);
