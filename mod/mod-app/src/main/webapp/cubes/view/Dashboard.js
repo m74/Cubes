@@ -13,23 +13,27 @@ Ext.define('Ext.cubes.view.Dashboard', {
 
     layout: 'fit',
     initComponent: function () {
+        // debugger
         var store = Ext.StoreMgr.lookup({
             type: 'array',
-            model: 'Ext.cubes.model.Shortcut',
-            filters: [{
-                filterFn: function (rec) {
-                    return rec.id !== 'Dashboard';
-                }
-            }]
+            // data: this.initialConfig.data,
+            fields:['id', 'title']
+            // model: 'Ext.cubes.model.Shortcut'
+            // filters: [{
+            //     filterFn: function (rec) {
+            //         return rec.id !== 'Dashboard';
+            //     }
+            // }]
         });
-        store.setData(Ext.getApplication().shortcuts.items);
+        store.setData(this.initialConfig.data);
+        // store.setData(Ext.getApplication().shortcuts.items);
         this.items = {
             xtype: 'dataview',
             cls: 'x-dashboard-list',
             store: store,
             tpl: [
                 '<ul class=""><tpl for=".">',
-                '<li class="x-dashboard-item"><div><a href="#{itemId}"><i class="fa fa-cogs"></i></a></div><div class="title">{title}</div></li>',
+                '<li class="x-dashboard-item"><div><a href="#{id}"><i class="fa fa-cogs"></i></a></div><div class="title">{title}</div></li>',
                 '</tpl></ul>'
             ],
             itemSelector: 'a.x-dashboard-item',

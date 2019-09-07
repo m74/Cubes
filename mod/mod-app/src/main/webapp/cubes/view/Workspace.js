@@ -46,7 +46,15 @@ Ext.define('Ext.cubes.view.Workspace', {
             callback: function () {
                 me.unmask();
             },
-            success: success
+            success: success,
+            failure: function () {
+                Ext.Msg.show({
+                    title: 'Ошибка',
+                    msg: 'Не удалось загрузить документ: ' + id,
+                    buttons: Ext.Msg.OK,
+                    icon: Ext.Msg.ERROR
+                });
+            }
         });
     },
 

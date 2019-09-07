@@ -22,27 +22,35 @@ Ext.define('Ext.cubes.view.HistoryPlugin', {
 
         Ext.apply(this, {
             handleToken: function (token) {
-                var tab = tabs.down('#' + token);
-                if (!tab) {
-                    var cfg = app.shortcuts.get(token);
-                    if (!cfg) {
-                        Ext.each(app.registry, function (item) {
-                            if (item.regexp.test(token)) {
-                                // если handler отработал нормально
-                                if (item.fn(tabs, token) !== false) {
-                                    return false;
-                                }
-                            }
-                        });
+                Ext.each(app.registry, function (item) {
+                    if (!item.regexp || item.regexp.test(token)) {
+                        // если handler отработал нормально
+                        if (item.fn(tabs, token) !== false) {
+                            return false;
+                        }
                     }
-                    if (cfg) {
-                        cfg.itemId = token;
-                        tab = tabs.add(cfg);
-                    } else {
-                        console.log('config not found: ', token);
-                    }
-                }
-                if (tab) tabs.setActiveTab(tab);
+                });
+                // var tab = tabs.down('#' + token);
+                // if (!tab) {
+                //     var cfg = app.shortcuts.get(token);
+                //     if (!cfg) {
+                //         Ext.each(app.registry, function (item) {
+                //             if (item.regexp.test(token)) {
+                //                 // если handler отработал нормально
+                //                 if (item.fn(tabs, token) !== false) {
+                //                     return false;
+                //                 }
+                //             }
+                //         });
+                //     }
+                //     if (cfg) {
+                //         cfg.itemId = token;
+                //         tab = tabs.add(cfg);
+                //     } else {
+                //         console.log('config not found: ', token);
+                //     }
+                // }
+                // if (tab) tabs.setActiveTab(tab);
             }
         });
     },

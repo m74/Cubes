@@ -11,7 +11,7 @@ Ext.define('Ext.cubes.view.MenuItem', {
     initComponent: function () {
         if (Ext.isArray(this.menu)) {
             this.menu = {
-                xclass: 'Ext.cubes.view.ShortcutsMenu',
+                defaultType: 'opentabmenuitem',
                 items: this.menu
             }
         }
@@ -19,6 +19,6 @@ Ext.define('Ext.cubes.view.MenuItem', {
     },
 
     handler: function () {
-        Ext.util.History.add(this.id);
+        Ext.util.History.add(this.itemId);
     }
 });
