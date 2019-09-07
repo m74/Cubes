@@ -11,7 +11,7 @@ Ext.define('Ext.cubes.Application', {
         'overrides.util.Format', 'overrides.Date', 'overrides.grid.column.Boolean', 'overrides.form.field.Date',
         'overrides.data.field.Date', 'overrides.Action', 'overrides.Component', 'overrides.Container', 'overrides.view.Table',
         'Ext.cubes.model.Shortcut',
-        'Ext.cubes.view.MenuItem',
+        'Ext.cubes.view.MenuItem', 'overrides.data.Model',
         'Ext.cubes.features.HotKeys', 'overrides.DefaultAction', 'overrides.data.field.Field', 'overrides.form.field.ComboBox',
         'overrides.window.Window', 'overrides.grid.ContextMenu', 'overrides.toolbar.Toolbar'
     ],
