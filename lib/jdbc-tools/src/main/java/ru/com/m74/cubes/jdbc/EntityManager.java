@@ -108,12 +108,14 @@ public class EntityManager {
         return select;
     }
 
-    private Insert insert(Class<?> type) {
+    private Insert insert(Class<?> type, Object dto) {
         Insert q = new Insert();
         q.into(tableName(type));
 
         for (Field field : getUpdatableFields(type)) {
-            q.value(getColumnName(field), ":" + field.getName());
+            if (field.getAnnotation(Column.class).insertable() && getValue(dto, field) != null) {
+                q.value(getColumnName(field), ":" + field.getName());
+            }
         }
 
         return q;
@@ -140,7 +142,7 @@ public class EntityManager {
         Field idField = getPrimaryKeyField(type);
         if (idField == null) throw new RuntimeException("@PrimaryKey annotation not present in: " + type);
         Object idValue = getValue(dto, idField);
-        Insert q = insert(type);
+        Insert q = insert(type, dto);
         if (idValue != null)
             q.value(getColumnName(idField), ":" + idField.getName());
         jdbcTemplate.update(q.toString(), namedParameters, keyHolder, new String[]{SqlUtils.getResultSetFieldName(idField)});
@@ -314,9 +316,11 @@ public class EntityManager {
         Field primaryKeyField = getPrimaryKeyField(type);
 
         for (Field field : getUpdatableFields(type)) {
-            String fieldName = field.getName();
-            values.put(fieldName, getValue(dto, field));
-            sql.set(getColumnName(field), ":" + fieldName);
+            if (field.getAnnotation(Column.class).updatable()) {
+                String fieldName = field.getName();
+                values.put(fieldName, getValue(dto, field));
+                sql.set(getColumnName(field), ":" + fieldName);
+            }
         }
 
         sql.where(getColumnName(primaryKeyField) + "=:" + primaryKeyField.getName());
@@ -336,8 +340,10 @@ public class EntityManager {
         Object idValue = getValue(dto, primaryKeyField);
 
         for (Field field : getUpdatableFields(type)) {
-            Object value = getValue(dto, field);
-            jdbcTemplate.update("UPDATE " + tableName + " set " + getColumnName(field) + "=:value where " + sqlPrimaryKeyName + "=:id", map().add("value", value).add("id", idValue));
+            if (field.getAnnotation(Column.class).updatable()) {
+                Object value = getValue(dto, field);
+                jdbcTemplate.update("UPDATE " + tableName + " set " + getColumnName(field) + "=:value where " + sqlPrimaryKeyName + "=:id", map().add("value", value).add("id", idValue));
+            }
         }
     }
 
