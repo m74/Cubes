@@ -3,6 +3,7 @@
  */
 Ext.define('overrides.form.field.ComboBox', {
     override: 'Ext.form.field.ComboBox',
+    valueField: 'value',
     setValue: function (v) {
         if (v && this.store.find(this.valueField, v[this.valueField], 0, false, false, true) === -1) {
             this.setSelection(this.store.add(v));
