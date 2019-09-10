@@ -12,7 +12,7 @@ import static ru.com.m74.cubes.common.MapUtils.map;
 import static ru.com.m74.cubes.jdbc.utils.EMUtils.sort;
 
 
-public class AbstractRepoImpl<T> implements AbstractRepo<T> {
+public class AbstractRepoImpl<T, I> implements AbstractRepo<T, I> {
 
     protected final EntityManager em;
 
@@ -50,7 +50,7 @@ public class AbstractRepoImpl<T> implements AbstractRepo<T> {
     }
 
     @Override
-    public T get(Object id) {
+    public T get(I id) {
         try {
             return em.get(type, id);
         } catch (EmptyResultDataAccessException e) {
@@ -70,18 +70,18 @@ public class AbstractRepoImpl<T> implements AbstractRepo<T> {
     }
 
     @Override
-    public T save(Object id, Map<String, Object> changes) {
+    public T save(I id, Map<String, Object> changes) {
         em.update(type, id, changes);
         return get(id);
     }
 
     @Override
-    public void deleteById(Object id) {
+    public void deleteById(I id) {
         em.remove(type, id);
     }
 
-//    @Override
-//    public void deleteByIds(Object[] ids) {
-//        em.remove(type, ids);
-//    }
+    @Override
+    public void deleteByIds(I[] ids) {
+        em.removeAll(type, ids);
+    }
 }

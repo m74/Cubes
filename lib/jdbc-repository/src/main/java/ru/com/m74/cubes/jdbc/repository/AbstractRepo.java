@@ -5,7 +5,7 @@ import ru.com.m74.extjs.dto.Request;
 import java.util.List;
 import java.util.Map;
 
-public interface AbstractRepo<T> {
+public interface AbstractRepo<T, I> {
 
     List<T> getAll(Request request);
 
@@ -13,15 +13,15 @@ public interface AbstractRepo<T> {
 
     long count(Request request, Map<String, Object> params);
 
-    T get(Object id);
+    T get(I id);
 
     T save(T entity);
 
     T persist(T entity);
 
-    T save(Object id, Map<String, Object> changes);
+    T save(I id, Map<String, Object> changes);
 
-    void deleteById(Object id);
+    void deleteById(I id);
 
-//    void deleteByIds(Object[] ids);
+    void deleteByIds(I[] ids);
 }

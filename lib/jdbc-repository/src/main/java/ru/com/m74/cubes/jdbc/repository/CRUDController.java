@@ -6,11 +6,11 @@ import ru.com.m74.extjs.dto.Response;
 
 import java.util.Map;
 
-public class CRUDController<T> {
+public class CRUDController<T, I> {
 
-    private final AbstractRepo<T> repository;
+    private final AbstractRepo<T, I> repository;
 
-    public CRUDController(AbstractRepo<T> repository) {
+    public CRUDController(AbstractRepo<T, I> repository) {
         this.repository = repository;
     }
 
@@ -24,7 +24,7 @@ public class CRUDController<T> {
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/{id}")
-    public Response<T> get(@PathVariable Object id) {
+    public Response<T> get(@PathVariable I id) {
         return new Response<>(repository.get(id));
     }
 
@@ -34,12 +34,12 @@ public class CRUDController<T> {
     }
 
     @RequestMapping(method = RequestMethod.PUT, path = "/{id}")
-    public Response<T> save(@RequestBody Map<String, Object> changes, @PathVariable Object id) {
+    public Response<T> save(@RequestBody Map<String, Object> changes, @PathVariable I id) {
         return new Response<>(repository.save(id, changes));
     }
 
     @RequestMapping(method = RequestMethod.DELETE, path = "/{id}")
-    public void delete(@PathVariable Object id) {
+    public void delete(@PathVariable I id) {
         repository.deleteById(id);
     }
 
