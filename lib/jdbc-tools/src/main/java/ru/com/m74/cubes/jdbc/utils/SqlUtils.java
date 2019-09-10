@@ -27,6 +27,8 @@ public class SqlUtils {
      */
     public static <T> String[] getOrderBy(Class<T> type, String fieldName) {
         Field field = DTOUtils.findField(type, fieldName);
+        if (field == null) throw new RuntimeException("Field not found: " + fieldName);
+
         Column rsfa = field.getAnnotation(Column.class);
         String columns[] = rsfa.orderBy();
         if (isEmpty(columns)) {
