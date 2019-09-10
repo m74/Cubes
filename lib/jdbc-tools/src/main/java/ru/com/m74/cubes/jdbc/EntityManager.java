@@ -386,6 +386,14 @@ public class EntityManager {
         jdbcTemplate.update("DELETE " + tableName + " WHERE " + primaryKeyFieldName + " = :id", map("id", idValue));
     }
 
+    public void removeAll(Class type, Object idValues[]) {
+        Field primaryKeyField = getPrimaryKeyField(type);
+        String primaryKeyFieldName = SqlUtils.getResultSetFieldName(primaryKeyField);
+        String tableName = tableName(type);
+
+        jdbcTemplate.update("DELETE " + tableName + " WHERE " + primaryKeyFieldName + " in (:ids)", map("ids", idValues));
+    }
+
 //    public void remove(Object dto) {
 //        Field primaryKeyField = getPrimaryKeyField(dto.getClass());
 //        if (primaryKeyField == null) throw new RuntimeException("PrimaryKey not fount: " + dto.getClass());
