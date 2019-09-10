@@ -12,7 +12,13 @@ Ext.define('overrides.form.field.ComboBox', {
     },
     initComponent: function () {
         if (this.url) {
-            this.store = {proxy: {type: 'rest', url: this.url}}
+            this.store = {
+                autoLoad: this.autoLoad,
+                proxy: {
+                    type: 'rest',
+                    url: this.url
+                }
+            }
         }
         this.callParent(arguments);
     }
