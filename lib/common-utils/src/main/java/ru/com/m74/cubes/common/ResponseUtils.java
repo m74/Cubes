@@ -12,7 +12,6 @@ import java.net.URLEncoder;
 public class ResponseUtils {
 
     public static void write(HttpServletResponse response, File file) throws IOException {
-
         write(response, FileUtils.readFileToByteArray(file));
     }
 
@@ -27,7 +26,6 @@ public class ResponseUtils {
             response.setHeader("Content-Disposition", (inLine ? "inline" : "attachment") + "; filename*=UTF-8''" + URLEncoder.encode(fileName, "UTF-8").replace("+", "%20"));
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
-
         }
     }
 
