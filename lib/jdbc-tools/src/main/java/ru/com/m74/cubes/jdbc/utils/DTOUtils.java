@@ -1,5 +1,6 @@
 package ru.com.m74.cubes.jdbc.utils;
 
+import ru.com.m74.cubes.jdbc.Link;
 import ru.com.m74.cubes.jdbc.annotations.Column;
 import ru.com.m74.cubes.jdbc.annotations.Id;
 
@@ -35,6 +36,8 @@ public class DTOUtils {
             if (field.isAnnotationPresent(Id.class) && value instanceof Number && ((Number) value).intValue() <= 0) {
                 return null;
             }
+
+            if (value instanceof Link) value = ((Link) value).getId();
 
             if (value instanceof Boolean) {
                 return ((Boolean) value) ? 1 : 0;
