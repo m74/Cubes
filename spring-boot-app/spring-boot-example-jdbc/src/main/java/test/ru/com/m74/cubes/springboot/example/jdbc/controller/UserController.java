@@ -9,7 +9,7 @@ import test.ru.com.m74.cubes.springboot.example.jdbc.repo.UserRepo;
 
 @RestController
 @RequestMapping("Test.model.User")
-public class UserController extends CRUDController<User> {
+public class UserController extends CRUDController<User, Long> {
 
     @Autowired
     public UserController(UserRepo repo) {

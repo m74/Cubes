@@ -7,7 +7,7 @@ import ru.com.m74.cubes.jdbc.EntityManager;
 import test.ru.com.m74.cubes.springboot.example.jdbc.domain.User;
 
 @Repository
-public class UserRepoImpl extends AbstractRepoImpl<User> implements UserRepo {
+public class UserRepoImpl extends AbstractRepoImpl<User, Long> implements UserRepo {
 
     @Autowired
     public UserRepoImpl(EntityManager em) {
