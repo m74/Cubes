@@ -35,6 +35,7 @@ public class CRUDController<T, I> {
 
     @RequestMapping(method = RequestMethod.PUT, path = "/{id}")
     public Response<T> save(@RequestBody Map<String, Object> changes, @PathVariable I id) {
+        repository.convert(changes);
         return new Response<>(repository.save(id, changes));
     }
 

@@ -2,9 +2,11 @@ package ru.com.m74.cubes.jdbc.repository;
 
 import org.springframework.dao.EmptyResultDataAccessException;
 import ru.com.m74.cubes.jdbc.EntityManager;
+import ru.com.m74.cubes.jdbc.utils.DTOUtils;
 import ru.com.m74.cubes.sql.base.Select;
 import ru.com.m74.extjs.dto.Request;
 
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 
@@ -83,5 +85,16 @@ public class AbstractRepoImpl<T, I> implements AbstractRepo<T, I> {
     @Override
     public void deleteByIds(I[] ids) {
         em.removeAll(type, ids);
+    }
+
+    @Override
+    public void convert(Map<String, Object> changes) {
+        for (String key : changes.keySet()) {
+            Field f = DTOUtils.findField(type, key);
+            if (f == null) throw new RuntimeException("Field not found: " + key);
+            if (changes.get(key) instanceof Map) {
+                changes.replace(key, ((Map<String, Object>) changes.get(key)).get("id"));
+            }
+        }
     }
 }

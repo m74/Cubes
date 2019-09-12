@@ -24,4 +24,6 @@ public interface AbstractRepo<T, I> {
     void deleteById(I id);
 
     void deleteByIds(I[] ids);
+
+    void convert(Map<String, Object> changes);
 }
