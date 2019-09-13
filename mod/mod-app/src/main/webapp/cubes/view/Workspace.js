@@ -6,15 +6,10 @@
  */
 Ext.define('Ext.cubes.view.Workspace', {
     extend: 'Ext.tab.Panel',
-    requires: [
-        'Ext.cubes.view.HistoryPlugin'
-    ],
     xtype: 'workspace',
-    plugins: ['history'],
 
     defaults: {
         border: false,
-        enableHistory: true,
         closable: true
     },
 
