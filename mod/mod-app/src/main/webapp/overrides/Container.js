@@ -19,8 +19,9 @@ Ext.define('overrides.Container', {
     },
 
     lookupComponent: function (c) {
-        if (typeof c === 'string' && c[0] === '@') {
-            c = this.getAction(c.substring(1));
+        // если отсутствует действие (action)
+        if (typeof c === 'string' && c[0] === '@' && !this.getAction(c.substring(1))) {
+            return null;
         }
         if (c && Ext.hasRoles(c.roles)) {
             // Не создаем компонент, если нет прав
