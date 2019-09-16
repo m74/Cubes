@@ -7,14 +7,10 @@
  */
 Ext.define('overrides.Container', {
     override: 'Ext.Container',
-    config: {
-        roles: []
-    },
+    roles: [],
 
-    initComponent: function () {
-        this.on('beforeadd', function (cnt, item) {
-            return Ext.hasRoles(item.roles);
-        }, this);
+    onBeforeAdd: function (item) {
+        if (!Ext.hasRoles(item.roles)) return false;
         this.callParent(arguments);
     },
 
@@ -23,18 +19,18 @@ Ext.define('overrides.Container', {
         if (typeof c === 'string' && c[0] === '@' && !this.getAction(c.substring(1))) {
             return null;
         }
-        if (c && Ext.hasRoles(c.roles)) {
-            // Не создаем компонент, если нет прав
-            return this.callParent(arguments);
+        // если компонент не доступен пользователю
+        if (!Ext.hasRoles(c.roles)) {
+            return null;
         }
-        return null;
+
+        return this.callParent(arguments);
     },
     privates: {
         prepareItems: function (items, applyDefaults) {
-            items = Ext.Array.filter(this.callParent(arguments), function (el) {
+            return Ext.Array.filter(this.callParent(arguments), function (el) {
                 return el !== undefined && el !== null;
             });
-            return items;
         }
     },
 
@@ -50,6 +46,7 @@ Ext.define('overrides.Container', {
 
     // @override
     updateActions: function (actions) {
+        // Убираем недоступные пользователю действия (actions)
         this.actions = {};
         for (var n in actions) {
             var a = actions[n];
