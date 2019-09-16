@@ -164,10 +164,10 @@ Ext.define('overrides.hotkeys.Action', {
 
 Ext.define('overrides.hotkeys.Container', {
     override: 'Ext.container.Container',
-    updateActions: function (actions) {
+    updateActions: function () {
         this.callParent(arguments);
-        for (var n in actions) {
-            actions[n].actionTarget = this;
+        for (var n in this.actions) {
+            if (this.actions[n]) this.actions[n].actionTarget = this;
         }
     }
 });

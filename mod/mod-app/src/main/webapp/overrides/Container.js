@@ -19,11 +19,22 @@ Ext.define('overrides.Container', {
     },
 
     lookupComponent: function (c) {
-        if (Ext.hasRoles(c.roles)) {
-            // Не создаем компонент, если нет прав
-            c = this.callParent(arguments);
+        if (typeof c === 'string' && c[0] === '@') {
+            c = this.getAction(c.substring(1));
         }
-        return c;
+        if (c && Ext.hasRoles(c.roles)) {
+            // Не создаем компонент, если нет прав
+            return this.callParent(arguments);
+        }
+        return null;
+    },
+    privates: {
+        prepareItems: function (items, applyDefaults) {
+            items = Ext.Array.filter(this.callParent(arguments), function (el) {
+                return el !== undefined && el !== null;
+            });
+            return items;
+        }
     },
 
     // @override
@@ -34,6 +45,18 @@ Ext.define('overrides.Container', {
         }
 
         this.callParent(arguments);
+    },
+
+    // @override
+    updateActions: function (actions) {
+        this.actions = {};
+        for (var n in actions) {
+            var a = actions[n];
+            if (a && Ext.hasRoles(a.roles)) {
+                this.actions[n] = a;
+            }
+        }
+        this.callParent([this.actions]);
     }
 });
 
