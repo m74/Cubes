@@ -7,6 +7,9 @@
  */
 Ext.define('overrides.Container', {
     override: 'Ext.Container',
+    config: {
+        roles: []
+    },
 
     initComponent: function () {
         this.on('beforeadd', function (cnt, item) {
