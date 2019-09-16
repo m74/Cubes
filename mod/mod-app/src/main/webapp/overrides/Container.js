@@ -65,15 +65,15 @@ Ext.hasRoles = function () {
 };
 
 
-Ext.define('overrides.cubes.Application', {
-    override: 'Ext.cubes.Application',
-    init: function () {
-        var me = this;
-        this.callParent(arguments);
-        this.on('login', function () {
-            me.shortcuts = me.shortcuts.filterBy(function (itm) {
-                return Ext.hasRoles(itm.roles);
-            });
-        })
-    }
-});
+// Ext.define('overrides.cubes.Application', {
+//     override: 'Ext.cubes.Application',
+//     init: function () {
+//         var me = this;
+//         this.callParent(arguments);
+//         this.on('login', function () {
+//             me.shortcuts = me.shortcuts.filterBy(function (itm) {
+//                 return Ext.hasRoles(itm.roles);
+//             });
+//         })
+//     }
+// });
