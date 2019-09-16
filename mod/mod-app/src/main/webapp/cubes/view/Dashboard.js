@@ -16,17 +16,26 @@ Ext.define('Ext.cubes.view.Dashboard', {
         // debugger
         var store = Ext.StoreMgr.lookup({
             type: 'array',
-            // data: this.initialConfig.data,
-            fields:['id', 'title']
-            // model: 'Ext.cubes.model.Shortcut'
-            // filters: [{
-            //     filterFn: function (rec) {
-            //         return rec.id !== 'Dashboard';
-            //     }
-            // }]
+            fields: ['id', 'title', 'roles'],
+            filters: [{
+                filterFn: function (rec) {
+                    return Ext.hasRoles(rec.get('roles'));
+                }
+            }]
         });
-        store.setData(this.initialConfig.data);
-        // store.setData(Ext.getApplication().shortcuts.items);
+        var arr = [];
+        Ext.each(this.initialConfig.data, function (xtype) {
+            var cls = Ext.ClassManager.getByAlias('widget.' + xtype);
+            var cfg = cls.prototype.config;
+            if (Ext.hasRoles(cfg.roles)) {
+                arr.push({
+                    id: xtype,
+                    title: cfg.title
+                });
+            }
+        });
+
+        store.setData(arr);
         this.items = {
             xtype: 'dataview',
             cls: 'x-dashboard-list',
