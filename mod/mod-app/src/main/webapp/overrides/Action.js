@@ -9,24 +9,6 @@ Ext.define('overrides.Action', {
      */
     setTooltip: function (tooltip) {
         this.callEach('setTooltip', [tooltip]);
-    },
-
-    setEnableFlags: function (flags) {
-        var me = this;
-        this.setDisabled((function () {
-            var arr = me.initialConfig.enableOn;
-            if (arr) {
-                if (Ext.isString(arr)) arr = [arr];
-                for (var i = 0; i < arr.length; i++) {
-                    if (!flags || flags[arr[i]] !== true) {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        })());
-
-
     }
 });
 
