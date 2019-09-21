@@ -30,7 +30,7 @@ Ext.define('overrides.data.Model', {
         }
         this.setData(resp);
     },
-    handleSuccess: function () {
+    applyResponseFn: function () {
         var me = this;
         return function (resp) {
             return me.applyResponse(resp);
