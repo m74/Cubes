@@ -18,7 +18,7 @@ Ext.define('Ext.cubes.controller.ExceptionHandler', {
                 case 500:
                     var r = Ext.decode(resp.responseText);
                     Ext.Msg.show({
-                        title: r.error,
+                        title: 'Ошибка выполнения запроса',
                         msg: r.message,
                         buttons: Ext.Msg.OK,
                         icon: Ext.Msg.ERROR
