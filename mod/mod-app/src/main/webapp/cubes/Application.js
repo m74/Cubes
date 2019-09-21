@@ -18,6 +18,10 @@ Ext.define('Ext.cubes.Application', {
 
     quickTips: false,
 
+    paths: {
+        'Ext.ux': 'ux'
+    },
+
     platformConfig: {
         desktop: {
             quickTips: true
