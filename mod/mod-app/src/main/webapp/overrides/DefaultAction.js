@@ -6,23 +6,22 @@
  */
 Ext.define('overrides.DefaultAction', {
     override: 'Ext.panel.Table',
+    defaultAction: undefined,
     initComponent: function () {
-        var me = this;
+        var action;
         this.callParent(arguments);
-        if (me.actions && me.defaultAction) {
-            this.on('rowdblclick', function () {
-                me.doAction(me.defaultAction);
-            });
-            this.on('rowkeydown', function (grid, rec, tr, index, e) {
-                if (e.keyCode === Ext.event.Event.ENTER) {
-                    me.doAction(me.defaultAction);
-                }
-            });
-
+        if (this.defaultAction) {
+            action = this.getAction(this.defaultAction);
+            if (action) {
+                this.on('rowdblclick', function () {
+                    action.execute();
+                });
+                this.on('rowkeydown', function (grid, rec, tr, index, e) {
+                    if (e.keyCode === Ext.event.Event.ENTER) {
+                        action.execute();
+                    }
+                });
+            }
         }
-    },
-    doAction: function (name) {
-        var a = this.actions[name];
-        if (a) a.execute();
     }
 });
