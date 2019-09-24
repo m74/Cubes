@@ -85,6 +85,7 @@ var Loader = new function () {
 
 Loader.load([
     'ext/ext-all{suffix}.js',
+    'ext/packages/ux/classic/ux{suffix}.js',
     'ext/classic/theme-{theme}/theme-{theme}{suffix}.js',
     'ext/classic/theme-{theme}/resources/theme-{theme}-all{suffix}.css',
     'ext/packages/font-awesome/resources/font-awesome-all{suffix}.css',
