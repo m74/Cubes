@@ -148,8 +148,9 @@ Ext.define('overrides.hotkeys.Action', {
     addComponent: function (cmp) {
         var c = this.initialConfig, hk = this.hotkey;
         this.callParent(arguments);
-        if (hk && c.text) {
-            cmp.setText(c.text + ' (' + this.hotkey.getTitle() + ')');
+        if (hk) {
+            if (c.text) cmp.setText(c.text + ' (' + this.hotkey.getTitle() + ')');
+            if (c.tooltip) cmp.setTooltip(c.tooltip + ' (' + this.hotkey.getTitle() + ')');
         }
     },
 
