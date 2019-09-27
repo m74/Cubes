@@ -13,6 +13,11 @@ Ext.define('Ext.cubes.view.Workspace', {
         closable: true
     },
 
+    listeners: {
+        tabchange: function (tp, tab) {
+            document.title = tab.title;
+        }
+    },
     add: function () {
         function handle(items) {
             return Ext.Array.map(items, function (item) {
