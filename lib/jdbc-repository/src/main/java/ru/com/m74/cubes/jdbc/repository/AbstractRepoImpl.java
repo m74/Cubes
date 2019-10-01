@@ -67,7 +67,7 @@ public class AbstractRepoImpl<T, I> implements AbstractRepo<T, I> {
     }
 
     @Override
-    public T persist(T entity) {
+    public T persist(T entity, Map<String, Object> params) {
         return em.persist(entity);
     }
 

@@ -17,7 +17,7 @@ public interface AbstractRepo<T, I> {
 
     T save(T entity);
 
-    T persist(T entity);
+    T persist(T entity, Map<String, Object> params);
 
     T save(I id, Map<String, Object> changes);
 

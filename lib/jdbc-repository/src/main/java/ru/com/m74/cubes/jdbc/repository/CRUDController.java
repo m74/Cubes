@@ -29,8 +29,8 @@ public class CRUDController<T, I> {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public Response<T> create(@RequestBody T entity) {
-        return new Response<>(repository.persist(entity));
+    public Response<T> create(@RequestBody T entity, @RequestParam Map<String, Object> params) {
+        return new Response<>(repository.persist(entity, params));
     }
 
     @RequestMapping(method = RequestMethod.PUT, path = "/{id}")
