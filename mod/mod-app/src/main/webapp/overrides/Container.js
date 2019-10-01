@@ -1,16 +1,16 @@
 /**
  * Дополняет компонент:
  * <li>Проверкой на соответствие набору прав текущего пользователя.
- * Если компонент имеет атрибут roles и среди перечисленных в нем ролей
+ * Если компонент имеет атрибут permissions и среди перечисленных в нем ролей
  * отсутствуют роли текущего пользователя, то компонент не будет помещен в контейнер.</li>
  * <li>Позволяет в конфиге указывать значение items функицией или строкой с именем функции.</li>
  */
 Ext.define('overrides.Container', {
     override: 'Ext.Container',
-    roles: [],
+    permissions: [],
 
     onBeforeAdd: function (item) {
-        if (!Ext.hasPermissions(item.roles)) return false;
+        if (!Ext.hasPermissions(item.permissions)) return false;
         this.callParent(arguments);
     },
 
@@ -20,7 +20,7 @@ Ext.define('overrides.Container', {
             return null;
         }
         // если компонент не доступен пользователю
-        if (!Ext.hasPermissions(c.roles)) {
+        if (!Ext.hasPermissions(c.permissions)) {
             return null;
         }
 
@@ -50,7 +50,7 @@ Ext.define('overrides.Container', {
         this.actions = {};
         for (var n in actions) {
             var a = actions[n];
-            if (a && Ext.hasPermissions(a.roles)) {
+            if (a && Ext.hasPermissions(a.permissions)) {
                 this.actions[n] = a;
             }
         }
@@ -70,7 +70,7 @@ Ext.hasPermissions = function () {
 //         this.callParent(arguments);
 //         this.on('login', function () {
 //             me.shortcuts = me.shortcuts.filterBy(function (itm) {
-//                 return Ext.hasPermissions(itm.roles);
+//                 return Ext.hasPermissions(itm.permissions);
 //             });
 //         })
 //     }

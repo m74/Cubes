@@ -58,7 +58,7 @@ Ext.define('Ext.cubes.view.Users', {
         renderer: function (v) {
             return Ext.util.Format.array(v, 'title');
         },
-        dataIndex: 'roles'
+        dataIndex: 'permissions'
     }, {
         text: 'Комментарии',
         flex: 1,

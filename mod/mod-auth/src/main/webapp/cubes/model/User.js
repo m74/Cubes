@@ -16,6 +16,6 @@ Ext.define('Ext.cubes.model.User', {
         {name: 'createAt', type: 'date'},
         {name: 'lastAccess', type: 'date'},
         {name: 'active', type: 'boolean'},
-        'roles'
+        'permissions'
     ]
 });

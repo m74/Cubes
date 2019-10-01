@@ -16,10 +16,10 @@ Ext.define('Ext.cubes.view.Dashboard', {
         // debugger
         var store = Ext.StoreMgr.lookup({
             type: 'array',
-            fields: ['id', 'title', 'roles'],
+            fields: ['id', 'title', 'permissions'],
             filters: [{
                 filterFn: function (rec) {
-                    return Ext.hasPermissions(rec.get('roles'));
+                    return Ext.hasPermissions(rec.get('permissions'));
                 }
             }]
         });
@@ -27,7 +27,7 @@ Ext.define('Ext.cubes.view.Dashboard', {
         Ext.each(this.initialConfig.data, function (xtype) {
             var cls = Ext.ClassManager.getByAlias('widget.' + xtype);
             var cfg = cls.prototype.config;
-            if (Ext.hasPermissions(cls.prototype.roles)) {
+            if (Ext.hasPermissions(cls.prototype.permissions)) {
                 arr.push({
                     id: xtype,
                     title: cfg.title
