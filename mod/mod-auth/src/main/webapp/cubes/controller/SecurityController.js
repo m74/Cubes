@@ -99,7 +99,7 @@ Ext.define('Ext.cubes.controller.SecurityController', {
         el.addCls('x-auth-mask');
     },
     applyRemoteUser: function (user) {
-        this.application.hasRoles = Ext.hasRoles = function (roles) {
+        this.application.hasPermissions = Ext.hasPermissions = function (roles) {
 
             if (Ext.isEmpty(roles)) {
                 return true;

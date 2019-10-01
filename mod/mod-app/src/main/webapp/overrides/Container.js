@@ -10,7 +10,7 @@ Ext.define('overrides.Container', {
     roles: [],
 
     onBeforeAdd: function (item) {
-        if (!Ext.hasRoles(item.roles)) return false;
+        if (!Ext.hasPermissions(item.roles)) return false;
         this.callParent(arguments);
     },
 
@@ -20,7 +20,7 @@ Ext.define('overrides.Container', {
             return null;
         }
         // если компонент не доступен пользователю
-        if (!Ext.hasRoles(c.roles)) {
+        if (!Ext.hasPermissions(c.roles)) {
             return null;
         }
 
@@ -50,7 +50,7 @@ Ext.define('overrides.Container', {
         this.actions = {};
         for (var n in actions) {
             var a = actions[n];
-            if (a && Ext.hasRoles(a.roles)) {
+            if (a && Ext.hasPermissions(a.roles)) {
                 this.actions[n] = a;
             }
         }
@@ -58,7 +58,7 @@ Ext.define('overrides.Container', {
     }
 });
 
-Ext.hasRoles = function () {
+Ext.hasPermissions = function () {
     return true;
 };
 
@@ -70,7 +70,7 @@ Ext.hasRoles = function () {
 //         this.callParent(arguments);
 //         this.on('login', function () {
 //             me.shortcuts = me.shortcuts.filterBy(function (itm) {
-//                 return Ext.hasRoles(itm.roles);
+//                 return Ext.hasPermissions(itm.roles);
 //             });
 //         })
 //     }

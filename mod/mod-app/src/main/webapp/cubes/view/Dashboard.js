@@ -19,7 +19,7 @@ Ext.define('Ext.cubes.view.Dashboard', {
             fields: ['id', 'title', 'roles'],
             filters: [{
                 filterFn: function (rec) {
-                    return Ext.hasRoles(rec.get('roles'));
+                    return Ext.hasPermissions(rec.get('roles'));
                 }
             }]
         });
@@ -27,7 +27,7 @@ Ext.define('Ext.cubes.view.Dashboard', {
         Ext.each(this.initialConfig.data, function (xtype) {
             var cls = Ext.ClassManager.getByAlias('widget.' + xtype);
             var cfg = cls.prototype.config;
-            if (Ext.hasRoles(cfg.roles)) {
+            if (Ext.hasPermissions(cls.prototype.roles)) {
                 arr.push({
                     id: xtype,
                     title: cfg.title
