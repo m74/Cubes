@@ -20,7 +20,7 @@ public class MvcConfiguration implements WebMvcConfigurer {
 
     @Override
     public void addFormatters(FormatterRegistry registry) {
-        registry.addFormatterForFieldType(Filter.class, new JsonFormatter<>(objectMapper, Filter[].class));
-        registry.addFormatterForFieldType(Sorter.class, new JsonFormatter<>(objectMapper, Sorter[].class));
+        registry.addFormatterForFieldType(Filter[].class, new JsonFormatter<>(objectMapper, Filter[].class));
+        registry.addFormatterForFieldType(Sorter[].class, new JsonFormatter<>(objectMapper, Sorter[].class));
     }
 }
