@@ -50,11 +50,13 @@ public class EntityManager {
 
         select.from(isEmpty(tableAlias) ? tableName : tableName + " " + aliasName(tableAlias));
 
-        Join join = type.getAnnotation(Join.class);
-        if (join != null) {
-            select.join(join.value());
-        }
 
+        for (Class t = type; t.getSuperclass() != null; t = t.getSuperclass()) {
+            Join join = (Join) t.getAnnotation(Join.class);
+            if (join != null) {
+                select.join(join.value());
+            }
+        }
         for (Field field : DTOUtils.getAnnotatedModelFields(type)) {
 //            Id id = field.getAnnotation(Id.class);
 //            if (id != null && isNotEmpty(id.name())) {
@@ -113,7 +115,7 @@ public class EntityManager {
         q.into(tableName(type));
 
         for (Field field : getUpdatableFields(type)) {
-            if (field.getAnnotation(Column.class).insertable() && getValue(dto, field) != null) {
+            if (field.getAnnotation(Column.class).insertable() /*&& getValue(dto, field) != null*/) {
                 q.value(getColumnName(field), ":" + field.getName());
             }
         }
@@ -180,15 +182,16 @@ public class EntityManager {
 
                 if (field.isAnnotationPresent(Column.class)) {
                     Column rsf = field.getAnnotation(Column.class);
-                    if (isNotEmpty(rsf.value()) && (isEmpty(SqlUtils.getFieldAlias(rsf)))) {
-                        q.set(rsf.value(), ":" + field.getName());
+                    if (rsf.updatable() && isEmpty(SqlUtils.getFieldAlias(rsf))) {
+                        q.set(getColumnName(field), ":" + field.getName());
                     }
                 }
             }
         }
 
         Field primaryKeyField = getPrimaryKeyField(type);
-        q.where(primaryKeyField.getAnnotation(Column.class).value() + "=:" + primaryKeyField.getName());
+        if (primaryKeyField == null) throw new RuntimeException("@Id not found");
+        q.where(getColumnName(primaryKeyField) + "=:" + primaryKeyField.getName());
 
         return q;
     }
