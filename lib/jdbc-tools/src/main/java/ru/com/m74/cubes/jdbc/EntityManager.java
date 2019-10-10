@@ -1,5 +1,6 @@
 package ru.com.m74.cubes.jdbc;
 
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -287,8 +288,12 @@ public class EntityManager {
         return jdbcTemplate.queryForObject(q.getCountSql(), params, Long.class);
     }
 
+    public <T> List<T> getResultList(Select<T> q, Map<String, Object> params, RowMapper<T> mapper) {
+        return jdbcTemplate.query(q.toString(), params, mapper);
+    }
+
     public <T> List<T> getResultList(Select<T> q, Map<String, Object> params) {
-        return jdbcTemplate.query(q.toString(), params, (resultSet, i) -> createEntity(resultSet, q.getType()));
+        return getResultList(q, params, (resultSet, i) -> createEntity(resultSet, q.getType()));
     }
 
     public void save(Object dto) {
