@@ -48,7 +48,7 @@ public class ObjectUtils {
      * @return
      */
     public static boolean isEquals(Object val1, Object val2) {
-        return val1 != null && val2 != null && val1.equals(val2);
+        return (val1 == null && val2 == null) || (val1 != null && val1.equals(val2));
     }
 
     public static <T> void forEach(T arr[], Consumer<T> consumer) {
