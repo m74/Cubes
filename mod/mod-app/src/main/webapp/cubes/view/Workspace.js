@@ -13,6 +13,10 @@ Ext.define('Ext.cubes.view.Workspace', {
         closable: true
     },
 
+    plugins:[
+        'tabclosemenu',
+        'tabreorderer'
+    ],
     docTitle: document.title,
 
     listeners: {
