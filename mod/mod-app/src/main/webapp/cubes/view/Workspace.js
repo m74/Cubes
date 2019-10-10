@@ -13,9 +13,11 @@ Ext.define('Ext.cubes.view.Workspace', {
         closable: true
     },
 
+    docTitle: document.title,
+
     listeners: {
         tabchange: function (tp, tab) {
-            document.title = tab.title;
+            document.title = this.docTitle + " - " + tab.title;
         }
     },
     add: function () {
@@ -46,7 +48,7 @@ Ext.define('Ext.cubes.view.Workspace', {
             callback: function () {
                 me.unmask();
             },
-            success: success,
+            success: sukccess,
             failure: function () {
                 Ext.Msg.show({
                     title: 'Ошибка',
