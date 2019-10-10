@@ -14,6 +14,7 @@ Ext.define('Ext.cubes.Application', {
         'Ext.cubes.model.Shortcut',
         'Ext.cubes.view.MenuItem', 'overrides.data.Model',
         'Ext.cubes.features.HotKeys', 'overrides.DefaultAction', 'overrides.data.field.Field', 'overrides.form.field.ComboBox',
+        'overrides.form.field.Checkbox',
         'overrides.window.Window', 'overrides.grid.ContextMenu', 'overrides.toolbar.Toolbar'
     ],
 
