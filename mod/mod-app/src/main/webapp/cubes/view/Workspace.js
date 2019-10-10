@@ -20,22 +20,6 @@ Ext.define('Ext.cubes.view.Workspace', {
             document.title = this.docTitle + " - " + tab.title;
         }
     },
-    add: function () {
-        function handle(items) {
-            return Ext.Array.map(items, function (item) {
-                if (Ext.isString(item) && item[0] === '@') {
-                    item = Ext.getApplication().shortcuts.get(item.substr(1));
-                }
-                return item;
-            })
-        }
-
-        if (arguments.length === 1 && Ext.isArray(arguments[0])) {
-            return this.callParent(handle(arguments[0]));
-        } else {
-            return this.callParent(handle(Ext.Array.slice(arguments)));
-        }
-    },
 
     loadRecord: function (model, id, success) {
         var me = this;

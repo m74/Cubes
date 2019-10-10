@@ -38,10 +38,17 @@ Ext.define('Ext.cubes.view.Menu', {
         if (Ext.isString(c)) {
             var cls = Ext.ClassManager.getByAlias('widget.' + c);
             if (cls) {
-                arguments[0] = {
+                c = {
+                    // arguments[0] = c = {
                     itemId: c,
                     text: cls.prototype.config.title,
                     permissions: cls.prototype.permissions
+                };
+                if (Ext.hasPermissions(c.permissions)) {
+                    Ext.StoreManager.lookup('shortcuts').add({
+                        id: c.itemId,
+                        text: c.text
+                    });
                 }
             }
         }
