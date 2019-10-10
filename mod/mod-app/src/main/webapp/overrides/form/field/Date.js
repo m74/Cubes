@@ -1,6 +1,7 @@
 Ext.define('overrides.form.field.Date', {
     override: 'Ext.form.field.Date',
 
+    submitFormat: 'c',
     dateFormat: 'c',
     format: 'd.m.Y',
     startDay: 1,
