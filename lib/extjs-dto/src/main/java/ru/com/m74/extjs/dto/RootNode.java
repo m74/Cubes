@@ -24,6 +24,7 @@ public class RootNode<T extends Node> implements Node<T, Object> {
         this.children = nodes;
     }
 
+    @Override
     public Iterable<T> getChildren() {
         return children;
     }

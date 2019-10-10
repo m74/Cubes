@@ -6,4 +6,6 @@ public interface Node<T extends Node, I> {
     I getParentId();
 
     void setChildren(Iterable<T> nodes);
+
+    Iterable<T> getChildren();
 }
