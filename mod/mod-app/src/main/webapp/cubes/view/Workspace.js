@@ -36,7 +36,7 @@ Ext.define('Ext.cubes.view.Workspace', {
             callback: function () {
                 me.unmask();
             },
-            success: sukccess,
+            success: success,
             failure: function () {
                 Ext.Msg.show({
                     title: 'Ошибка',
