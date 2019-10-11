@@ -1,30 +1,4 @@
 /**
- * Ext.workspace.ux.desktop.MenuItem
- *
- * @author mixam
- * @date 27.09.2018
- */
-Ext.define('Ext.cubes.view.MenuItem', {
-    extend: 'Ext.menu.Item',
-    alias: 'widget.opentabmenuitem',
-
-    initComponent: function () {
-        if (Ext.isArray(this.menu)) {
-            this.menu = {
-                xclass: 'Ext.cubes.view.Menu',
-                items: this.menu
-            }
-        }
-        this.callParent(arguments);
-    },
-
-    handler: function () {
-        Ext.util.History.add(this.itemId);
-    }
-});
-
-
-/**
  * Ext.cubes.view.Menu
  *
  * @author mixam
@@ -33,7 +7,9 @@ Ext.define('Ext.cubes.view.MenuItem', {
 Ext.define('Ext.cubes.view.Menu', {
     extend: 'Ext.menu.Menu',
     defaultType: 'opentabmenuitem',
-    requires: [],
+    requires: [
+        'Ext.cubes.view.MenuItem'
+    ],
     lookupComponent: function (c) {
         if (Ext.isString(c)) {
             var cls = Ext.ClassManager.getByAlias('widget.' + c);
@@ -42,6 +18,7 @@ Ext.define('Ext.cubes.view.Menu', {
                     // arguments[0] = c = {
                     itemId: c,
                     text: cls.prototype.config.title,
+                    // canAccessible: cls.prototype.canAccessible,
                     permissions: cls.prototype.permissions
                 };
                 if (Ext.hasPermissions(c.permissions)) {

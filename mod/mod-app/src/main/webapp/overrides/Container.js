@@ -9,9 +9,14 @@ Ext.define('overrides.Container', {
     override: 'Ext.Container',
     permissions: [],
 
-    onBeforeAdd: function (item) {
-        if (!Ext.hasPermissions(item.permissions)) return false;
+    onBeforeAdd: function (c) {
+        if (!this.canAddComponent(c)) return false;
         this.callParent(arguments);
+    },
+
+    canAddComponent: function (c) {
+        return Ext.hasPermissions(c.permissions);
+        // (c.canAccessible ? c.canAccessible() : true) &&
     },
 
     lookupComponent: function (c) {
@@ -20,7 +25,7 @@ Ext.define('overrides.Container', {
             return null;
         }
         // если компонент не доступен пользователю
-        if (!Ext.hasPermissions(c.permissions)) {
+        if (!this.canAddComponent(c)) {
             return null;
         }
 
