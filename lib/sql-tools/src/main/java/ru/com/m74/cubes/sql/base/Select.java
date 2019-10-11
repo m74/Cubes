@@ -130,6 +130,10 @@ public class Select<T> implements Serializable {
         return this;
     }
 
+    public Where<T> getWhere() {
+        return where;
+    }
+
     /**
      * Обнулить условия и добавить новое
      */
