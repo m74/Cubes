@@ -4,6 +4,7 @@ import ru.com.m74.cubes.jdbc.ColumnNotFoundException;
 import ru.com.m74.cubes.jdbc.Link;
 import ru.com.m74.cubes.jdbc.annotations.LinkTo;
 import ru.com.m74.cubes.sql.base.Select;
+import ru.com.m74.extjs.dto.Filter;
 import ru.com.m74.extjs.dto.Sorter;
 
 import java.lang.reflect.Field;
@@ -13,20 +14,51 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
-import static ru.com.m74.cubes.common.ObjectUtils.isEmpty;
-import static ru.com.m74.cubes.common.ObjectUtils.isNotEmpty;
+import static ru.com.m74.cubes.common.ObjectUtils.*;
+import static ru.com.m74.cubes.jdbc.utils.SqlUtils.getColumnNameWithAlias;
 import static ru.com.m74.cubes.jdbc.utils.SqlUtils.getResultSetFieldName;
 
 public class EMUtils {
-    public static final String TIMESTAMP_FORMAT = "yyyy-MM-dd'T'HH:mm:ssXXX";
+    private static final String TIMESTAMP_FORMAT = "yyyy-MM-dd'T'HH:mm:ssXXX";
 
     public static <T> void sort(Select<T> q, Sorter sorters[]) {
-        if (isNotEmpty(sorters)) {
-            for (Sorter sorter : sorters) {
-                q.addOrderBy(SqlUtils.getOrderBy(q.getType(), sorter.getProperty()), sorter.getDirection());
+        forEach(sorters, sorter -> {
+            q.addOrderBy(SqlUtils.getOrderBy(q.getType(), sorter.getProperty()), sorter.getDirection());
+        });
+    }
+
+    public static <T> void filter(Select<T> q, Map<String, Object> params, Filter filters[]) {
+        AtomicInteger i = new AtomicInteger();
+
+        forEach(filters, filter -> {
+            String fname = filter.getProperty();
+            String pname = fname + i.getAndIncrement();
+            params.put(pname, filter.getValue());
+
+            Field field = DTOUtils.findField(q.getType(), fname);
+            if (field != null) {
+                String cname = getColumnNameWithAlias(q.getType(), field);
+
+                if (String.class.isAssignableFrom(field.getType())) {
+                    switch (filter.getOperator()) {
+                        case like:
+                        case startsWith:
+                            q.and("upper(" + cname + ") like upper(:" + fname + ")||'%'");
+                            break;
+                        case contains:
+                            q.and("upper(" + cname + ") like '%'||upper(:" + fname + ")||'%'");
+                            break;
+                    }
+                } else if (Date.class.isAssignableFrom(field.getType()) || Number.class.isAssignableFrom(field.getType())) {
+                    q.and(cname + " " + filter.getOperator().sql() + " :" + pname);
+                } else {
+                    throw new RuntimeException(field.getName());
+                }
             }
-        }
+        });
     }
 
     /**

@@ -58,3 +58,10 @@ Ext.define('Ext.cubes.Application', {
         );
     }
 });
+
+Ext.grid.filters.filter.Date.prototype.config.fields.lt.text = "Меньше";
+Ext.grid.filters.filter.Date.prototype.config.fields.eq.text = "Равно";
+Ext.grid.filters.filter.Date.prototype.config.fields.gt.text = "Больше";
+Ext.grid.filters.Filters.prototype.menuFilterText = "Фильры";
+Ext.grid.filters.filter.String.prototype.emptyText = "Введите строку ...";
+Ext.grid.filters.filter.Number.prototype.emptyText = "Введите номер ...";
