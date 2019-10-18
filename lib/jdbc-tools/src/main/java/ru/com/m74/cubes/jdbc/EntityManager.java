@@ -43,6 +43,10 @@ public class EntityManager {
         return jdbcTemplate;
     }
 
+    public Select select(String... fields) {
+        return new Select().select(fields);
+    }
+
     public <T> Select<T> select(Class<T> type) {
         Select<T> select = new Select<>(type);
 

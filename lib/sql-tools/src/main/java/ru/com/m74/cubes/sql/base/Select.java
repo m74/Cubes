@@ -40,6 +40,7 @@ public class Select<T> implements Serializable {
     private List<String> orderBy = new ArrayList<>();
     private boolean pagging = false;
     private boolean distinct = false;
+    private Select with = null;
 //    private boolean count = false;
 
     public Select() {
@@ -192,6 +193,9 @@ public class Select<T> implements Serializable {
 
 //        String sql = hint == null ? "" : hint + delim;
         String sql = "";
+        if (this.with != null) {
+            sql += "with q as (" + this.with.toString() + ")";
+        }
 
         if (count) {
             sql += "select count(*)" + delim;
@@ -248,5 +252,10 @@ public class Select<T> implements Serializable {
         }
 
         return sql;
+    }
+
+    public Select<T> with(Select with) {
+        this.with = with;
+        return this;
     }
 }

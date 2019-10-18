@@ -103,4 +103,8 @@ public class AbstractRepoImpl<T, I> implements AbstractRepo<T, I> {
             }
         }
     }
+
+    public Class<T> getType() {
+        return type;
+    }
 }
