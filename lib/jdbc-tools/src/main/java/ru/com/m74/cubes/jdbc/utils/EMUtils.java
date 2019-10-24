@@ -22,7 +22,8 @@ import static ru.com.m74.cubes.jdbc.utils.SqlUtils.getColumnNameWithAlias;
 import static ru.com.m74.cubes.jdbc.utils.SqlUtils.getResultSetFieldName;
 
 public class EMUtils {
-    private static final String TIMESTAMP_FORMAT = "yyyy-MM-dd'T'HH:mm:ssXXX";
+    private static final String TIMESTAMP_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
+//    private static final String TIMESTAMP_FORMAT = "yyyy-MM-dd'T'HH:mm:ssXXX";
 
     public static <T> void sort(Select<T> q, Sorter sorters[]) {
         forEach(sorters, sorter -> {
@@ -36,17 +37,38 @@ public class EMUtils {
         forEach(filters, filter -> {
             String fname = filter.getProperty();
             String pname = fname + i.getAndIncrement();
-            params.put(pname, filter.getValue());
 
             Field field = DTOUtils.findField(q.getType(), fname);
             if (field != null) {
+                params.put(pname, cast(filter.getValue(), field.getType()));
+
                 String cname = getColumnNameWithAlias(q.getType(), field);
 
                 if (String.class.isAssignableFrom(field.getType())) {
                     switch (filter.getOperator()) {
+//                        case like:
+//                            q.and(cname + " like :" + fname);
+//                            break;
+//                        case starts:
+//                            q.and(cname + " like :" + fname + "||'%'");
+//                            break;
+//                        case ends:
+//                            q.and(cname + " like '%'||:" + fname);
+//                            break;
+//                        case contains:
+//                            q.and(cname + " like '%'||:" + fname + "||'%'");
+//                            break;
+                        case eq:
+                            q.and(cname + " = :" + fname);
+                            break;
                         case like:
-                        case startsWith:
+                            q.and("upper(" + cname + ") like upper(:" + fname + ")");
+                            break;
+                        case starts:
                             q.and("upper(" + cname + ") like upper(:" + fname + ")||'%'");
+                            break;
+                        case ends:
+                            q.and("upper(" + cname + ") like '%'||upper(:" + fname + ")");
                             break;
                         case contains:
                             q.and("upper(" + cname + ") like '%'||upper(:" + fname + ")||'%'");

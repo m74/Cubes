@@ -11,22 +11,37 @@ public class Filter {
 
     public enum Operator {
         like,
-        startsWith,
+        starts,
+        ends,
         contains,
+        //        likeIC,
+//        startsIC,
+//        endsIC,
+//        containsIC,
         eq,
         gt,
-        lt;
+        lt,
+        before,
+        after,
+        between;
 
         public String sql() {
             switch (this) {
                 case like:
-                case startsWith:
+                case starts:
+                case ends:
                 case contains:
+//                case likeIC:
+//                case startsIC:
+//                case endsIC:
+//                case containsIC:
                     return "like";
                 case eq:
                     return "=";
                 case lt:
+                case before:
                     return "<";
+                case after:
                 case gt:
                     return ">";
             }
