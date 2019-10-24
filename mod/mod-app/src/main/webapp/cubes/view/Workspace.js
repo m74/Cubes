@@ -13,11 +13,13 @@ Ext.define('Ext.cubes.view.Workspace', {
         closable: true
     },
 
-    plugins:[
+    plugins: [
         'tabclosemenu',
         'tabreorderer'
     ],
     docTitle: document.title,
+
+    stateEvents: ['add', 'remove', 'childmove'],
 
     listeners: {
         tabchange: function (tp, tab) {
@@ -25,32 +27,32 @@ Ext.define('Ext.cubes.view.Workspace', {
         }
     },
 
-    loadRecord: function (model, id, success) {
-        var me = this;
+    openTab: function (c) {
+        var tab;
+        if (Ext.isString(c)) c = {itemId: c, xtype: c};
 
-        me.mask('Идет загрузка ...');
-        if (Ext.isString(model)) {
-            model = Ext.Loader.syncRequire(model);
+        var index = this.items.findIndex('itemId', c.itemId);
+        if (index >= 0) {
+            tab = this.items.getAt(index);
+        } else {
+            tab = this.add(c);
         }
-        model.load(id, {
-            callback: function () {
-                me.unmask();
-            },
-            success: success,
-            failure: function () {
-                Ext.Msg.show({
-                    title: 'Ошибка',
-                    msg: 'Не удалось загрузить документ: ' + id,
-                    buttons: Ext.Msg.OK,
-                    icon: Ext.Msg.ERROR
-                });
-            }
-        });
+        if (!this.inStateRestore)
+            this.setActiveItem(tab);
     },
 
-    openTab: function (cfg) {
-        var tab = this.down('#' + cfg.itemId);
-        if (!tab) tab = this.add(cfg);
-        this.setActiveItem(tab);
+    getState: function () {
+        var state = this.callParent(arguments);
+        state.tabs = Ext.Array.map(this.items.items, function (item) {
+            return item.itemId;
+        });
+        return state;
+    },
+
+    applyState: function (state) {
+        this.callParent(arguments);
+        this.inStateRestore = true;
+        Ext.route.Router.doRun(state.tabs);
+        this.inStateRestore = false;
     }
 });
