@@ -18,6 +18,7 @@ Ext.define('Ext.cubes.view.Menu', {
                     // arguments[0] = c = {
                     itemId: c,
                     text: cls.prototype.config.title,
+                    iconCls: cls.prototype.config.iconCls,
                     // canAccessible: cls.prototype.canAccessible,
                     permissions: cls.prototype.permissions
                 };

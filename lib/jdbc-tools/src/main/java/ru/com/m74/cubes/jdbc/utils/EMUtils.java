@@ -35,6 +35,11 @@ public class EMUtils {
         });
     }
 
+    private static Class<?> getFilterType(Class<?> cls) {
+        if (Link.class.isAssignableFrom(cls)) return Long.class;
+        return cls;
+    }
+
     public static <T> void filter(Select<T> q, Map<String, Object> params, Filter filters[]) {
         AtomicInteger i = new AtomicInteger();
 
@@ -49,7 +54,7 @@ public class EMUtils {
                     params.put(pname + "From", period[0]);
                     params.put(pname + "Till", period[1]);
                 } else {
-                    params.put(pname, cast(filter.getValue(), field.getType()));
+                    params.put(pname, cast(filter.getValue(), getFilterType(field.getType())));
                 }
 
                 String cname = getColumnNameWithAlias(q.getType(), field);
@@ -84,6 +89,8 @@ public class EMUtils {
                             q.and("upper(" + cname + ") like '%'||upper(:" + fname + ")||'%'");
                             break;
                     }
+                } else if (Link.class.isAssignableFrom(field.getType())) {
+                    q.and(cname + " " + filter.getOperator().sql() + " :" + pname);
                 } else if (Date.class.isAssignableFrom(field.getType()) || Number.class.isAssignableFrom(field.getType())) {
                     switch (filter.getOperator()) {
                         case between:
