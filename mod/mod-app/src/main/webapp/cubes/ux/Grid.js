@@ -52,24 +52,24 @@ Ext.define('Ext.cubes.ux.Grid', {
 
     actions: {
         create: {
-            tooltip: 'Создать',
+            text: 'Создать',
             iconCls: 'x-fa fa-plus',
             handler: 'doCreateRecord'
         },
         edit: {
-            tooltip: 'Редактировать',
+            text: 'Редактировать',
             iconCls: 'x-fa fa-pencil',
             enableOn:['singleSelect'],
             handler: 'doEditRecord'
         },
         remove: {
-            tooltip: 'Удалить',
+            text: 'Удалить',
             iconCls: 'x-fa fa-trash',
             enableOn:['singleSelect'],
             handler: 'doRemoveRecord'
         },
         reload: {
-            tooltip: 'Перезагрузить',
+            text: 'Перезагрузить',
             iconCls: 'x-fa fa-refresh',
             handler: 'doReload'
         }
@@ -85,9 +85,5 @@ Ext.define('Ext.cubes.ux.Grid', {
     bbar: {
         xtype: 'pagingtoolbar',
         displayInfo: true
-    },
-
-    initComponent: function () {
-        this.callParent(arguments);
     }
 });
