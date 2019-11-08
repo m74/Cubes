@@ -10,7 +10,8 @@
 }
 
 .x-dashboard-item {
-  display: inline-block;
+  display: inline-table;
+  cursor: pointer;
   width: 100px;
   margin: 10px;
   border-radius: .25rem;

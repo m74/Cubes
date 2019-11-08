@@ -30,7 +30,8 @@ Ext.define('Ext.cubes.view.Dashboard', {
             if (Ext.hasPermissions(cls.prototype.permissions)) {
                 arr.push({
                     id: xtype,
-                    title: cfg.title
+                    title: cfg.title,
+                    iconCls: cfg.iconCls || 'fa fa-cogs'
                 });
             }
         });
@@ -42,7 +43,7 @@ Ext.define('Ext.cubes.view.Dashboard', {
             store: store,
             tpl: [
                 '<ul class=""><tpl for=".">',
-                '<li class="x-dashboard-item"><div><a href="#{id}"><i class="fa fa-cogs"></i></a></div><div class="title">{title}</div></li>',
+                '<li class="x-dashboard-item"><div><a href="#{id}"><i class="{iconCls}"></i></a></div><div class="title">{title}</div></li>',
                 '</tpl></ul>'
             ],
             itemSelector: 'a.x-dashboard-item',
