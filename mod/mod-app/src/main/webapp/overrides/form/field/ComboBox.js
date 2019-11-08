@@ -12,6 +12,9 @@ Ext.define('overrides.form.field.ComboBox', {
         } else if (v && this.store.find(this.valueField, v[this.valueField] || v, 0, false, false, true) === -1) {
             this.setSelection(this.store.add(v));
         }
+
+        if (v && v[this.valueField]) v = v[this.valueField];
+
         this.callParent([v]);
     },
     initComponent: function () {
