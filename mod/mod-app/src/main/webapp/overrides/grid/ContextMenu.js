@@ -5,7 +5,7 @@
  * @date 05/09/2019
  */
 Ext.define('overrides.grid.ContextMenu', {
-    override: 'Ext.grid.Panel',
+    override: 'Ext.panel.Table',
 
     initComponent: function () {
         this.callParent(arguments);

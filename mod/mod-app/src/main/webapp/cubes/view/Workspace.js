@@ -31,14 +31,18 @@ Ext.define('Ext.cubes.view.Workspace', {
         var tab;
         if (Ext.isString(c)) c = {itemId: c, xtype: c};
 
-        var index = this.items.findIndex('itemId', c.itemId);
-        if (index >= 0) {
-            tab = this.items.getAt(index);
-        } else {
-            tab = this.add(c);
+        try {
+            var index = this.items.findIndex('itemId', c.itemId);
+            if (index >= 0) {
+                tab = this.items.getAt(index);
+            } else {
+                tab = this.add(c);
+            }
+            if (!this.inStateRestore)
+                this.setActiveItem(tab);
+        } catch (e) {
+            console.log('Invalid config: ', c, e);
         }
-        if (!this.inStateRestore)
-            this.setActiveItem(tab);
     },
 
     getState: function () {
