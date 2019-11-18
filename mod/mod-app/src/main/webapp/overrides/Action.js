@@ -22,3 +22,13 @@ Ext.define('overrides.actions.Button', {
         this.callParent(arguments);
     }
 });
+
+Ext.define('overrides.actions.MenuItem', {
+    override: 'Ext.menu.Item',
+    onClick: function (e) {
+        if (Ext.isFunction(this.handler) && !this.scope) {
+            this.scope = this.resolveListenerScope();
+        }
+        this.callParent(arguments);
+    }
+});
