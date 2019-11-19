@@ -18,11 +18,9 @@ import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.MessageFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+import static java.util.Objects.requireNonNull;
 import static ru.com.m74.cubes.common.MapUtils.map;
 import static ru.com.m74.cubes.common.ObjectUtils.isEmpty;
 import static ru.com.m74.cubes.common.ObjectUtils.isNotEmpty;
@@ -120,7 +118,7 @@ public class EntityManager {
         q.into(tableName(type));
 
         for (Field field : getUpdatableFields(type)) {
-            if (field.getAnnotation(Column.class).insertable() /*&& getValue(dto, field) != null*/) {
+            if (field.getAnnotation(Column.class).insertable() && isNotEmpty(getValue(dto, field))) {
                 q.value(getColumnName(field), ":" + field.getName());
             }
         }
@@ -134,7 +132,8 @@ public class EntityManager {
 
         Map<String, Object> values = new HashMap<>();
         for (Field field : DTOUtils.getAnnotatedModelFields(type)) {
-            values.put(field.getName(), getValue(dto, field));
+            Object v = getValue(dto, field);
+            if (isNotEmpty(v)) values.put(field.getName(), v);
         }
         return new MapSqlParameterSource(values);
     }
@@ -150,9 +149,10 @@ public class EntityManager {
         if (idField == null) throw new RuntimeException("@PrimaryKey annotation not present in: " + type);
         Object idValue = getValue(dto, idField);
         Insert q = insert(type, dto);
+        String idColumnName = getColumnName(idField);
         if (idValue != null)
-            q.value(getColumnName(idField), ":" + idField.getName());
-        jdbcTemplate.update(q.toString(), namedParameters, keyHolder, new String[]{SqlUtils.getResultSetFieldName(idField)});
+            q.value(idColumnName, ":" + idField.getName());
+        jdbcTemplate.update(q.toString(), namedParameters, keyHolder, new String[]{idColumnName});
 
         // safe PK setting
         final Class<?> idFieldType = idField.getType();
@@ -391,19 +391,19 @@ public class EntityManager {
     }
 
     public void remove(Class type, Object idValue) {
-        Field primaryKeyField = getPrimaryKeyField(type);
-        String primaryKeyFieldName = SqlUtils.getResultSetFieldName(primaryKeyField);
+        Field primaryKeyField = requireNonNull(getPrimaryKeyField(type));
+        String primaryKeyColumnName = getColumnName(primaryKeyField);
         String tableName = tableName(type);
 
-        jdbcTemplate.update("DELETE " + tableName + " WHERE " + primaryKeyFieldName + " = :id", map("id", idValue));
+        jdbcTemplate.update("DELETE " + tableName + " WHERE " + primaryKeyColumnName + " = :id", map("id", idValue));
     }
 
     public void removeAll(Class type, Object idValues[]) {
-        Field primaryKeyField = getPrimaryKeyField(type);
-        String primaryKeyFieldName = SqlUtils.getResultSetFieldName(primaryKeyField);
+        Field primaryKeyField = requireNonNull(getPrimaryKeyField(type));
+        String primaryKeyColumnName = getColumnName(primaryKeyField);
         String tableName = tableName(type);
 
-        jdbcTemplate.update("DELETE " + tableName + " WHERE " + primaryKeyFieldName + " in (:ids)", map("ids", idValues));
+        jdbcTemplate.update("DELETE " + tableName + " WHERE " + primaryKeyColumnName + " in (:ids)", map("ids", idValues));
     }
 
 //    public void remove(Object dto) {
