@@ -40,7 +40,7 @@ Ext.define('Ext.cubes.features.HotKeys', {
                     if (tc.ownerCt instanceof Ext.toolbar.Paging) return;
                     if (tc instanceof Ext.form.field.TextArea && e.keyCode === e.ENTER && e.ctrlKey === false) return;
                     // Не обрабатываем горячие клавиши есть у нас открыт пикер
-                    if (tc instanceof Ext.form.field.ComboBox && !tc.picker.hidden) return;
+                    if (tc instanceof Ext.form.field.ComboBox && tc.picker && !tc.picker.hidden) return;
                     // if (isSpecialKey && tc.picker && !tc.picker.hidden) return;
                 }
 
