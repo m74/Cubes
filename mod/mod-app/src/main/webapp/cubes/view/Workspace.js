@@ -22,17 +22,17 @@ Ext.define('Ext.cubes.view.Workspace', {
     stateEvents: ['add', 'remove', 'childmove'],
 
     listeners: {
-        tabchange: function (tp, tab) {
+        tabchange: (tp, tab) => {
             document.title = this.docTitle + " - " + tab.title;
         }
     },
 
-    openTab: function (c) {
-        var tab;
+    openTab(c) {
+        let tab;
         if (Ext.isString(c)) c = {itemId: c, xtype: c};
 
         try {
-            var index = this.items.findIndex('itemId', c.itemId);
+            const index = this.items.findIndex('itemId', c.itemId);
             if (index >= 0) {
                 tab = this.items.getAt(index);
             } else {
@@ -45,15 +45,13 @@ Ext.define('Ext.cubes.view.Workspace', {
         }
     },
 
-    getState: function () {
-        var state = this.callParent(arguments);
-        state.tabs = Ext.Array.map(this.items.items, function (item) {
-            return item.itemId;
-        });
+    getState() {
+        const state = this.callParent(arguments);
+        state.tabs = Ext.Array.map(this.items.items, item => item.itemId);
         return state;
     },
 
-    applyState: function (state) {
+    applyState(state) {
         this.callParent(arguments);
         this.inStateRestore = true;
         Ext.route.Router.doRun(state.tabs);

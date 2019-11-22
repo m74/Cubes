@@ -9,39 +9,17 @@ Ext.define('Ext.cubes.ux.Grid', {
 
     defaultListenerScope: true,
 
-    doCreateRecord: function () {
+    doCreateRecord() {
         this.store.add({});
     },
 
-    doRemoveRecord: function () {
-        var view = this.view;
-        Ext.MessageBox.confirm('Внимание!', 'Вы действительно хотите удалить выбранные записи?', function (b) {
-            if (b === 'yes') {
-                var recs = view.selModel.getSelection();
-                view.store.remove(recs);
-                //
-                // var ids = [];
-                // Ext.each(recs, function (rec) {
-                //     ids.push(rec.id);
-                // });
-                //
-                // Ext.Ajax.request({
-                //     url: view.store.model.getProxy().getUrl(),
-                //     jsonData: {
-                //         ids: ids
-                //     },
-                //     params: {
-                //         ids: ids
-                //     },
-                //     method: 'DELETE',
-                //     success: function () {
-                //         view.store.remove(recs);
-                //     }
-                // });
-            }
+    doRemoveRecord() {
+        const view = this.view;
+        Ext.MessageBox.confirm('Внимание!', 'Вы действительно хотите удалить выбранные записи?', b => {
+            if (b === 'yes') view.store.remove(view.selModel.getSelection());
         });
     },
-    doReload: function () {
+    doReload() {
         this.view.store.loadPage(1);
     },
 
@@ -59,13 +37,13 @@ Ext.define('Ext.cubes.ux.Grid', {
         edit: {
             text: 'Редактировать',
             iconCls: 'x-fa fa-pencil',
-            enableOn:['singleSelect'],
+            enableOn: ['singleSelect'],
             handler: 'doEditRecord'
         },
         remove: {
             text: 'Удалить',
             iconCls: 'x-fa fa-trash',
-            enableOn:['singleSelect'],
+            enableOn: ['singleSelect'],
             handler: 'doRemoveRecord'
         },
         reload: {

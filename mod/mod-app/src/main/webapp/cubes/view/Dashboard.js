@@ -12,21 +12,18 @@ Ext.define('Ext.cubes.view.Dashboard', {
     xtype: 'dashboard',
 
     layout: 'fit',
-    initComponent: function () {
-        // debugger
-        var store = Ext.StoreMgr.lookup({
+    initComponent() {
+        const store = Ext.StoreMgr.lookup({
             type: 'array',
             fields: ['id', 'title', 'permissions'],
             filters: [{
-                filterFn: function (rec) {
-                    return Ext.hasPermissions(rec.get('permissions'));
-                }
+                filterFn: rec => Ext.hasPermissions(rec.get('permissions'))
             }]
         });
-        var arr = [];
-        Ext.each(this.initialConfig.data, function (xtype) {
-            var cls = Ext.ClassManager.getByAlias('widget.' + xtype);
-            var cfg = cls.prototype.config;
+        const arr = [];
+        Ext.each(this.initialConfig.data, xtype => {
+            const cls = Ext.ClassManager.getByAlias('widget.' + xtype);
+            const cfg = cls.prototype.config;
             if (Ext.hasPermissions(cls.prototype.permissions)) {
                 arr.push({
                     id: xtype,

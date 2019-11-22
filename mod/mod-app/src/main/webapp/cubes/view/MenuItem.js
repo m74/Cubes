@@ -8,7 +8,7 @@ Ext.define('Ext.cubes.view.MenuItem', {
     extend: 'Ext.menu.Item',
     alias: 'widget.opentabmenuitem',
 
-    initComponent: function () {
+    initComponent() {
         if (Ext.isArray(this.menu)) {
             this.menu = {
                 xclass: 'Ext.cubes.view.Menu',
@@ -18,7 +18,7 @@ Ext.define('Ext.cubes.view.MenuItem', {
         this.callParent(arguments);
     },
 
-    handler: function () {
+    handler() {
         Ext.util.History.add(this.itemId);
     }
 });

@@ -10,9 +10,9 @@ Ext.define('Ext.cubes.view.Menu', {
     requires: [
         'Ext.cubes.view.MenuItem'
     ],
-    lookupComponent: function (c) {
+    lookupComponent(c) {
         if (Ext.isString(c)) {
-            var cls = Ext.ClassManager.getByAlias('widget.' + c);
+            const cls = Ext.ClassManager.getByAlias('widget.' + c);
             if (cls) {
                 c = {
                     // arguments[0] = c = {
@@ -30,7 +30,7 @@ Ext.define('Ext.cubes.view.Menu', {
                 }
             }
         }
-        var cmp = this.callParent(arguments);
+        const cmp = this.callParent(arguments);
         if (cmp.getMenu() && cmp.getMenu().items.getCount() === 0) return null;
         return cmp;
     }

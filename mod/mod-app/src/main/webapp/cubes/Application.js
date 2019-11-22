@@ -36,7 +36,7 @@ Ext.define('Ext.cubes.Application', {
     },
 
 
-    init: function () {
+    init() {
         Ext.app.Application.instance = this;
 
         this.params = Ext.Object.fromQueryString(location.search);
@@ -48,7 +48,7 @@ Ext.define('Ext.cubes.Application', {
         });
     },
 
-    onAppUpdate: function () {
+    onAppUpdate() {
         Ext.Msg.confirm('Приложение обновлено', 'Это приложение нуждается в обновлении, перезагрузить?',
             function (choice) {
                 if (choice === 'yes') {
