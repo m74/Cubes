@@ -22,7 +22,7 @@ Ext.define('Ext.cubes.view.Workspace', {
     stateEvents: ['add', 'remove', 'childmove'],
 
     listeners: {
-        tabchange: (tp, tab) => {
+        tabchange(tp, tab) {
             document.title = this.docTitle + " - " + tab.title;
         }
     },
