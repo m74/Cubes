@@ -129,8 +129,7 @@ public class EntityManager {
         return q;
     }
 
-
-    private SqlParameterSource generateSqlValues(Object dto) {
+    private Map<String, Object> getValues(Object dto) {
         Class<?> type = dto.getClass();
 
         Map<String, Object> values = new HashMap<>();
@@ -138,14 +137,15 @@ public class EntityManager {
             Object v = getValue(dto, field);
             if (isNotEmpty(v)) values.put(field.getName(), v);
         }
-        return new MapSqlParameterSource(values);
+        return values;
     }
 
 
     @SuppressWarnings({"unchecked"})
     public <T> T persist(T dto) {
         Class<T> type = (Class<T>) dto.getClass();
-        SqlParameterSource namedParameters = generateSqlValues(dto);
+
+        Map<String, Object> values = getValues(dto);
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         Field idField = getPrimaryKeyField(type);
@@ -153,9 +153,9 @@ public class EntityManager {
         Object idValue = getValue(dto, idField);
         Insert q = insert(type, dto);
         String idColumnName = getColumnName(idField);
-        if (idValue != null)
-            q.value(idColumnName, ":" + idField.getName());
-        jdbcTemplate.update(q.toString(), namedParameters, keyHolder, new String[]{idColumnName});
+        values.put(idField.getName(), idValue);
+        q.value(idColumnName, ":" + idField.getName());
+        jdbcTemplate.update(q.toString(), new MapSqlParameterSource(values), keyHolder, new String[]{idColumnName});
 
         // safe PK setting
         final Class<?> idFieldType = idField.getType();
