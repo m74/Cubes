@@ -18,7 +18,10 @@ import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.MessageFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static java.util.Objects.requireNonNull;
 import static ru.com.m74.cubes.common.MapUtils.map;
@@ -388,6 +391,16 @@ public class EntityManager {
     public <T> T getSingleResult(Select<T> query, Map<String, Object> params) {
         return jdbcTemplate.queryForObject(
                 query.toString(), params, (resultSet, i) -> createEntity(resultSet, query.getType()));
+    }
+
+    public void remove(Object entity) {
+        Class type = entity.getClass();
+        Field primaryKeyField = requireNonNull(getPrimaryKeyField(type));
+        String primaryKeyColumnName = getColumnName(primaryKeyField);
+        String tableName = tableName(type);
+        Object idValue = getValue(entity, primaryKeyField);
+
+        jdbcTemplate.update("DELETE " + tableName + " WHERE " + primaryKeyColumnName + " = :id", map("id", idValue));
     }
 
     public void remove(Class type, Object idValue) {
