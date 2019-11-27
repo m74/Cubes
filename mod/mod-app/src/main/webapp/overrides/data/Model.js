@@ -7,20 +7,20 @@
 Ext.define('overrides.data.Model', {
     override: 'Ext.data.Model',
     requires: [],
-    setData: function (data) {
+    setData(data) {
         this.data = data;
         Ext.each(this.fields, function (f) {
             this.data[f.name] = f.convert ? f.convert(data[f.name]) : data[f.name];
         }, this);
 
-        var id = this.get(this.idProperty);
+        const id = this.get(this.idProperty);
         if (id) this.id = id;
         else this.data[this.idProperty] = this.id;
 
         this.phantom = !(this.id > 0);
         this.callJoined('afterCommit');
     },
-    applyResponse: function (resp) {
+    applyResponse(resp) {
         if (resp.responseText) {
             resp = resp.responseObject || Ext.decode(resp.responseText);
         }
@@ -29,11 +29,5 @@ Ext.define('overrides.data.Model', {
             if (Ext.isArray(resp)) resp = resp[0];
         }
         this.setData(resp);
-    },
-    applyResponseFn: function () {
-        var me = this;
-        return function (resp) {
-            return me.applyResponse(resp);
-        };
     }
 });
