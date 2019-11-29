@@ -88,7 +88,7 @@ if (!localStorage.theme) localStorage.theme = 'Triton';
 const
     suffix = params.debug ? '-debug' : '',
     theme = localStorage.theme.toLowerCase(),
-    lang = params || 'ru';
+    lang = params.lang || 'ru';
 
 Loader.load([
     `ext/ext-all${suffix}.js`,
