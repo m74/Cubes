@@ -58,7 +58,8 @@ public class AbstractRepoImpl<T, I> implements AbstractRepo<T, I> {
         try {
             return em.get(type, id);
         } catch (EmptyResultDataAccessException e) {
-            throw new RuntimeException("Объект " + type.getSimpleName() + "(" + tableName(type) + ") с идентификатором " + id + " не существует.", e);
+            return null;
+//            throw new RuntimeException("Объект " + type.getSimpleName() + "(" + tableName(type) + ") с идентификатором " + id + " не существует.", e);
         }
     }
 
