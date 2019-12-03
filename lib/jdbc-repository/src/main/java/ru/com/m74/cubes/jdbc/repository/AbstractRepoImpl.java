@@ -13,6 +13,7 @@ import java.util.Map;
 
 import static ru.com.m74.cubes.common.MapUtils.map;
 import static ru.com.m74.cubes.jdbc.utils.EMUtils.sort;
+import static ru.com.m74.cubes.jdbc.utils.SqlUtils.tableName;
 
 
 public class AbstractRepoImpl<T, I> implements AbstractRepo<T, I> {
@@ -57,7 +58,7 @@ public class AbstractRepoImpl<T, I> implements AbstractRepo<T, I> {
         try {
             return em.get(type, id);
         } catch (EmptyResultDataAccessException e) {
-            return null;
+            throw new RuntimeException("Объект " + type.getSimpleName() + "(" + tableName(type) + ") с идентификатором " + id + " не существует.", e);
         }
     }
 
@@ -70,7 +71,7 @@ public class AbstractRepoImpl<T, I> implements AbstractRepo<T, I> {
 
     @Override
     @Transactional
-    public T persist(T entity, Map<String, Object> params) {
+    public T persist(T entity) {
         return em.persist(entity);
     }
 
