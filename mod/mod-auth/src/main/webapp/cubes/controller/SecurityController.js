@@ -123,7 +123,7 @@ Ext.define('Ext.cubes.controller.SecurityController', {
     login: function () {
         var user = Ext.remoteUser();
         this.mask('Открываем приложение ..');
-        this.application.fireEvent('login', this, user);
+        Ext.fireEvent('login', this, user);
         this.unmask();
     }
 });

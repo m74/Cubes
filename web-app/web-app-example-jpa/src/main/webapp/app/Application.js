@@ -11,7 +11,7 @@ Ext.define('Test.Application', {
     init: function () {
         this.callParent(arguments);
 
-        this.on('login', function () {
+        Ext.on('login', function () {
             this.getMainView().add({
                 border: false,
                 layout: 'fit',
