@@ -21,6 +21,10 @@ public class Link {
         this.title = title;
     }
 
+    public Link(Object id) {
+        this(id, null);
+    }
+
     public Object getId() {
         return id;
     }

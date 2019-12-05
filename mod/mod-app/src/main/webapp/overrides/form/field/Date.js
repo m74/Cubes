@@ -10,6 +10,11 @@ Ext.define('overrides.form.field.Date', {
         this.callParent(arguments);
         // fix bag
         this.lastValue = this.rawValue
+    },
+
+    setValue: function (v) {
+        this.callParent(arguments);
+        this.value = this.rawDate;
     }
     // maskRe: /[\d\.]/,
 
