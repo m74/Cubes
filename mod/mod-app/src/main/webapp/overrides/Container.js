@@ -67,7 +67,15 @@ Ext.hasPermissions = function () {
     return true;
 };
 
-
+Ext.define('overrides.Container', {
+    override: 'Ext.menu.Menu',
+    lookupComponent(c) {
+        if (typeof c === 'string' && c[0] === '@' && !this.getAction(c.substring(1))) {
+            return null;
+        }
+        return this.callParent(arguments);
+    }
+});
 // Ext.define('overrides.cubes.Application', {
 //     override: 'Ext.cubes.Application',
 //     init: function () {
