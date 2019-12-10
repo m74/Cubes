@@ -34,7 +34,7 @@ public class SqlUtils {
         if (isEmpty(columns)) {
             if (field.isAnnotationPresent(LinkTo.class)) {
                 LinkTo linkTo = field.getAnnotation(LinkTo.class);
-                return new String[]{field.getName() + "_" + linkTo.title()};
+                return new String[]{quote(fieldName) + "." + quote(linkTo.title())};
             } else {
                 return new String[]{getColumnNameWithAlias(type, field)};
             }
