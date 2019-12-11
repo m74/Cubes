@@ -97,6 +97,7 @@ Loader.load([
     `ext/classic/theme-${theme}/resources/theme-${theme}-all${suffix}.css`,
     `ext/packages/font-awesome/resources/font-awesome-all${suffix}.css`,
     `ext/classic/locale/locale-${lang}${suffix}.js`,
+    `css/theme-${theme}/style.css`,
     `app.js`
 ]);
 
