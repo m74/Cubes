@@ -1,0 +1,10 @@
+.x-form-trigger.x-form-trigger-fa {
+    background-image: none;
+    font: 14px/20px FontAwesome;
+    font-weight: bolder;
+    color: white;
+}
+
+.x-form-trigger.x-form-trigger-fa.x-form-trigger-over {
+    background-color: orange;
+}
