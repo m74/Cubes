@@ -23,13 +23,15 @@ Ext.define('Ext.cubes.view.Dashboard', {
         const arr = [];
         Ext.each(this.initialConfig.data, xtype => {
             const cls = Ext.ClassManager.getByAlias('widget.' + xtype);
-            const cfg = cls.prototype.config;
-            if (Ext.hasPermissions(cls.prototype.permissions)) {
-                arr.push({
-                    id: xtype,
-                    title: cfg.title,
-                    iconCls: cfg.iconCls || 'fa fa-cogs'
-                });
+            if (cls) {
+                const cfg = cls.prototype.config;
+                if (Ext.hasPermissions(cls.prototype.permissions)) {
+                    arr.push({
+                        id: xtype,
+                        title: cfg.title,
+                        iconCls: cfg.iconCls || 'fa fa-cogs'
+                    });
+                }
             }
         });
 
