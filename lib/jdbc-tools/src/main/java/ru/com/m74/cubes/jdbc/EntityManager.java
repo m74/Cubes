@@ -149,7 +149,7 @@ public class EntityManager {
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         Field idField = getPrimaryKeyField(type);
-        if (idField == null) throw new RuntimeException("@PrimaryKey annotation not present in: " + type);
+        if (idField == null) throw new RuntimeException("@Id annotation not present in: " + type);
         Object idValue = getValue(dto, idField);
         Insert q = insert(type, dto);
         String idColumnName = getColumnName(idField);
