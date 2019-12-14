@@ -37,6 +37,7 @@ public class EMUtils {
 
     private static Class<?> getFilterType(Class<?> cls) {
         if (Link.class.isAssignableFrom(cls)) return Long.class;
+        if (Enum.class.isAssignableFrom(cls)) return String.class;
         return cls;
     }
 
@@ -59,7 +60,7 @@ public class EMUtils {
 
                 String cname = getColumnNameWithAlias(q.getType(), field);
 
-                if (String.class.isAssignableFrom(field.getType())) {
+                if (String.class.isAssignableFrom(field.getType()) || Enum.class.isAssignableFrom(field.getType())) {
                     switch (filter.getOperator()) {
 //                        case like:
 //                            q.and(cname + " like :" + fname);

@@ -58,7 +58,7 @@ public class Filter {
     }
 
     public Operator getOperator() {
-        return operator;
+        return operator != null ? operator : Operator.eq;
     }
 
     public void setOperator(Operator operator) {
