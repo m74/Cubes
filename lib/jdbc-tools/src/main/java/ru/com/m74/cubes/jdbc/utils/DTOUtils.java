@@ -6,11 +6,10 @@ import ru.com.m74.cubes.jdbc.annotations.Id;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -96,11 +95,6 @@ public class DTOUtils {
      * @return список свойств
      */
     public static List<Field> getModelFields(Class type, Predicate<Field>... predicates) {
-        Class superType = type.getSuperclass();
-
-        List<Field> fields = superType.equals(Object.class) ?
-                new ArrayList<>() :
-                getModelFields(type.getSuperclass(), predicates);
 
         Stream<Field> stream = Arrays.stream(type.getDeclaredFields());
         stream = stream.filter(field -> !Modifier.isStatic(field.getModifiers()));
@@ -108,11 +102,26 @@ public class DTOUtils {
         for (Predicate<Field> predicate : predicates) {
             stream = stream.filter(predicate);
         }
-//       stream.collect(Collectors.toList());
-        Collections.addAll(fields, stream.toArray(Field[]::new));
+
+        List<Field> fields = stream.collect(Collectors.toList());
+
+        Class superType = type.getSuperclass();
+        if (!superType.equals(Object.class)) {
+            getModelFields(superType, predicates).forEach(field -> {
+                if (!containsField(fields, field.getName())) {
+                    fields.add(field);
+                }
+            });
+        }
 
         return fields;
 
+    }
+
+    private static boolean containsField(List<Field> fields, String fieldName) {
+        return fields.stream().anyMatch(field -> {
+            return field.getName().equals(fieldName);
+        });
     }
 
     /**
