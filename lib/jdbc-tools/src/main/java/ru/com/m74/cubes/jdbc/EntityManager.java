@@ -175,7 +175,15 @@ public class EntityManager {
                     MessageFormat.format("Неподдерживаемый тип PK поля ({1}) для сущности {0}",
                             dto.getClass().getName(), idFieldType.getName()));
         }
-        return get(type, getValue(dto, idField));
+        return dto;
+//        return refresh(dto);
+    }
+
+    @SuppressWarnings({"unchecked"})
+    public <T> T refresh(T entity) {
+        Class<T> type = (Class<T>) entity.getClass();
+        Field idField = requireNonNull(getPrimaryKeyField(type), "Требуется аннотация @Id");
+        return get(type, getValue(entity, idField));
     }
 
 
