@@ -1,66 +1,22 @@
 package ru.com.m74.cubes.jdbc.repository;
 
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.transaction.annotation.Transactional;
 import ru.com.m74.cubes.jdbc.EntityManager;
 import ru.com.m74.cubes.jdbc.utils.DTOUtils;
-import ru.com.m74.cubes.sql.base.Select;
-import ru.com.m74.extjs.dto.Request;
 
 import java.lang.reflect.Field;
-import java.util.List;
 import java.util.Map;
 
-import static ru.com.m74.cubes.common.MapUtils.map;
-import static ru.com.m74.cubes.jdbc.utils.EMUtils.sort;
-import static ru.com.m74.cubes.jdbc.utils.SqlUtils.tableName;
 
-
-public class AbstractRepoImpl<T, I> implements AbstractRepo<T, I> {
-
+public class AbstractRepoImpl<T, I> extends ReadOnlyRepoImpl<T, I> implements AbstractRepo<T, I> {
     protected final EntityManager em;
 
     private final Class<T> type;
 
     public AbstractRepoImpl(EntityManager em, Class<T> type) {
+        super(em, type);
         this.type = type;
         this.em = em;
-    }
-
-    protected Select<T> createAllQuery(Request request, Map<String, Object> params) {
-        return em.select(type);
-    }
-
-    @Override
-    public List<T> getAll(Request request, Map<String, Object> params) {
-        Select<T> q = createAllQuery(request, params);
-        if (request.isPaging()) {
-            q.setPagging(true);
-        }
-        request.applyParams(params);
-        sort(q, request.getSort());
-        return em.getResultList(q, params);
-    }
-
-    @Override
-    public List<T> getAll(Request request) {
-        return getAll(request, map());
-    }
-
-    @Override
-    public long count(Request request, Map<String, Object> params) {
-        request.applyParams(params);
-        return em.count(createAllQuery(request, params), params);
-    }
-
-    @Override
-    public T get(I id) {
-        try {
-            return em.get(type, id);
-        } catch (EmptyResultDataAccessException e) {
-            return null;
-//            throw new RuntimeException("Объект " + type.getSimpleName() + "(" + tableName(type) + ") с идентификатором " + id + " не существует.", e);
-        }
     }
 
     @Override

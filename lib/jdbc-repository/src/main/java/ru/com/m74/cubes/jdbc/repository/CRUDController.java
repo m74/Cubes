@@ -1,31 +1,20 @@
 package ru.com.m74.cubes.jdbc.repository;
 
-import org.springframework.web.bind.annotation.*;
-import ru.com.m74.extjs.dto.Request;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import ru.com.m74.extjs.dto.Response;
 
 import java.util.Map;
 
-public class CRUDController<T, I> {
+public class CRUDController<T, I> extends RController<T, I> {
 
     private final AbstractRepo<T, I> repository;
 
     public CRUDController(AbstractRepo<T, I> repository) {
+        super(repository);
         this.repository = repository;
-    }
-
-    @RequestMapping(method = RequestMethod.GET)
-    public Response<Iterable<T>> getAll(@RequestParam Map<String, Object> params, Request request) {
-        Response<Iterable<T>> response = new Response<>(repository.getAll(request, params));
-        if (request.isPaging()) {
-            response.setTotalCount(repository.count(request, params));
-        }
-        return response;
-    }
-
-    @RequestMapping(method = RequestMethod.GET, path = "/{id}")
-    public Response<T> get(@PathVariable I id) {
-        return new Response<>(repository.get(id));
     }
 
     @RequestMapping(method = RequestMethod.POST)
