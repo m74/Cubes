@@ -3,7 +3,6 @@ package ru.com.m74.cubes.jdbc;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import ru.com.m74.cubes.jdbc.annotations.*;
@@ -167,6 +166,10 @@ public class EntityManager {
             // if big number
             if (keyHolder.getKey() != null)
                 setValue(dto, idField, new BigDecimal(keyHolder.getKey().toString()));
+        } else if (idFieldType.isAssignableFrom(String.class)) {
+            // if string
+//            if (keyHolder.getKey() != null)
+//                setValue(dto, idField, keyHolder.getKey().toString());
         } else {
             throw new IllegalStateException(
                     MessageFormat.format("Неподдерживаемый тип PK поля ({1}) для сущности {0}",
