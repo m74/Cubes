@@ -175,15 +175,21 @@ public class EntityManager {
                     MessageFormat.format("Неподдерживаемый тип PK поля ({1}) для сущности {0}",
                             dto.getClass().getName(), idFieldType.getName()));
         }
+        refresh(dto);
+
         return dto;
-//        return refresh(dto);
+    }
+
+    private <T> Select<T> createSelectById(Class<T> type, Field idField) {
+        return select(type).where(getColumnNameWithAlias(type, idField) + "=:id");
     }
 
     @SuppressWarnings({"unchecked"})
-    public <T> T refresh(T entity) {
+    public <T> void refresh(T entity) {
         Class<T> type = (Class<T>) entity.getClass();
         Field idField = requireNonNull(getPrimaryKeyField(type), "Требуется аннотация @Id");
-        return get(type, getValue(entity, idField));
+        Object value = getValue(entity, idField);
+        applyResult(createSelectById(type, idField), map("id", value), entity);
     }
 
 
@@ -286,19 +292,21 @@ public class EntityManager {
                     ) {
                 return rs.getObject(1, type);
             } else {
-//                long time = System.currentTimeMillis();
                 T dto = type.newInstance();
-                for (Field field : DTOUtils.getAnnotatedModelFields(type)) {
-                    try {
-                        setValue(dto, field, getResultSetValue(rs, field));
-                    } catch (ColumnNotFoundException ignored) {
-                    }
-                }
-//                LOG.debug("Class:{}, Time:{}", type, (System.currentTimeMillis() - time));
+                applyEntity(rs, dto);
                 return dto;
             }
         } catch (InstantiationException | IllegalAccessException | SQLException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    private <T> void applyEntity(ResultSet rs, T dto) {
+        for (Field field : DTOUtils.getAnnotatedModelFields(dto.getClass())) {
+            try {
+                setValue(dto, field, getResultSetValue(rs, field));
+            } catch (ColumnNotFoundException ignored) {
+            }
         }
     }
 
@@ -391,7 +399,7 @@ public class EntityManager {
     }
 
     private <T> T get(Class<T> type, Field field, Object value) {
-        return getSingleResult(select(type).where(getColumnNameWithAlias(type, field) + "=:id"), map("id", value));
+        return getSingleResult(createSelectById(type, field), map("id", value));
     }
 
 //    public <T> T getSingleResult(Select<T> query, Map<String, Object> params, RowMapper<T> mapper) {
@@ -402,6 +410,14 @@ public class EntityManager {
     public <T> T getSingleResult(Select<T> query, Map<String, Object> params) {
         return jdbcTemplate.queryForObject(
                 query.toString(), params, (resultSet, i) -> createEntity(resultSet, query.getType()));
+    }
+
+    private <T> void applyResult(Select<T> query, Map<String, Object> params, T instance) {
+        jdbcTemplate.queryForObject(
+                query.toString(), params, (resultSet, i) -> {
+                    applyEntity(resultSet, instance);
+                    return instance;
+                });
     }
 
     public void remove(Object entity) {
