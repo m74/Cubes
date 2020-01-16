@@ -89,6 +89,7 @@ const
     suffix = params.debug ? '-debug' : '',
     theme = localStorage.theme.toLowerCase(),
     lang = params.lang || 'ru';
+const dc = new Date().getTime();
 
 Loader.load([
     `ext/ext-all${suffix}.js`,
@@ -98,6 +99,6 @@ Loader.load([
     `ext/packages/font-awesome/resources/font-awesome-all${suffix}.css`,
     `ext/classic/locale/locale-${lang}${suffix}.js`,
     `css/theme-${theme}/style.css`,
-    `app.js`
+    `app.js?_dc=${dc}`
 ]);
 
