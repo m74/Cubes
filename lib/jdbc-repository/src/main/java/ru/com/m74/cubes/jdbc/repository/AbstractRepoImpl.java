@@ -8,7 +8,7 @@ import java.lang.reflect.Field;
 import java.util.Map;
 
 
-public class AbstractRepoImpl<T, I> extends ReadOnlyRepoImpl<T, I> implements AbstractRepo<T, I> {
+public abstract class AbstractRepoImpl<T, I> extends ReadOnlyRepoImpl<T, I> implements AbstractRepo<T, I> {
     protected final EntityManager em;
 
     private final Class<T> type;
