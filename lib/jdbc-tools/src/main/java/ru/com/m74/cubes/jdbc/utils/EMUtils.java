@@ -2,6 +2,7 @@ package ru.com.m74.cubes.jdbc.utils;
 
 import ru.com.m74.cubes.jdbc.ColumnNotFoundException;
 import ru.com.m74.cubes.jdbc.Link;
+import ru.com.m74.cubes.jdbc.annotations.Column;
 import ru.com.m74.cubes.jdbc.annotations.LinkTo;
 import ru.com.m74.cubes.sql.base.Select;
 import ru.com.m74.extjs.dto.Filter;
@@ -46,10 +47,11 @@ public class EMUtils {
 
         forEach(filters, filter -> {
             String fname = filter.getProperty();
-            String pname = fname + i.getAndIncrement();
 
             Field field = findField(q.getType(), fname);
-            if (field != null) {
+            if (field != null && field.getAnnotation(Column.class) != null) {
+                String pname = fname + i.getAndIncrement();
+
                 if (filter.getOperator() == between) {
                     Date[] period = requireNonNull(cast(filter.getValue(), Date[].class), "Не указан период");
                     params.put(pname + "From", period[0]);
