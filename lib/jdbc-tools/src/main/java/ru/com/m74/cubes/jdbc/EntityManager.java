@@ -146,36 +146,40 @@ public class EntityManager {
 
         Map<String, Object> values = getValues(dto);
 
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        Field idField = getPrimaryKeyField(type);
-        if (idField == null) throw new RuntimeException("@Id annotation not present in: " + type);
-        Object idValue = getValue(dto, idField);
         Insert q = insert(type, dto);
-        String idColumnName = getColumnName(idField);
-        values.put(idField.getName(), idValue);
-        q.value(idColumnName, ":" + idField.getName());
-        jdbcTemplate.update(q.toString(), new MapSqlParameterSource(values), keyHolder, new String[]{idColumnName});
+        Field idField = getPrimaryKeyField(type);
+        if (idField == null) {
+            jdbcTemplate.update(q.toString(), new MapSqlParameterSource(values));
+        } else {
+//            throw new RuntimeException("@Id annotation not present in: " + type);
+            Object idValue = getValue(dto, idField);
+            String idColumnName = getColumnName(idField);
+            values.put(idField.getName(), idValue);
+            q.value(idColumnName, ":" + idField.getName());
+            KeyHolder keyHolder = new GeneratedKeyHolder();
+            jdbcTemplate.update(q.toString(), new MapSqlParameterSource(values), keyHolder, new String[]{idColumnName});
 
-        // safe PK setting
-        final Class<?> idFieldType = idField.getType();
-        if (idFieldType.isAssignableFrom(Long.class) || idFieldType.equals(long.class)) {
-            //if long
-            if (keyHolder.getKey() != null)
-                setValue(dto, idField, keyHolder.getKey().longValue());
-        } else if (idFieldType.isAssignableFrom(BigDecimal.class)) {
-            // if big number
-            if (keyHolder.getKey() != null)
-                setValue(dto, idField, new BigDecimal(keyHolder.getKey().toString()));
-        } else if (idFieldType.isAssignableFrom(String.class)) {
-            // if string
+            // safe PK setting
+            final Class<?> idFieldType = idField.getType();
+            if (idFieldType.isAssignableFrom(Long.class) || idFieldType.equals(long.class)) {
+                //if long
+                if (keyHolder.getKey() != null)
+                    setValue(dto, idField, keyHolder.getKey().longValue());
+            } else if (idFieldType.isAssignableFrom(BigDecimal.class)) {
+                // if big number
+                if (keyHolder.getKey() != null)
+                    setValue(dto, idField, new BigDecimal(keyHolder.getKey().toString()));
+//            } else if (idFieldType.isAssignableFrom(String.class)) {
+                // if string
 //            if (keyHolder.getKey() != null)
 //                setValue(dto, idField, keyHolder.getKey().toString());
-        } else {
-            throw new IllegalStateException(
-                    MessageFormat.format("Неподдерживаемый тип PK поля ({1}) для сущности {0}",
-                            dto.getClass().getName(), idFieldType.getName()));
+            } else {
+                throw new IllegalStateException(
+                        MessageFormat.format("Неподдерживаемый тип PK поля ({1}) для сущности {0}",
+                                dto.getClass().getName(), idFieldType.getName()));
+            }
         }
-        refresh(dto);
+//        refresh(dto);
 
         return dto;
     }

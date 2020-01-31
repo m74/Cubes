@@ -29,7 +29,9 @@ public abstract class AbstractRepoImpl<T, I> extends ReadOnlyRepoImpl<T, I> impl
     @Override
     @Transactional
     public T persist(T entity) {
-        return em.persist(entity);
+        em.persist(entity);
+        em.refresh(entity);
+        return entity;
     }
 
     @Override
