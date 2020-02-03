@@ -49,7 +49,7 @@ public class EMUtils {
             String fname = filter.getProperty();
 
             Field field = findField(q.getType(), fname);
-            if (field != null && field.getAnnotation(Column.class) != null) {
+            if (field != null && field.getAnnotation(Column.class) != null && isNotEmpty(filter.getValue())) {
                 String pname = fname + i.getAndIncrement();
 
                 if (filter.getOperator() == between) {
