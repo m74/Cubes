@@ -148,7 +148,7 @@ public class EntityManager {
 
         Insert q = insert(type, dto);
         Field idField = getPrimaryKeyField(type);
-        if (idField == null) {
+        if (idField == null || isNotEmpty(getValue(dto, idField))) {
             jdbcTemplate.update(q.toString(), new MapSqlParameterSource(values));
         } else {
 //            throw new RuntimeException("@Id annotation not present in: " + type);
@@ -169,7 +169,7 @@ public class EntityManager {
                 // if big number
                 if (keyHolder.getKey() != null)
                     setValue(dto, idField, new BigDecimal(keyHolder.getKey().toString()));
-//            } else if (idFieldType.isAssignableFrom(String.class)) {
+            } else if (idFieldType.isAssignableFrom(String.class)) {
                 // if string
 //            if (keyHolder.getKey() != null)
 //                setValue(dto, idField, keyHolder.getKey().toString());
@@ -394,7 +394,7 @@ public class EntityManager {
     private static List<Field> getUpdatableFields(Class<?> type) {
         return DTOUtils.getModelFields(type,
                 field -> field.isAnnotationPresent(Column.class),
-                field -> !field.isAnnotationPresent(Id.class),
+//                field -> !field.isAnnotationPresent(Id.class),
                 field -> isFieldInTable(type, field));
     }
 
