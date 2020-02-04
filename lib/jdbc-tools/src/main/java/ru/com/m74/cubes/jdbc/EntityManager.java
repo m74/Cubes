@@ -154,8 +154,10 @@ public class EntityManager {
 //            throw new RuntimeException("@Id annotation not present in: " + type);
             Object idValue = getValue(dto, idField);
             String idColumnName = getColumnName(idField);
-            values.put(idField.getName(), idValue);
-            q.value(idColumnName, ":" + idField.getName());
+            if (idValue != null) {
+                values.put(idField.getName(), idValue);
+                q.value(idColumnName, ":" + idField.getName());
+            }
             KeyHolder keyHolder = new GeneratedKeyHolder();
             jdbcTemplate.update(q.toString(), new MapSqlParameterSource(values), keyHolder, new String[]{idColumnName});
 
