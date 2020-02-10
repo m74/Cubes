@@ -120,7 +120,8 @@ public class EntityManager {
         q.into(tableName(type));
 
         for (Field field : getUpdatableFields(type)) {
-            if (field.getAnnotation(Column.class).insertable() && isNotEmpty(getValue(dto, field))) {
+
+            if (field.getAnnotation(Column.class).insertable() && getValue(dto, field) != null) {
                 q.value(getColumnName(field), ":" + field.getName());
             }
         }
@@ -134,7 +135,7 @@ public class EntityManager {
         Map<String, Object> values = new HashMap<>();
         for (Field field : DTOUtils.getAnnotatedModelFields(type)) {
             Object v = getValue(dto, field);
-            if (isNotEmpty(v)) values.put(field.getName(), v);
+            if (v !=null) values.put(field.getName(), v);
         }
         return values;
     }
