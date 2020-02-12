@@ -6,6 +6,9 @@
  */
 Ext.define('Ext.cubes.view.Workspace', {
     extend: 'Ext.tab.Panel',
+    requires: [
+        'Ext.cubes.view.TabMenu'
+    ],
     xtype: 'workspace',
 
     defaults: {
@@ -14,12 +17,12 @@ Ext.define('Ext.cubes.view.Workspace', {
     },
 
     plugins: [
-        'tabclosemenu',
+        'tabmenu',
         'tabreorderer'
     ],
     docTitle: document.title,
 
-    stateEvents: ['add', 'remove', 'childmove'],
+    stateEvents: ['add', 'remove', 'childmove', 'tabstatechange'],
 
     listeners: {
         tabchange(tp, tab) {
@@ -29,7 +32,9 @@ Ext.define('Ext.cubes.view.Workspace', {
 
     openTab(c) {
         let tab;
-        if (Ext.isString(c)) c = {itemId: c, xtype: c};
+        if (Ext.isString(c)) c = {xtype: c};
+        if (!c.xtype) throw new Error('Необходимо свойство xtype!');
+        if (!c.itemId) c.itemId = c.xtype;
 
         try {
             const index = this.items.findIndex('itemId', c.itemId);
@@ -47,14 +52,16 @@ Ext.define('Ext.cubes.view.Workspace', {
 
     getState() {
         const state = this.callParent(arguments);
-        state.tabs = Ext.Array.map(this.items.items, item => item.itemId);
+        state.tabs = Ext.Array.map(this.items.items, item => {
+            return {xtype: item.itemId, closable: item.closable}
+        });
         return state;
     },
 
     applyState(state) {
         this.callParent(arguments);
         this.inStateRestore = true;
-        Ext.route.Router.doRun(state.tabs);
+        Ext.each(state.tabs, tab => this.openTab(tab));
         this.inStateRestore = false;
     }
 });
