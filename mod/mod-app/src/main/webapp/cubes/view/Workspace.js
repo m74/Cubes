@@ -33,8 +33,8 @@ Ext.define('Ext.cubes.view.Workspace', {
     openTab(c) {
         let tab;
         if (Ext.isString(c)) c = {xtype: c};
-        if (!c.xtype) throw new Error('Необходимо свойство xtype!');
         if (!c.itemId) c.itemId = c.xtype;
+        if (!c.itemId) throw new Error('Отсутствует itemId!');
 
         try {
             const index = this.items.findIndex('itemId', c.itemId);
