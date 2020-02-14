@@ -45,11 +45,12 @@ public class ReadOnlyRepoImpl<T, I> implements ReadOnlyRepo<T, I> {
 
     @Override
     public List<T> getAll(Request request, Map<String, Object> params) {
+        request.applyParams(params);
+
         Select<T> q = createAllQuery(request, params);
         if (request.isPaging()) {
             q.setPagging(true);
         }
-        request.applyParams(params);
         sort(q, request.getSort());
         return em.getResultList(q, params);
     }
