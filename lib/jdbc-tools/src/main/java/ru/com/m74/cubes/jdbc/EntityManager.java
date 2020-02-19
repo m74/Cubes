@@ -5,9 +5,13 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.support.TransactionCallback;
+import org.springframework.transaction.support.TransactionTemplate;
 import ru.com.m74.cubes.jdbc.annotations.*;
 import ru.com.m74.cubes.jdbc.utils.DTOUtils;
 import ru.com.m74.cubes.jdbc.utils.SqlUtils;
+import ru.com.m74.cubes.sql.Dialect;
 import ru.com.m74.cubes.sql.base.Insert;
 import ru.com.m74.cubes.sql.base.Select;
 import ru.com.m74.cubes.sql.base.Update;
@@ -35,8 +39,18 @@ public class EntityManager {
 
     private NamedParameterJdbcTemplate jdbcTemplate;
 
-    public EntityManager(NamedParameterJdbcTemplate jdbcTemplate) {
+    private Dialect dialect;
+
+    private PlatformTransactionManager txManager;
+
+    public EntityManager(NamedParameterJdbcTemplate jdbcTemplate, PlatformTransactionManager txManager, Dialect dialect) {
         this.jdbcTemplate = jdbcTemplate;
+        this.dialect = dialect;
+        this.txManager = txManager;
+    }
+
+    public <T> T tx(TransactionCallback<T> callback) {
+        return new TransactionTemplate(txManager).execute(callback);
     }
 
     public NamedParameterJdbcTemplate getJdbcTemplate() {
@@ -44,11 +58,11 @@ public class EntityManager {
     }
 
     public Select select(String... fields) {
-        return new Select().select(fields);
+        return new Select(dialect).select(fields);
     }
 
     public <T> Select<T> select(Class<T> type) {
-        Select<T> select = new Select<>(type);
+        Select<T> select = new Select<>(dialect, type);
 
         String tableAlias = tableAlias(type);
         String tableName = tableName(type);
@@ -135,7 +149,7 @@ public class EntityManager {
         Map<String, Object> values = new HashMap<>();
         for (Field field : DTOUtils.getAnnotatedModelFields(type)) {
             Object v = getValue(dto, field);
-            if (v !=null) values.put(field.getName(), v);
+            if (v != null) values.put(field.getName(), v);
         }
         return values;
     }

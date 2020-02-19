@@ -1,6 +1,5 @@
 package ru.com.m74.cubes.jdbc.repository;
 
-import org.springframework.transaction.annotation.Transactional;
 import ru.com.m74.cubes.jdbc.EntityManager;
 import ru.com.m74.cubes.jdbc.utils.DTOUtils;
 
@@ -20,14 +19,12 @@ public abstract class AbstractRepoImpl<T, I> extends ReadOnlyRepoImpl<T, I> impl
     }
 
     @Override
-    @Transactional
     public T save(T entity) {
         em.save(entity);
         return entity;
     }
 
     @Override
-    @Transactional
     public T persist(T entity) {
         em.persist(entity);
         em.refresh(entity);
@@ -35,20 +32,17 @@ public abstract class AbstractRepoImpl<T, I> extends ReadOnlyRepoImpl<T, I> impl
     }
 
     @Override
-    @Transactional
     public T save(I id, Map<String, Object> changes) {
         em.update(type, id, changes);
         return get(id);
     }
 
     @Override
-    @Transactional
     public void deleteById(I id) {
         em.remove(type, id);
     }
 
     @Override
-    @Transactional
     public void deleteByIds(I[] ids) {
         em.removeAll(type, ids);
     }
