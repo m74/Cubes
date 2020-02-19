@@ -1,5 +1,7 @@
 package ru.com.m74.cubes.sql.base;
 
+import ru.com.m74.cubes.sql.Dialect;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -40,13 +42,16 @@ public class Select<T> implements Serializable {
     private List<String> orderBy = new ArrayList<>();
     private boolean pagging = false;
     private boolean distinct = false;
-    private Select with = null;
+    //    private Select with = null;
 //    private boolean count = false;
+    private Dialect dialect;
 
-    public Select() {
+    public Select(Dialect dialect) {
+        this.dialect = dialect;
     }
 
-    public Select(Class<T> type) {
+    public Select(Dialect dialect, Class<T> type) {
+        this(dialect);
         this.type = type;
     }
 
@@ -178,7 +183,7 @@ public class Select<T> implements Serializable {
         return toString(false, "\n");
     }
 
-    @Override
+    //    @Override
     public String toString() {
         return toString(false, " ");
     }
@@ -193,9 +198,9 @@ public class Select<T> implements Serializable {
 
 //        String sql = hint == null ? "" : hint + delim;
         String sql = "";
-        if (this.with != null) {
-            sql += "with q as (" + this.with.toString() + ")";
-        }
+//        if (this.with != null) {
+//            sql += "with q as (" + this.with.toString() + ")";
+//        }
 
         if (count) {
             sql += "select count(*)" + delim;
@@ -215,8 +220,6 @@ public class Select<T> implements Serializable {
                 }
             }
         } else {
-            if (pagging)
-                sql += "select t_.* from (" + delim + "select data_.*, rownum rn_" + delim + "from (" + delim;
 
             sql += "select" + delim;
 
@@ -244,18 +247,15 @@ public class Select<T> implements Serializable {
             if (!orderBy.isEmpty())
                 sql += delim + "order by " + String.join("," + delim, orderBy);
 
-//            if (pagging) sql += delim + "OFFSET :start ROWS FETCH NEXT :limit ROWS ONLY";
-            if (pagging) {
-                sql += delim + ") data_" + delim + "where rownum <= (:start + :limit)) t_ " + delim +
-                        "where t_.rn_ > :start";
-            }
+            if (pagging) sql = dialect.pagging(sql, delim);
         }
 
         return sql;
     }
 
-    public Select<T> with(Select with) {
-        this.with = with;
-        return this;
-    }
+
+//    public Select<T> with(Select with) {
+//        this.with = with;
+//        return this;
+//    }
 }
