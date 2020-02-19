@@ -6,11 +6,17 @@
  */
 Ext.define('Ext.cubes.view.Roles', {
     extend: 'Ext.cubes.ux.Grid',
-    requires:[
+    requires: [
         'Ext.cubes.model.Role'
     ],
+    xtype: 'roles',
+    title: 'Роли',
 
-    model: 'Ext.cubes.model.Role',
+    store: {
+        autoLoad: true,
+        autoSync: true,
+        model: 'Ext.cubes.model.Role'
+    },
 
     plugins: {
         cellediting: true
@@ -22,6 +28,7 @@ Ext.define('Ext.cubes.view.Roles', {
         dataIndex: 'id'
     }, {
         text: 'Наименние',
+        editor: 'textfield',
         flex: 1,
         dataIndex: 'title'
     }]

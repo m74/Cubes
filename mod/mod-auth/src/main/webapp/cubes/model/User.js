@@ -5,7 +5,8 @@
  * @date 24.09.2018
  */
 Ext.define('Ext.cubes.model.User', {
-    extend: 'Ext.cubes.model.Base',
+    extend: 'Ext.data.Model',
+    identifier: 'negative',
     fields: [
         {name: 'id', type: 'int'},
         'login',
@@ -17,5 +18,9 @@ Ext.define('Ext.cubes.model.User', {
         {name: 'lastAccess', type: 'date'},
         {name: 'active', type: 'boolean'},
         'permissions'
-    ]
+    ],
+    proxy: {
+        type: 'rest',
+        url: './User'
+    }
 });

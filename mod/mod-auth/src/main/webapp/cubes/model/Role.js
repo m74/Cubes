@@ -5,10 +5,14 @@
  * @date 24.09.2018
  */
 Ext.define('Ext.cubes.model.Role', {
-    extend: 'Ext.cubes.model.Base',
+    extend: 'Ext.data.Model',
     identifier: 'sequential',
     fields: [
         'id',
         'title'
-    ]
+    ],
+    proxy: {
+        type: 'rest',
+        url: 'Role'
+    }
 });

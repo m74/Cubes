@@ -31,6 +31,9 @@ Ext.define('Ext.cubes.controller.SecurityController', {
             }
         }, this);
 
+        app.on('viewready', () => {
+            app.menu.add({text: 'Выход', action: 'logout'});
+        });
     },
 
     logout: function () {
@@ -55,7 +58,7 @@ Ext.define('Ext.cubes.controller.SecurityController', {
                 this.authenticate();
             },
             success: function (r) {
-                var resp = Ext.decode(r.responseText);
+                let resp = Ext.decode(r.responseText);
 
                 if (!resp.success) {
                     this.authenticate();
@@ -68,14 +71,13 @@ Ext.define('Ext.cubes.controller.SecurityController', {
     },
 
     authenticate: function () {
-        var me = this;
         this.mask();
 
         Ext.create('Ext.cubes.view.LoginDialog', {
-            handleLogin: function (values) {
-                me.form.children[0].value = values.username;
-                me.form.children[1].value = values.password;
-                me.form.submit();
+            handleLogin: (values) => {
+                this.form.children[0].value = values.username;
+                this.form.children[1].value = values.password;
+                this.form.submit();
             }
         });
 
@@ -95,7 +97,7 @@ Ext.define('Ext.cubes.controller.SecurityController', {
         Ext.getBody().unmask();
     },
     mask: function (msg) {
-        var el = Ext.getBody().mask(msg, 'x-center-box mask');
+        let el = Ext.getBody().mask(msg, 'x-center-box mask');
         el.addCls('x-auth-mask');
     },
     applyRemoteUser: function (user) {
@@ -108,8 +110,8 @@ Ext.define('Ext.cubes.controller.SecurityController', {
                 permissions = Ext.toArray(arguments);
             }
 
-            for (var i = 0; i < permissions.length; i++) {
-                var permission = permissions[i].toLowerCase();
+            for (let i = 0; i < permissions.length; i++) {
+                let permission = permissions[i].toLowerCase();
                 if (user.permissions && user.permissions.indexOf(permission) !== -1)
                     return true;
             }
@@ -121,7 +123,7 @@ Ext.define('Ext.cubes.controller.SecurityController', {
         };
     },
     login: function () {
-        var user = Ext.remoteUser();
+        let user = Ext.remoteUser();
         this.mask('Открываем приложение ..');
         Ext.fireEvent('login', this, user);
         this.unmask();

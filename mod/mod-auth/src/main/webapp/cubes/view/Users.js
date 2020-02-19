@@ -8,7 +8,14 @@ Ext.define('Ext.cubes.view.Users', {
     extend: 'Ext.cubes.ux.Grid',
     requires: ['Ext.cubes.model.User'],
 
-    model: 'Ext.cubes.model.User',
+    title: 'Пользователи',
+    xtype: 'users',
+
+    store: {
+        model: 'Ext.cubes.model.User',
+        autoSync: true,
+        autoLoad: true,
+    },
 
     plugins: {
         cellediting: true

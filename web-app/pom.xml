@@ -15,6 +15,7 @@
 
     <modules>
         <module>web-app-example-jpa</module>
+        <module>web-app-example-jdbc</module>
     </modules>
 
     <dependencies>

@@ -10,41 +10,24 @@ Ext.application({
 
     name: 'Test',
 
-    profiles: [
-        'Ext.cubes.profile.Development'
+    requires: [
+        'Test.view.Users',
+        'Test.TestPanel'
     ],
 
-    shortcuts: {
-        Dashboard: {
-            title: 'Dashboard',
-            xclass: 'Ext.cubes.view.Dashboard',
-            closable: false
-        },
-        Users: {
-            title: 'Пользователи',
-            xclass: 'Test.view.Users'
-        },
-        // Roles: {
-        //     title: 'Роли',
-        //     xclass: 'Ext.cubes.view.Roles'
-        // },
-        TestPanel: {
-            title: 'Test Panel',
-            xclass: 'Test.TestPanel'
-        }
-    },
     menu: [{
         text: 'Администрирование',
-        menu: [
-            '@Users'
-            // , '@Roles'
-        ]
-    }],
+        menu: ['users']
+    }, 'testpanel'],
 
-    tabs: ['@Dashboard'],
-
-    controllers: [
-        'Ext.cubes.controller.ExceptionHandler'
-        // 'Ext.cubes.controller.SecurityController'
+    tabs: [
+        {
+            itemId: 'dashboard',
+            title: 'Рабочий стол',
+            iconCls: 'x-fa fa-dashboard',
+            closable: false,
+            xclass: 'Ext.cubes.view.Dashboard',
+            data: ['users', 'testpanel']
+        }
     ]
 });
