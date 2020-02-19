@@ -19,6 +19,6 @@ Ext.define('Ext.cubes.view.MenuItem', {
     },
 
     handler() {
-        Ext.util.History.add(this.itemId);
+        if (this.itemId) Ext.util.History.add(this.itemId);
     }
 });
