@@ -17,6 +17,6 @@ Ext.define('Test.Application', {
     launch: function () {
         // this.callParent(arguments);
 
-        this.createWorkspace();
+        this.openWorkspace();
     }
 });

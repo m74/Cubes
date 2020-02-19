@@ -53,7 +53,7 @@ Ext.define('Ext.cubes.view.Workspace', {
     getState() {
         const state = this.callParent(arguments);
         state.tabs = Ext.Array.map(this.items.items, item => {
-            return {xtype: item.itemId, closable: item.closable}
+            return {itemId: item.itemId, xclass: item.$className, closable: item.closable}
         });
         return state;
     },

@@ -15,6 +15,6 @@ Ext.define('Test.Application', {
     ],
 
     launch: function () {
-        Ext.on('login', user => this.createWorkspace());
+        Ext.on('login', user => this.openWorkspace(user));
     }
 });
