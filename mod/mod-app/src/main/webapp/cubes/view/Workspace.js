@@ -45,6 +45,8 @@ Ext.define('Ext.cubes.view.Workspace', {
             }
             if (!this.inStateRestore)
                 this.setActiveItem(tab);
+
+            return tab;
         } catch (e) {
             console.log('Invalid config: ', c, e);
         }
