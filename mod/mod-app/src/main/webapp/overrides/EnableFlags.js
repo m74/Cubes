@@ -22,10 +22,10 @@ Ext.define('overrides.EnableFlags', {
 
 Ext.define('overrides.enableFlags.Component', {
     override: 'Ext.Component',
-    enableFlags: {},
+    // enableFlags: {},
 
     setEnableFlags: function (flags) {
-        this.enableFlags = Ext.apply(this.enableFlags, flags || {});
+        this.enableFlags = Ext.apply(this.enableFlags || {}, flags);
 
         for (var n in this.actions) {
             this.actions[n].setEnableFlags(this.enableFlags);
@@ -37,7 +37,7 @@ Ext.define('overrides.enableFlags.Component', {
 
     initComponent: function () {
         this.callParent(arguments);
-        this.setEnableFlags(this.enableFlags);
+        if (this.enableFlags) this.setEnableFlags(this.enableFlags);
     }
 });
 
