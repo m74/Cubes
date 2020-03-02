@@ -51,9 +51,10 @@ public abstract class AbstractRepoImpl<T, I> extends ReadOnlyRepoImpl<T, I> impl
     public void convert(Map<String, Object> changes) {
         for (String key : changes.keySet()) {
             Field f = DTOUtils.findField(type, key);
-            if (f == null) throw new RuntimeException("Field not found: " + key);
-            if (changes.get(key) instanceof Map) {
-                changes.replace(key, ((Map<String, Object>) changes.get(key)).get("id"));
+            if (f != null) {
+                if (changes.get(key) instanceof Map) {
+                    changes.replace(key, ((Map<String, Object>) changes.get(key)).get("id"));
+                }
             }
         }
     }
