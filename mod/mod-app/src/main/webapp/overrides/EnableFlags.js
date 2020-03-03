@@ -37,7 +37,7 @@ Ext.define('overrides.enableFlags.Component', {
 
     initComponent: function () {
         this.callParent(arguments);
-        if (this.enableFlags) this.setEnableFlags(this.enableFlags);
+        if (this.actions) this.setEnableFlags(this.enableFlags || {});
     }
 });
 
