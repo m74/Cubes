@@ -4,12 +4,11 @@ Ext.define('overrides.EnableFlags', {
     override: 'Ext.Action',
 
     setEnableFlags: function (flags) {
-        var me = this;
-        this.setDisabled((function () {
-            var arr = me.initialConfig.enableOn;
+        this.setDisabled((() => {
+            let arr = this.initialConfig.enableOn;
             if (arr) {
                 if (Ext.isString(arr)) arr = [arr];
-                for (var i = 0; i < arr.length; i++) {
+                for (let i = 0; i < arr.length; i++) {
                     if (!flags || flags[arr[i]] !== true) {
                         return true;
                     }
@@ -27,7 +26,7 @@ Ext.define('overrides.enableFlags.Component', {
     setEnableFlags: function (flags) {
         this.enableFlags = Ext.apply(this.enableFlags || {}, flags);
 
-        for (var n in this.actions) {
+        for (let n in this.actions) {
             this.actions[n].setEnableFlags(this.enableFlags);
         }
         if (this.ownerCt && this.ownerCt.setEnableFlags) {
@@ -44,10 +43,9 @@ Ext.define('overrides.enableFlags.Component', {
 Ext.define('overrides.enableFlags.Table', {
     override: 'Ext.view.Table',
     applySelectionModel: function () {
-        var grid = this.ownerGrid;
-        var sm = this.callParent(arguments);
-        sm.on('selectionchange', function (sm, recs) {
-            grid.setEnableFlags({
+        let sm = this.callParent(arguments);
+        sm.on('selectionchange', (sm, recs) => {
+            this.ownerGrid.setEnableFlags({
                 multiSelect: recs.length > 0,
                 singleSelect: recs.length === 1
             });
@@ -59,10 +57,12 @@ Ext.define('overrides.enableFlags.Table', {
 Ext.define('overrides.enableFlags.FormPanel', {
     override: 'Ext.form.Panel',
     initComponent: function () {
-        var me = this;
         this.callParent(arguments);
-        this.on('validitychange', function (form, valid) {
-            me.setEnableFlags({
+        this.setEnableFlags({
+            valid: this.form.isValid()
+        });
+        this.on('validitychange', (form, valid) => {
+            this.setEnableFlags({
                 valid: valid
             });
         });
