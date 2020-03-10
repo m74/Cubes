@@ -23,6 +23,7 @@ Ext.define('Ext.cubes.TabsApplication', {
                 layout: 'fit',
                 tbar: [{
                     text: 'Пуск',
+                    itemId: 'start',
                     iconCls: 'x-fa fa-home',
                     menu: {
                         xclass: 'Ext.cubes.view.Menu',
@@ -41,7 +42,8 @@ Ext.define('Ext.cubes.TabsApplication', {
                     render: panel => {
                         this.tbar = panel.down('toolbar[dock=top]');
                         this.tabs = panel.down('workspace');
-                        this.fireEvent('viewready', panel)
+                        this.fireEvent('viewready', panel);
+                        Ext.fireEvent('workspaceready', this, panel);
                     }
                 }
             });
