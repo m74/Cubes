@@ -43,6 +43,15 @@ Ext.define('Ext.cubes.Application', {
 
         this.params = Ext.Object.fromQueryString(location.search);
 
+        this.contextPath = (() => {
+            let re = new RegExp('^.*app.js.*$');
+            for (let el of document.getElementsByTagName('script')) {
+                if (el.src && el.src.match(re))
+                    return el.src.replace(new RegExp(`${location.origin}|/app.js.*`, 'g'), '');
+            }
+        })();
+
+
         Ext.StoreManager.lookup({
             type: 'array',
             storeId: 'shortcuts',
