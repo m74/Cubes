@@ -136,6 +136,11 @@ public class Select<T> implements Serializable {
         return this;
     }
 
+    public Select<T> join(int index, String... joins) {
+        this.joins.addAll(index, Arrays.asList(joins));
+        return this;
+    }
+
     public Where<T> getWhere() {
         return where;
     }

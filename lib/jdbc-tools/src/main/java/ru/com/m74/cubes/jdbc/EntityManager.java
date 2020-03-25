@@ -73,7 +73,7 @@ public class EntityManager {
         for (Class t = type; t.getSuperclass() != null; t = t.getSuperclass()) {
             Join join = (Join) t.getAnnotation(Join.class);
             if (join != null) {
-                select.join(join.value());
+                select.join(0, join.value());
             }
         }
         for (Field field : DTOUtils.getAnnotatedModelFields(type)) {
