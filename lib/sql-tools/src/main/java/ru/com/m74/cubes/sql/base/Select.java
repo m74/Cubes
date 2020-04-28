@@ -160,7 +160,7 @@ public class Select<T> implements Serializable {
         if (where != null)
             where.and(str);
         else
-            where(str);
+            this.where = new Where(str);
 
         return this;
     }
