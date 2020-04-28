@@ -149,8 +149,7 @@ public class Select<T> implements Serializable {
      * Обнулить условия и добавить новое
      */
     public Select<T> where(String... str) {
-        this.where = new Where(str);
-        return this;
+        return and(str);
     }
 
     /**
