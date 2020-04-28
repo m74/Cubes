@@ -46,7 +46,7 @@ Ext.define('Ext.cubes.view.Dashboard', {
                 '</tpl></ul>'
             ],
             itemSelector: 'a.x-dashboard-item',
-            emptyText: 'No widgets'
+            emptyText: '<div style="padding: 10px">Ваша рабочая область не содержит элементов ...</div>'
         };
         this.callParent(arguments);
     }
