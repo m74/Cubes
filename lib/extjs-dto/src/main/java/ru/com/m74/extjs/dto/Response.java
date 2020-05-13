@@ -1,5 +1,8 @@
 package ru.com.m74.extjs.dto;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Response<T> {
     private T records;
     private Long totalCount;
@@ -9,6 +12,8 @@ public class Response<T> {
     private String message;
 
     private final MetaData metaData = new MetaData();
+
+    private Map<String, Object> properties;
 
     public Response(T records) {
         this.records = records;
@@ -44,6 +49,15 @@ public class Response<T> {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public void addProperty(String key, Object value) {
+        if (properties == null) properties = new HashMap<>();
+        properties.put(key, value);
+    }
+
+    public Map<String, Object> getProperties() {
+        return properties;
     }
 
     public MetaData getMetaData() {
