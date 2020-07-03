@@ -89,7 +89,10 @@ public class EMUtils {
                             q.and("upper(" + cname + ") like '%'||upper(:" + fname + ")");
                             break;
                         case contains:
-                            q.and("upper(" + cname + ") like '%'||upper(:" + fname + ")||'%'");
+                            // Для поиска совместимого со старой программой. Поиск в учете, поле "Автор документа"
+                            q.and(cname + " IS NOT NULL");
+                            q.and("CATSEARCH(" + cname + ", :" + fname + ", NULL) > 0");
+//                            q.and("upper(" + cname + ") like '%'||upper(:" + fname + ")||'%'");
                             break;
                     }
                 } else if (Link.class.isAssignableFrom(field.getType())) {
