@@ -1,8 +1,5 @@
 package ru.com.m74.cubes.jdbc.repository;
 
-import ru.com.m74.extjs.dto.Request;
-
-import java.util.List;
 import java.util.Map;
 
 public interface AbstractRepo<T, I> extends ReadOnlyRepo<T, I> {
