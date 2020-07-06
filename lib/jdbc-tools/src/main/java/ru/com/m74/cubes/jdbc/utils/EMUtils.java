@@ -103,7 +103,7 @@ public class EMUtils {
                             q.and(cname + " between :" + pname + "From and :" + pname + "Till");
                             break;
                         default:
-                            q.and(cname + " " + filter.getOperator().sql() + " :" + pname);
+                            q.and("trunc(" + cname + ") " + filter.getOperator().sql() + " :" + pname);
                     }
                 } else {
                     throw new RuntimeException(field.getName());
