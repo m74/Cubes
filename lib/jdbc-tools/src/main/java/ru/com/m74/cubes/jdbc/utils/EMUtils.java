@@ -2,10 +2,8 @@ package ru.com.m74.cubes.jdbc.utils;
 
 import ru.com.m74.cubes.jdbc.ColumnNotFoundException;
 import ru.com.m74.cubes.jdbc.Link;
-import ru.com.m74.cubes.jdbc.annotations.Column;
 import ru.com.m74.cubes.jdbc.annotations.LinkTo;
 import ru.com.m74.cubes.sql.base.Select;
-import ru.com.m74.extjs.dto.Filter;
 import ru.com.m74.extjs.dto.Sorter;
 
 import java.lang.reflect.Field;
@@ -16,15 +14,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
-import static java.util.Objects.requireNonNull;
 import static ru.com.m74.cubes.common.ObjectUtils.*;
-import static ru.com.m74.cubes.jdbc.utils.DTOUtils.findField;
-import static ru.com.m74.cubes.jdbc.utils.SqlUtils.getColumnNameWithAlias;
 import static ru.com.m74.cubes.jdbc.utils.SqlUtils.getResultSetFieldName;
-import static ru.com.m74.extjs.dto.Filter.Operator.between;
 
 public class EMUtils {
     private static final String TIMESTAMP_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
@@ -36,80 +28,10 @@ public class EMUtils {
         });
     }
 
-    private static Class<?> getFilterType(Class<?> cls) {
+    public static Class<?> getFilterType(Class<?> cls) {
         if (Link.class.isAssignableFrom(cls)) return Long.class;
         if (Enum.class.isAssignableFrom(cls)) return String.class;
         return cls;
-    }
-
-    public static <T> void filter(Select<T> q, Map<String, Object> params, Filter filters[]) {
-        AtomicInteger i = new AtomicInteger();
-
-        forEach(filters, filter -> {
-            String fname = filter.getProperty();
-
-            Field field = findField(q.getType(), fname);
-            if (field != null && field.getAnnotation(Column.class) != null && isNotEmpty(filter.getValue())) {
-                String pname = fname + i.getAndIncrement();
-
-                if (filter.getOperator() == between) {
-                    Date[] period = requireNonNull(cast(filter.getValue(), Date[].class), "Не указан период");
-                    params.put(pname + "From", period[0]);
-                    params.put(pname + "Till", period[1]);
-                } else {
-                    params.put(pname, cast(filter.getValue(), getFilterType(field.getType())));
-                }
-
-                String cname = getColumnNameWithAlias(q.getType(), field);
-
-                if (String.class.isAssignableFrom(field.getType()) || Enum.class.isAssignableFrom(field.getType())) {
-                    switch (filter.getOperator()) {
-//                        case like:
-//                            q.and(cname + " like :" + fname);
-//                            break;
-//                        case starts:
-//                            q.and(cname + " like :" + fname + "||'%'");
-//                            break;
-//                        case ends:
-//                            q.and(cname + " like '%'||:" + fname);
-//                            break;
-//                        case contains:
-//                            q.and(cname + " like '%'||:" + fname + "||'%'");
-//                            break;
-                        case eq:
-                            q.and(cname + " = :" + fname);
-                            break;
-                        case like:
-                            q.and("upper(" + cname + ") like upper(:" + fname + ")");
-                            break;
-                        case starts:
-                            q.and("upper(" + cname + ") like upper(:" + fname + ")||'%'");
-                            break;
-                        case ends:
-                            q.and("upper(" + cname + ") like '%'||upper(:" + fname + ")");
-                            break;
-                        case contains:
-                            // Для поиска совместимого со старой программой. Поиск в учете, поле "Автор документа"
-                            q.and(cname + " IS NOT NULL");
-                            q.and("CATSEARCH(" + cname + ", :" + fname + ", NULL) > 0");
-//                            q.and("upper(" + cname + ") like '%'||upper(:" + fname + ")||'%'");
-                            break;
-                    }
-                } else if (Link.class.isAssignableFrom(field.getType())) {
-                    q.and(cname + " " + filter.getOperator().sql() + " :" + pname);
-                } else if (Date.class.isAssignableFrom(field.getType()) || Number.class.isAssignableFrom(field.getType())) {
-                    switch (filter.getOperator()) {
-                        case between:
-                            q.and(cname + " between :" + pname + "From and :" + pname + "Till");
-                            break;
-                        default:
-                            q.and("trunc(" + cname + ") " + filter.getOperator().sql() + " :" + pname);
-                    }
-                } else {
-                    throw new RuntimeException(field.getName());
-                }
-            }
-        });
     }
 
     /**

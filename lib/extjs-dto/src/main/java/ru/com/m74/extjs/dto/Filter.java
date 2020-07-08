@@ -6,48 +6,8 @@ package ru.com.m74.extjs.dto;
  */
 public class Filter {
     private String property;
-    private Operator operator;
+    private String operator;
     private Object value;
-
-    public enum Operator {
-        like,
-        starts,
-        ends,
-        contains,
-        //        likeIC,
-//        startsIC,
-//        endsIC,
-//        containsIC,
-        eq,
-        gt,
-        lt,
-        before,
-        after,
-        between;
-
-        public String sql() {
-            switch (this) {
-                case like:
-                case starts:
-                case ends:
-                case contains:
-//                case likeIC:
-//                case startsIC:
-//                case endsIC:
-//                case containsIC:
-                    return "like";
-                case eq:
-                    return "=";
-                case lt:
-                case before:
-                    return "<";
-                case after:
-                case gt:
-                    return ">";
-            }
-            throw new RuntimeException(name());
-        }
-    }
 
     public String getProperty() {
         return property;
@@ -57,11 +17,11 @@ public class Filter {
         this.property = property;
     }
 
-    public Operator getOperator() {
-        return operator != null ? operator : Operator.eq;
+    public String getOperator() {
+        return operator != null ? operator : "eq";
     }
 
-    public void setOperator(Operator operator) {
+    public void setOperator(String operator) {
         this.operator = operator;
     }
 

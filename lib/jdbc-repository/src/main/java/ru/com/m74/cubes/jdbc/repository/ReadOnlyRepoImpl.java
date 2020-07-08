@@ -2,6 +2,7 @@ package ru.com.m74.cubes.jdbc.repository;
 
 import org.springframework.dao.EmptyResultDataAccessException;
 import ru.com.m74.cubes.jdbc.EntityManager;
+import ru.com.m74.cubes.jdbc.utils.GrigFilters;
 import ru.com.m74.cubes.sql.base.Select;
 import ru.com.m74.extjs.dto.Filter;
 import ru.com.m74.extjs.dto.Request;
@@ -11,7 +12,6 @@ import java.util.Map;
 
 import static ru.com.m74.cubes.common.MapUtils.map;
 import static ru.com.m74.cubes.common.ObjectUtils.forEach;
-import static ru.com.m74.cubes.jdbc.utils.EMUtils.filter;
 import static ru.com.m74.cubes.jdbc.utils.EMUtils.sort;
 
 public class ReadOnlyRepoImpl<T, I> implements ReadOnlyRepo<T, I> {
@@ -26,7 +26,7 @@ public class ReadOnlyRepoImpl<T, I> implements ReadOnlyRepo<T, I> {
 
     protected Select<T> createAllQuery(Request request, Map<String, Object> params) {
         Select<T> q = em.select(type);
-        filter(q, params, request.getFilter());
+        GrigFilters.getInstance().filter(q, params, request.getFilter());
         forEach(request.getFilter(), filter -> handleFilter(q, params, filter));
         return q;
     }
