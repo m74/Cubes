@@ -55,8 +55,8 @@ public class GrigFilters {
         });
     }
 
-    protected <T> void doStringFilter(Select<T> q, String operator, String cname, String fname) {
-        switch (operator) {
+    protected <T> void doStringFilter(Select<T> q, Filter filter, String cname, String fname) {
+        switch (filter.getOperator()) {
 //                        case like:
 //                            q.and(cname + " like :" + fname);
 //                            break;
@@ -84,12 +84,19 @@ public class GrigFilters {
             case "contains":
                 q.and("upper(" + cname + ") like '%'||upper(:" + fname + ")||'%'");
                 break;
+            case "containsWords":
+                for (String word : ((String) filter.getValue()).split(" ")) {
+                    q.and("upper(" + cname + ") like upper('" + word + "')||' %' or " +
+                            "upper(" + cname + ") like '% '||upper('" + word + "') or " +
+                            "upper(" + cname + ") like '% '||upper('" + word + "')||' %'");
+                }
+                break;
         }
     }
 
     private  <T> void doFilter(Select<T> q, Filter filter, String cname, String fname, String pname, Field field) {
         if (String.class.isAssignableFrom(field.getType()) || Enum.class.isAssignableFrom(field.getType())) {
-            doStringFilter(q, filter.getOperator(), cname, fname);
+            doStringFilter(q, filter, cname, fname);
         } else if (Link.class.isAssignableFrom(field.getType())) {
             q.and(cname + " " + getOperatorSql(filter.getOperator()) + " :" + pname);
         } else if (Date.class.isAssignableFrom(field.getType()) || Number.class.isAssignableFrom(field.getType())) {
