@@ -18,7 +18,7 @@ Ext.define('Ext.cubes.controller.ExceptionHandler', {
         }
 
         Ext.Ajax.on('requestcomplete', (conn, resp, opts) => {
-            resp.responseObject = Ext.decode(resp.responseText);
+            resp.responseObject = Ext.isEmpty(resp.responseText) ? {} : Ext.decode(resp.responseText);
             // upload exception
             if (resp.responseObject.success === false) showException(resp.responseObject);
         });
