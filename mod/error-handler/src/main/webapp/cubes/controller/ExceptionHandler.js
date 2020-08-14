@@ -8,6 +8,10 @@ Ext.define('Ext.cubes.controller.ExceptionHandler', {
     extend: 'Ext.app.Controller',
     init: function () {
 
+        function str2obj(str) {
+            return Ext.isEmpty(str) ? {} : Ext.decode(str);
+        }
+
         function showException(e) {
             Ext.Msg.show({
                 title: 'Ошибка выполнения запроса',
@@ -18,7 +22,7 @@ Ext.define('Ext.cubes.controller.ExceptionHandler', {
         }
 
         Ext.Ajax.on('requestcomplete', (conn, resp, opts) => {
-            resp.responseObject = Ext.isEmpty(resp.responseText) ? {} : Ext.decode(resp.responseText);
+            resp.responseObject = str2obj(resp.responseText);
             // upload exception
             if (resp.responseObject.success === false) showException(resp.responseObject);
         });
@@ -32,7 +36,7 @@ Ext.define('Ext.cubes.controller.ExceptionHandler', {
                     // Unauthorized
                     break;
                 case 500:
-                    showException(Ext.decode(resp.responseText));
+                    showException(str2obj(resp.responseText));
                     break;
                 default:
                     Ext.Msg.show({
