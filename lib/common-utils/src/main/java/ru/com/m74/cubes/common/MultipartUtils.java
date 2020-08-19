@@ -8,10 +8,10 @@ public class MultipartUtils {
     public static String decode(String str) {
         if (str == null) return null;
 
-        try {
-            str = new String(str.getBytes("iso8859-1"));
-        } catch (UnsupportedEncodingException ignored) {
-        }
+//        try {
+//            str = new String(str.getBytes("iso8859-1"));
+//        } catch (UnsupportedEncodingException ignored) {
+//        }
 
         try {
             return MimeUtility.decodeText(str);
