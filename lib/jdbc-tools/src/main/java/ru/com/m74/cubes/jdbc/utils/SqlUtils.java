@@ -30,7 +30,7 @@ public class SqlUtils {
         if (field == null) throw new RuntimeException("Field not found: " + fieldName);
 
         Column rsfa = field.getAnnotation(Column.class);
-        String columns[] = rsfa.orderBy();
+        String columns[] = rsfa != null ? rsfa.orderBy() : null;
         if (isEmpty(columns)) {
             if (field.isAnnotationPresent(LinkTo.class)) {
                 LinkTo linkTo = field.getAnnotation(LinkTo.class);
@@ -80,6 +80,8 @@ public class SqlUtils {
 
     public static <T> String getColumnNameWithAlias(Class<T> type, Field field) {
         Column col = field.getAnnotation(Column.class);
+        if (col == null) return field.getName();
+
         String column = col.value();
         if (isEmpty(column)) {
             column = camel2snake(field.getName());
