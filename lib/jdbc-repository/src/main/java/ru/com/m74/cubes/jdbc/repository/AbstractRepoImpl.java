@@ -21,6 +21,7 @@ public abstract class AbstractRepoImpl<T, I> extends ReadOnlyRepoImpl<T, I> impl
     @Override
     public T save(T entity) {
         em.save(entity);
+        em.refresh(entity);
         return entity;
     }
 
