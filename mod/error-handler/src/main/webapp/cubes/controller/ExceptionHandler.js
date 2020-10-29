@@ -29,6 +29,20 @@ Ext.define('Ext.cubes.controller.ExceptionHandler', {
 
         Ext.Ajax.on('requestexception', function (conn, resp, opts) {
             switch (resp.status) {
+                case 0:
+                    Ext.Msg.show({
+                        title: `Превышен интервал ожидания (${resp.statusText}).`,
+                        msg:
+                            `Сервер не ответил в течении ${settings['vsrf.ajax.request.timeout'] / 1000}  сек. 
+                            <br>
+                            Возможно проблема заключается в отстутствии сокдинения с сетью или база данных очень долго формирует ответ по Вашему запросу.
+                            <p>
+                            Попробуйте повторить Ваш запрос еще раз. Если ошибка повторится обратитесь в тех. поддержку`,
+                        width: 600,
+                        buttons: Ext.Msg.OK,
+                        icon: Ext.Msg.ERROR
+                    });
+                    break;
                 case -1:
                     // Aborted by customer
                     break;
