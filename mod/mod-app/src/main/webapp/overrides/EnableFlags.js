@@ -40,16 +40,26 @@ Ext.define('overrides.enableFlags.Component', {
     }
 });
 
+Ext.define('overrides.enableFlags.GridPanel', {
+    override: 'Ext.grid.Panel',
+
+    setEnableFlagsFromRecords(recs) {
+        this.setEnableFlags(this.createEnableFlags(recs));
+    },
+
+    createEnableFlags(recs) {
+        return {
+            multiSelect: recs.length > 0,
+            singleSelect: recs.length === 1
+        };
+    }
+});
+
 Ext.define('overrides.enableFlags.Table', {
     override: 'Ext.view.Table',
     applySelectionModel: function () {
         let sm = this.callParent(arguments);
-        sm.on('selectionchange', (sm, recs) => {
-            this.ownerGrid.setEnableFlags({
-                multiSelect: recs.length > 0,
-                singleSelect: recs.length === 1
-            });
-        });
+        sm.on('selectionchange', (sm, recs) => this.ownerGrid.setEnableFlagsFromRecords(recs));
         return sm;
     }
 });
