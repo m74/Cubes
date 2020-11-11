@@ -40,8 +40,8 @@ Ext.define('overrides.enableFlags.Component', {
     }
 });
 
-Ext.define('overrides.enableFlags.GridPanel', {
-    override: 'Ext.grid.Panel',
+Ext.define('overrides.enableFlags.TablePanel', {
+    override: 'Ext.panel.Table',
 
     setEnableFlagsFromRecords(recs) {
         this.setEnableFlags(this.createEnableFlags(recs));
