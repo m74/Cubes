@@ -47,6 +47,10 @@ Ext.define('overrides.enableFlags.TablePanel', {
         this.setEnableFlags(this.createEnableFlags(recs));
     },
 
+    setEnableFlagsFromSelectedRecords() {
+        this.setEnableFlagsFromRecords(this.getSelection());
+    },
+
     createEnableFlags(recs) {
         return {
             multiSelect: recs.length > 0,
