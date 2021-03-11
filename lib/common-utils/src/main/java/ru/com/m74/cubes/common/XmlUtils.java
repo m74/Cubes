@@ -22,7 +22,7 @@ public class XmlUtils {
             JAXBElement<T> el = jaxbUnmarshaller.unmarshal(new StreamSource(reader), type);
             return el.getValue();
         } catch (Exception e) {
-            throw new RuntimeException("Ошибка приобрахования XML", e);
+            throw new RuntimeException("Ошибка преобразования XML", e);
         }
     }
 
@@ -42,7 +42,7 @@ public class XmlUtils {
             marshaller.marshal(obj, out);
             return out.getBuffer().toString();
         } catch (Exception e) {
-            throw new RuntimeException("Ошибка приобрахования XML", e);
+            throw new RuntimeException("Ошибка преобразования XML", e);
         }
     }
 }
