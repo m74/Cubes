@@ -6,6 +6,10 @@
  */
 Ext.define('Ext.cubes.controller.ExceptionHandler', {
     extend: 'Ext.app.Controller',
+
+    isJsonResponse(resp) {
+        return /^application\/json(;)/.test(resp.getResponseHeader('Content-Type'))
+    },
     init: function () {
 
         function str2obj(str) {
@@ -22,9 +26,11 @@ Ext.define('Ext.cubes.controller.ExceptionHandler', {
         }
 
         Ext.Ajax.on('requestcomplete', (conn, resp, opts) => {
-            resp.responseObject = str2obj(resp.responseText);
-            // upload exception
-            if (resp.responseObject.success === false) showException(resp.responseObject);
+            if (this.isJsonResponse(resp)) {
+                resp.responseObject = str2obj(resp.responseText);
+                // upload exception
+                if (resp.responseObject.success === false) showException(resp.responseObject);
+            }
         });
 
         Ext.Ajax.on('requestexception', function (conn, resp, opts) {
@@ -50,7 +56,9 @@ Ext.define('Ext.cubes.controller.ExceptionHandler', {
                     // Unauthorized
                     break;
                 case 500:
-                    showException(str2obj(resp.responseText));
+                    if (this.isJsonResponse(resp)) {
+                        showException(str2obj(resp.responseText));
+                    }
                     break;
                 default:
                     Ext.Msg.show({
