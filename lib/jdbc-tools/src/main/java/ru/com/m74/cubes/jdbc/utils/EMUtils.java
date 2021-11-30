@@ -1,5 +1,6 @@
 package ru.com.m74.cubes.jdbc.utils;
 
+import org.springframework.lang.Nullable;
 import ru.com.m74.cubes.jdbc.ColumnNotFoundException;
 import ru.com.m74.cubes.jdbc.Link;
 import ru.com.m74.cubes.jdbc.annotations.LinkTo;
@@ -95,18 +96,18 @@ public class EMUtils {
      * @param <T>
      * @return
      */
-    public static <T> T cast(Object value, Class<T> cls) {
+    public static <T> T cast(@Nullable Object value, Class<T> cls) {
 
         if (cls.equals(boolean.class) && isEmpty(value)) {
             value = false;
         }
 
-        if (cls.isInstance(value)) {
-            return (T) value;
-        }
-
         if (isEmpty(value)) {
             return null;
+        }
+
+        if (cls.isInstance(value)) {
+            return (T) value;
         }
 
 //        if (!(value instanceof String || value instanceof Number || value instanceof Boolean)) {
