@@ -31,6 +31,7 @@ Ext.define('Ext.cubes.ux.Grid', {
     actions: {
         create: {
             text: 'Создать',
+            hotkey: {ctrl: true, key: 'N'},
             iconCls: 'x-fa fa-plus',
             handler: 'doCreateRecord'
         },
@@ -43,6 +44,7 @@ Ext.define('Ext.cubes.ux.Grid', {
         remove: {
             text: 'Удалить',
             iconCls: 'x-fa fa-trash',
+            hotkey: 'Delete',
             enableOn: ['singleSelect'],
             handler: 'doRemoveRecord'
         },
