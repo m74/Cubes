@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class TreeTools {
 
-    public static <T extends Node> Iterable<T> getRootNodes(Iterable<T> nodes) {
+    public static <T extends Node<T, ?>> Iterable<T> getRootNodes(Iterable<T> nodes) {
         TimeLogger.init(LoggerFactory.getLogger(TreeTools.class));
         Map<Object, List<T>> map = createMap(nodes);
         List<T> children = map.get(null);
