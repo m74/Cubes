@@ -10,7 +10,13 @@ Ext.define('Ext.cubes.ux.Grid', {
     defaultListenerScope: true,
 
     doCreateRecord() {
-        this.store.add({});
+        Ext.MessageBox.confirm('Внимание!', 'Создать новую запись в таблице?', b => {
+            if (b === 'yes') {
+                this.store.insert(0, {});
+                this.selModel.select(0);
+            }
+        });
+
     },
 
     doRemoveRecord() {
@@ -57,11 +63,12 @@ Ext.define('Ext.cubes.ux.Grid', {
     tbar: [
         '@create',
         // '@edit',
-        '@remove',
-        '|',
-        "@reload"
+        '->',
+        '@remove'
+        // "@reload"
     ],
 
+    contextMenu: ['@remove'],
     bbar: {
         xtype: 'pagingtoolbar',
         displayInfo: true
