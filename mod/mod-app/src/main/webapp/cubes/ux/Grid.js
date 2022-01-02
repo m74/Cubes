@@ -20,11 +20,9 @@ Ext.define('Ext.cubes.ux.Grid', {
     },
 
     doRemoveRecord() {
-        const view = this.view;
-        Ext.MessageBox.confirm('Внимание!', 'Вы действительно хотите удалить выбранные записи?', b => {
-            if (b === 'yes') view.store.remove(view.selModel.getSelection());
-        });
+        removeSelectedRecord(this, {msg:'Вы действительно хотите удалить выбранные записи?'})
     },
+
     doReload() {
         this.view.store.loadPage(1);
     },
@@ -74,3 +72,36 @@ Ext.define('Ext.cubes.ux.Grid', {
         displayInfo: true
     }
 });
+
+
+function removeSelectedRecord(grid, cfg, cb) {
+    let rec = grid.selection;
+    Ext.MessageBox.show(Ext.apply({
+        title: 'Внимание',
+        buttons: Ext.MessageBox.YESNO,
+        icon: Ext.MessageBox.QUESTION,
+        buttonText: {
+            yes: 'Удалить',
+            no: 'Отмена (Esc)'
+        },
+        fn: buttonId => {
+            if ('yes' === buttonId) {
+                grid.mask('Удаляем выбранную запись...');
+                // rec.erase({
+                //     callback: () => grid.unmask() && cb && cb()
+                // });
+                Ext.Ajax.request({
+                    url: (rec.proxy || rec.store.proxy).url + '/' + rec.id,
+                    method: 'DELETE',
+                    success: () => {
+                        grid.store.setAutoSync(false);
+                        grid.store.remove(rec);
+                        // rec.parentNode.removeChild(rec)
+                        grid.store.setAutoSync(true);
+                    },
+                    callback: () => grid.unmask() && cb && cb()
+                });
+            }
+        }
+    }, cfg));
+}
