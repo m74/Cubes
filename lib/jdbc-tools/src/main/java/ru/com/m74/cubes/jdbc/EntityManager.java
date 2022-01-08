@@ -419,18 +419,25 @@ public class EntityManager {
         return get(type, getPrimaryKeyField(type), id);
     }
 
+    public <T> T get(Class<T> type, Object id, RowMapper<T> mapper) {
+        return get(type, getPrimaryKeyField(type), id, mapper);
+    }
+
     private <T> T get(Class<T> type, Field field, Object value) {
         return getSingleResult(createSelectById(type, field), map("id", value));
     }
 
-//    public <T> T getSingleResult(Select<T> query, Map<String, Object> params, RowMapper<T> mapper) {
-//        return jdbcTemplate.queryForObject(
-//                query.toString(), params, mapper);
-//    }
+    private <T> T get(Class<T> type, Field field, Object value, RowMapper<T> mapper) {
+        return getSingleResult(createSelectById(type, field), map("id", value), mapper);
+    }
+
+    public <T> T getSingleResult(Select<T> query, Map<String, Object> params, RowMapper<T> mapper) {
+        return jdbcTemplate.queryForObject(
+                query.toString(), params, mapper);
+    }
 
     public <T> T getSingleResult(Select<T> query, Map<String, Object> params) {
-        return jdbcTemplate.queryForObject(
-                query.toString(), params, (resultSet, i) -> createEntity(resultSet, query.getType()));
+        return getSingleResult(query, params, (resultSet, i) -> createEntity(resultSet, query.getType()));
     }
 
     private <T> void applyResult(Select<T> query, Map<String, Object> params, T instance) {
