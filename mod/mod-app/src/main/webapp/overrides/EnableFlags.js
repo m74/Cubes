@@ -22,6 +22,7 @@ Ext.define('overrides.EnableFlags', {
 Ext.define('overrides.enableFlags.Component', {
     override: 'Ext.Component',
     // enableFlags: {},
+    enableFlagsBubble: true,
 
     setEnableFlags: function (flags) {
         this.enableFlags = Ext.apply(this.enableFlags || {}, flags);
@@ -29,7 +30,8 @@ Ext.define('overrides.enableFlags.Component', {
         for (let n in this.actions) {
             this.actions[n].setEnableFlags(this.enableFlags);
         }
-        if (this.ownerCt && this.ownerCt.setEnableFlags) {
+
+        if (this.enableFlagsBubble && this.ownerCt && this.ownerCt.setEnableFlags) {
             this.ownerCt.setEnableFlags(flags);
         }
     },
