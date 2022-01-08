@@ -7,6 +7,7 @@ import ru.com.m74.cubes.sql.base.Select;
 import ru.com.m74.extjs.dto.Filter;
 import ru.com.m74.extjs.dto.Request;
 
+import java.sql.ResultSet;
 import java.util.List;
 import java.util.Map;
 
@@ -52,7 +53,7 @@ public class ReadOnlyRepoImpl<T, I> implements ReadOnlyRepo<T, I> {
             q.setPagging(true);
         }
         sort(q, request.getSort());
-        return em.getResultList(q, params);
+        return em.getResultList(q, params, this::mapEntity);
     }
 
     @Override
@@ -69,10 +70,14 @@ public class ReadOnlyRepoImpl<T, I> implements ReadOnlyRepo<T, I> {
     @Override
     public T get(I id) {
         try {
-            return em.get(type, id);
+            return em.get(type, id, this::mapEntity);
         } catch (EmptyResultDataAccessException e) {
             return null;
 //            throw new RuntimeException("Объект " + type.getSimpleName() + "(" + tableName(type) + ") с идентификатором " + id + " не существует.", e);
         }
+    }
+
+    public T mapEntity(ResultSet rs, int i) {
+        return em.createEntity(rs, type);
     }
 }
