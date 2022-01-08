@@ -99,7 +99,7 @@ public class GrigFilters {
             doStringFilter(q, filter, cname, fname);
         } else if (Link.class.isAssignableFrom(field.getType())) {
             q.and(cname + " " + getOperatorSql(filter.getOperator()) + " :" + pname);
-        } else if (Date.class.isAssignableFrom(field.getType()) || Number.class.isAssignableFrom(field.getType())) {
+        } else if (Date.class.isAssignableFrom(field.getType())) {
             switch (filter.getOperator()) {
                 case "between":
                     q.and(cname + " between :" + pname + "From and :" + pname + "Till");
@@ -107,6 +107,8 @@ public class GrigFilters {
                 default:
                     q.and("trunc(" + cname + ") " + getOperatorSql(filter.getOperator()) + " :" + pname);
             }
+        } else if (Number.class.isAssignableFrom(field.getType())) {
+            q.and(cname + " " + getOperatorSql(filter.getOperator()) + " :" + pname);
         } else {
             throw new RuntimeException(field.getName());
         }
