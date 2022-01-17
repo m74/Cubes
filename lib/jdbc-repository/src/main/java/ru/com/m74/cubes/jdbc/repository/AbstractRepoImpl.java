@@ -63,4 +63,19 @@ public abstract class AbstractRepoImpl<T, I> extends ReadOnlyRepoImpl<T, I> impl
     public Class<T> getType() {
         return type;
     }
+
+
+    public static Map<String, Object> asMap(Object obj) {
+        return (Map<String, Object>) obj;
+    }
+
+    public static void replace(Map<String, Object> changes, String key, Handler handler) {
+        if (changes.containsKey(key)) {
+            handler.handle(changes.get(key));
+        }
+    }
+
+    public interface Handler {
+        void handle(Object value);
+    }
 }
