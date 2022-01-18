@@ -205,6 +205,11 @@ public class EntityManager {
         return select(type).where(getColumnNameWithAlias(type, idField) + "=:id");
     }
 
+    /**
+     * Use: repo.get(id)
+     * @deprecated
+     */
+    @Deprecated
     @SuppressWarnings({"unchecked"})
     public <T> void refresh(T entity) {
         Class<T> type = (Class<T>) entity.getClass();

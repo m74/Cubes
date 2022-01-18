@@ -6,6 +6,10 @@ import ru.com.m74.cubes.jdbc.utils.DTOUtils;
 import java.lang.reflect.Field;
 import java.util.Map;
 
+import static java.util.Objects.requireNonNull;
+import static ru.com.m74.cubes.jdbc.utils.DTOUtils.getPrimaryKeyField;
+import static ru.com.m74.cubes.jdbc.utils.DTOUtils.getValue;
+
 
 public abstract class AbstractRepoImpl<T, I> extends ReadOnlyRepoImpl<T, I> implements AbstractRepo<T, I> {
     protected final EntityManager em;
@@ -21,15 +25,20 @@ public abstract class AbstractRepoImpl<T, I> extends ReadOnlyRepoImpl<T, I> impl
     @Override
     public T save(T entity) {
         em.save(entity);
-        em.refresh(entity);
-        return entity;
+        return getEntity(entity);
     }
 
     @Override
     public T persist(T entity) {
         em.persist(entity);
-        em.refresh(entity);
-        return entity;
+        return getEntity(entity);
+    }
+
+    @SuppressWarnings({"unchecked"})
+    public T getEntity(T entity) {
+        Field idField = requireNonNull(getPrimaryKeyField(type), "Требуется аннотация @Id");
+        I id = (I) getValue(entity, idField);
+        return get(id);
     }
 
     @Override
