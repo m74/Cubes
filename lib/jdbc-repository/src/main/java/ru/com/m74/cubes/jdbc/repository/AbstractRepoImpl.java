@@ -4,6 +4,7 @@ import ru.com.m74.cubes.jdbc.EntityManager;
 import ru.com.m74.cubes.jdbc.utils.DTOUtils;
 
 import java.lang.reflect.Field;
+import java.util.AbstractMap;
 import java.util.Map;
 
 import static java.util.Objects.requireNonNull;
@@ -80,11 +81,18 @@ public abstract class AbstractRepoImpl<T, I> extends ReadOnlyRepoImpl<T, I> impl
 
     public static void replace(Map<String, Object> changes, String key, Handler handler) {
         if (changes.containsKey(key)) {
-            handler.handle(changes.get(key));
+            Object val = changes.get(key);
+            changes.remove(key);
+            Map.Entry<String, Object> entry = handler.handle(val);
+            changes.put(entry.getKey(), entry.getValue());
         }
     }
 
+    public static <K, V> Map.Entry<K, V> entry(K key, V val) {
+        return new AbstractMap.SimpleEntry<>(key, val);
+    }
+
     public interface Handler {
-        void handle(Object value);
+        Map.Entry<String, Object> handle(Object value);
     }
 }
