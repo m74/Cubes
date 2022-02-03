@@ -5,6 +5,7 @@ import ru.com.m74.cubes.jdbc.utils.DTOUtils;
 
 import java.lang.reflect.Field;
 import java.util.AbstractMap;
+import java.util.Collections;
 import java.util.Map;
 
 import static java.util.Objects.requireNonNull;
@@ -75,8 +76,9 @@ public abstract class AbstractRepoImpl<T, I> extends ReadOnlyRepoImpl<T, I> impl
     }
 
 
+    @SuppressWarnings({"unchecked"})
     public static Map<String, Object> asMap(Object obj) {
-        return (Map<String, Object>) obj;
+        return obj != null ? (Map<String, Object>) obj : Collections.emptyMap();
     }
 
     public static void replace(Map<String, Object> changes, String key, Handler handler) {
