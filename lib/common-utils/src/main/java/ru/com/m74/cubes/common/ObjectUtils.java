@@ -4,8 +4,13 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class ObjectUtils {
+
+    public static String ifEmpty(String str, Supplier<String> fn) {
+        return isNotEmpty(str) ? str : fn.get();
+    }
 
     /**
      * Значение аргумента пусто
