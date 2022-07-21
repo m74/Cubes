@@ -48,7 +48,7 @@ Ext.define('Ext.cubes.ux.Grid', {
         remove: {
             text: 'Удалить',
             iconCls: 'x-fa fa-trash',
-            hotkey: 'Delete',
+            hotkey: {ctrl: true, key: 'Delete'},
             enableOn: ['singleSelect'],
             handler: 'doRemoveRecord'
         },
