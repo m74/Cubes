@@ -8,6 +8,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -37,6 +38,8 @@ public class DTOUtils {
             }
 
             if (value instanceof Link) value = ((Link) value).getId();
+
+            if (value instanceof UUID) value = ((UUID) value).toString();
 
             if (value instanceof Boolean) {
                 return ((Boolean) value) ? 1 : 0;

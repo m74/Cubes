@@ -23,7 +23,8 @@ public class ResponseUtils {
 
     public static void setResponseFileName(HttpServletResponse response, String fileName, boolean inLine) {
         try {
-            response.setHeader("Content-Disposition", (inLine ? "inline" : "attachment") + "; filename*=UTF-8''" + URLEncoder.encode(fileName, "UTF-8").replace("+", "%20"));
+            String fn = fileName != null ? URLEncoder.encode(fileName, "UTF-8").replace("+", "%20") : "";
+            response.setHeader("Content-Disposition", (inLine ? "inline" : "attachment") + "; filename*=UTF-8''" + fn);
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }
