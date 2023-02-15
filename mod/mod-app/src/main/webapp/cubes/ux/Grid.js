@@ -85,22 +85,28 @@ function removeSelectedRecord(grid, cfg, cb) {
             no: 'Отмена (Esc)'
         },
         fn: buttonId => {
+            const s = grid.store;
             if ('yes' === buttonId) {
                 grid.mask('Удаляем выбранную запись...');
-                // rec.erase({
-                //     callback: () => grid.unmask() && cb && cb()
-                // });
-                Ext.Ajax.request({
-                    url: (rec.proxy || rec.store.proxy).url + '/' + rec.id,
-                    method: 'DELETE',
-                    success: () => {
-                        grid.store.setAutoSync(false);
-                        grid.store.remove(rec);
-                        // rec.parentNode.removeChild(rec)
-                        grid.store.setAutoSync(true);
-                    },
-                    callback: () => grid.unmask() && cb && cb()
-                });
+
+                const callback = () => grid.unmask() && cb && cb()
+
+                if (s.autoSync) {
+                    rec.erase({callback});
+                } else {
+                    Ext.Ajax.request({
+                        url: (rec.proxy || rec.store.proxy).url + '/' + rec.id,
+                        method: 'DELETE',
+                        success: () => {
+                            // s.setAutoSync(false);
+                            s.remove(rec);
+                            // s.loadData(s.data.items.map(e => e.data));
+                            // rec.parentNode.removeChild(rec)
+                            // s.setAutoSync(true);
+                        },
+                        callback
+                    });
+                }
             }
         }
     }, cfg));
