@@ -11,7 +11,7 @@ Ext.define('Ext.cubes.controller.ExceptionHandler', {
 
         function str2obj(str) {
             try {
-                return Ext.isEmpty(str) ? {} : Ext.decode(str);
+                return Ext.decode(str, true);
             } catch (e) {
                 return {
                     message: str
@@ -31,7 +31,7 @@ Ext.define('Ext.cubes.controller.ExceptionHandler', {
         Ext.Ajax.on('requestcomplete', (conn, resp, opts) => {
             resp.responseObject = str2obj(resp.responseText);
             // upload exception
-            if (resp.responseObject.success === false) showException(resp.responseObject);
+            if (resp.responseObject && resp.responseObject.success === false) showException(resp.responseObject);
         });
 
         Ext.Ajax.on('requestexception', function (conn, resp, opts) {
