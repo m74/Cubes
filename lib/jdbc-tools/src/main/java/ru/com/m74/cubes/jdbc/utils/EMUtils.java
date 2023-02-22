@@ -15,6 +15,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import static ru.com.m74.cubes.common.ObjectUtils.*;
 import static ru.com.m74.cubes.jdbc.utils.SqlUtils.getResultSetFieldName;
@@ -71,6 +72,8 @@ public class EMUtils {
             fieldType = Long.class;
         } else if (fieldType.equals(double.class)) {
             fieldType = Double.class;
+        } else if (fieldType.equals(UUID.class)) {
+            return UUID.fromString(get(rs, colName, String.class));
         }
 
         return fieldType.equals(Object.class) ? get(rs, colName) : get(rs, colName, fieldType);
