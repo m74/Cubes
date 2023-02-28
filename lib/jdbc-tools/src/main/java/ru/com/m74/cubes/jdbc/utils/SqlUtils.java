@@ -92,7 +92,7 @@ public class SqlUtils {
         String alias = getFieldAlias(col);
         if (isEmpty(alias)) alias = tableAlias(type);
         if (isNotEmpty(alias)) {
-            column = alias + "." + column;
+            column = alias + "." + quote(column);
         }
         return column;
     }

@@ -136,7 +136,7 @@ public class EntityManager {
         for (Field field : getUpdatableFields(type)) {
 
             if (field.getAnnotation(Column.class).insertable() && getValue(dto, field) != null) {
-                q.value(getColumnName(field), ":" + field.getName());
+                q.value(quote(getColumnName(field)), ":" + field.getName());
             }
         }
 
@@ -234,7 +234,7 @@ public class EntityManager {
                 if (field.isAnnotationPresent(Column.class)) {
                     Column rsf = field.getAnnotation(Column.class);
                     if (rsf.updatable() && isEmpty(SqlUtils.getFieldAlias(rsf))) {
-                        q.set(getColumnName(field), ":" + field.getName());
+                        q.set(quote(getColumnName(field)), ":" + field.getName());
                     }
                 }
             }
